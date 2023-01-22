@@ -6,7 +6,7 @@ import 'package:inventoryapp/screens/category_add.dart';
 import 'package:inventoryapp/screens/category_edit.dart';
 import 'package:inventoryapp/services/category_services.dart';
 import 'package:provider/provider.dart';
-import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+
 
 class CategoryPage extends StatefulWidget {
   const CategoryPage({Key? key}) : super(key: key);
@@ -16,12 +16,6 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
-  // var _currentIndex = 1;
-
-  // List<Widget> _widgetOptions = <Widget>[
-  //   CategoryPage(),
-  //   CategoryAdd(),
-  // ];
 
   @override
   void initState() {
@@ -39,34 +33,6 @@ class _CategoryPageState extends State<CategoryPage> {
       appBar: AppBar(
       title: const Text('Provider App'),
       ),
-      // bottomNavigationBar: SalomonBottomBar(
-      //   currentIndex: _currentIndex,
-      //   onTap: (i) => setState(
-      //     () => _currentIndex = i,
-      //   ),
-      //   items: [
-      //     SalomonBottomBarItem(
-      //         icon: Icon(Icons.store),
-      //         title: Text("Magazyn"),
-      //         selectedColor: Colors.purple,
-      //       ),
-
-      //       /// Search
-      //       SalomonBottomBarItem(
-      //         icon: Icon(Icons.home),
-      //         title: Text("Home"),
-      //         selectedColor: Colors.orange,
-              
-      //       ),
-
-      //       /// Profile
-      //       // SalomonBottomBarItem(
-      //       //   icon: Icon(Icons.settings),
-      //       //   title: Text("Ustawienia"),
-      //       //   selectedColor: Colors.teal,
-      //       // ),
-      //   ],
-      // ),
       body: Consumer<CategoryProvider>(
         builder: (context, value, child) {
           if(value.isLoading) {
@@ -119,16 +85,18 @@ class _CategoryPageState extends State<CategoryPage> {
                   ),
             );
           }),
-          );
-        
+          );   
       }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CategoryAdd()),
-            );},
-        child: const Icon(Icons.add),
-        
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        child: FloatingActionButton(
+          onPressed: () {Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CategoryAdd()),
+              );},
+          child: const Icon(Icons.add),
+          
+        ),
       ),
     );
   }

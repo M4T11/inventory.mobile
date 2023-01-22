@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventoryapp/provider/category_provider.dart';
-import 'package:inventoryapp/screens/category_page.dart';
+import 'package:inventoryapp/screens/nav_page.dart';
 import 'package:provider/provider.dart';
-import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context)=>CategoryProvider(),
       child: const MaterialApp(
-        home: CategoryPage(),
+        home: NavPage(),
       ),
     );
     

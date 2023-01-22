@@ -37,7 +37,7 @@ class _CategoryAddState extends State<CategoryAdd> {
       title: const Text('Provider App'),
       ),
       // backgroundColor: Colors.grey[300],
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
           child: Column(
