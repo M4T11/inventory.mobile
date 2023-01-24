@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:inventoryapp/provider/ean_device_provider.dart';
-import 'package:inventoryapp/screens/location_add.dart';
+import 'package:inventoryapp/screens/ean_device_add.dart';
 import 'package:inventoryapp/screens/location_edit.dart';
 import 'package:inventoryapp/services/ean_device_services.dart';
 import 'package:provider/provider.dart';
@@ -95,7 +95,7 @@ class _EanDevicePageState extends State<EanDevicePage> {
         child: FloatingActionButton(
           onPressed: () {Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LocationAdd()),
+                MaterialPageRoute(builder: (context) => EanDeviceAdd()),
               );},
           child: const Icon(Icons.add),
           backgroundColor: Colors.green,

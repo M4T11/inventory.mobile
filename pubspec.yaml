@@ -42,6 +42,7 @@ dependencies:
   # salomon_bottom_bar: ^3.3.1
   persistent_bottom_nav_bar: ^5.0.2
   google_fonts: ^3.0.1
+  dropdown_button2: ^1.9.2
 
 dev_dependencies:
   flutter_test:

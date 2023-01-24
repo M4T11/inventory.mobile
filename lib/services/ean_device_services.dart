@@ -49,26 +49,26 @@ class EanDeviceService {
 //       }
 //   }
 
-//   Future<bool> addLocation(Location location) async {
-//     String url = 'http://127.0.0.1:8000/locations/';
-//     final uri = Uri.parse(url);
-//     try{
-//       final response = await http.post(
-//         uri,
-//         headers: <String, String>{
-//           'Content-Type': 'application/json; charset=UTF-8',
-//         },
-//         body: jsonEncode(location.toJson()),
-//       );
-//     if (response.statusCode == 201) {
-//       return true;
-//       } else {
-//         throw Exception('Failed to add location');}
-//     }
-//     catch(e){
-//       rethrow;
-//       }
-//   }
+  Future<bool> addEanDevice(EanDevice eanDevice) async {
+    String url = 'http://127.0.0.1:8000/ean_devices/name';
+    final uri = Uri.parse(url);
+    try{
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(eanDevice.toJson()),
+      );
+    if (response.statusCode == 201) {
+      return true;
+      } else {
+        throw Exception('Failed to add EAN Device');}
+    }
+    catch(e){
+      rethrow;
+      }
+  }
 
 
 

@@ -41,15 +41,15 @@ class EanDeviceProvider extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  // Future<void> addLocation(Location location) async {
-  //   isLoading = true;
-  //   notifyListeners();
-  //   _locationService.addLocation(location);
-  //   final response = await _locationService.getAll();
+  Future<void> addEanDevice(EanDevice eanDevice) async {
+    isLoading = true;
+    notifyListeners();
+    _eanDeviceService.addEanDevice(eanDevice);
+    final response = await _eanDeviceService.getAll();
     
-  //   _locations = response;
-  //   isLoading = false;
-  //   notifyListeners();
-  // }
+    _eanDevices = response;
+    isLoading = false;
+    notifyListeners();
+  }
 
 }
