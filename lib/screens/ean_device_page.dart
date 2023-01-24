@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:inventoryapp/models/category_model.dart';
-import 'package:inventoryapp/provider/category_provider.dart';
-import 'package:inventoryapp/screens/category_add.dart';
-import 'package:inventoryapp/screens/category_edit.dart';
-import 'package:inventoryapp/services/category_services.dart';
+import 'package:inventoryapp/provider/ean_device_provider.dart';
+import 'package:inventoryapp/screens/location_add.dart';
+import 'package:inventoryapp/screens/location_edit.dart';
+import 'package:inventoryapp/services/ean_device_services.dart';
 import 'package:provider/provider.dart';
 
 
-class CategoryPage extends StatefulWidget {
-  const CategoryPage({Key? key}) : super(key: key);
+class EanDevicePage extends StatefulWidget {
+  const EanDevicePage({Key? key}) : super(key: key);
 
   @override
-  State<CategoryPage> createState() => _CategoryPageState();
+  State<EanDevicePage> createState() => _EanDevicePageState();
 }
 
-class _CategoryPageState extends State<CategoryPage> {
+class _EanDevicePageState extends State<EanDevicePage> {
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<CategoryProvider>(context, listen: false).getAllCategories();
+      Provider.of<EanDeviceProvider>(context, listen: false).getAllEanDevices();
     });
     
   }
@@ -34,28 +33,28 @@ class _CategoryPageState extends State<CategoryPage> {
       title: const Text('Inventory App'),
       backgroundColor: Color(0xff235d3a),
       ),
-      body: Consumer<CategoryProvider>(
+      body: Consumer<EanDeviceProvider>(
         builder: (context, value, child) {
           if(value.isLoading) {
             return const Center(
               child: CircularProgressIndicator(),
               );
           }
-        final categories = value.categories;
+        final eanDevices = value.eanDevices;
         return RefreshIndicator(
-         onRefresh: () async => value.getAllCategories(),
+         onRefresh: () async => value.getAllEanDevices(),
          child: ListView.builder(
           physics: const AlwaysScrollableScrollPhysics(),
-          itemCount: categories.length,
+          itemCount: eanDevices.length,
           itemBuilder: (context, index) {
-            final category = categories[index];
+            final eanDevice = eanDevices[index];
             return Slidable(
               startActionPane: ActionPane(
                 motion: StretchMotion(),
                 children: [
                   SlidableAction(
                     onPressed: ((context) {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryEdit(categoryObject: category)));
+                      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationEdit(locationObject: eanDevice)));
                     }),
                     icon: Icons.edit,
                     foregroundColor: Colors.white,
@@ -68,7 +67,7 @@ class _CategoryPageState extends State<CategoryPage> {
                   SlidableAction(
                     onPressed: ((context) {
                       // Future<int> response = CategoryService().deleteCategory(category.categoryId);
-                      value.deleteCategories(category.categoryId);
+                      value.deleteLocations(eanDevice.eanDeviceId);
                       // setState(() { categories.removeWhere((element) => element.categoryId == category.categoryId); });
                       // setState(() { value.getAllCategories(); });                     
                     }),
@@ -82,10 +81,10 @@ class _CategoryPageState extends State<CategoryPage> {
                 leading: CircleAvatar(
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
-                  child: Text(category.categoryId.toString()),
+                  child: Text(eanDevice.eanDeviceId.toString()),
                   // child: Text((index+1).toString()),
                   ),
-                  title: Text(category.name),
+                  title: Text(eanDevice.producer.name + " " + eanDevice.model),
                   ),
             );
           }),
@@ -96,7 +95,7 @@ class _CategoryPageState extends State<CategoryPage> {
         child: FloatingActionButton(
           onPressed: () {Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CategoryAdd()),
+                MaterialPageRoute(builder: (context) => LocationAdd()),
               );},
           child: const Icon(Icons.add),
           backgroundColor: Colors.green,

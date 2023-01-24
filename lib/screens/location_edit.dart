@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:inventoryapp/models/category_model.dart';
-import 'package:inventoryapp/screens/category_page.dart';
-import 'package:inventoryapp/services/category_services.dart';
-import 'package:inventoryapp/provider/category_provider.dart';
+import 'package:inventoryapp/models/location_model.dart';
+import 'package:inventoryapp/screens/location_page.dart';
+import 'package:inventoryapp/services/location_services.dart';
+import 'package:inventoryapp/provider/location_provider.dart';
 import 'package:provider/provider.dart';
 
-class CategoryEdit extends StatefulWidget {
-  final Category categoryObject;
+class LocationEdit extends StatefulWidget {
+  final Location locationObject;
   // const CategoryEdit({Key? key}) : super(key: key);
   // const CategoryEdit({super.key, required this.category});
-  const CategoryEdit ({ Key? key, required this.categoryObject}): super(key: key);
+  const LocationEdit ({ Key? key, required this.locationObject}): super(key: key);
   
 
 
   @override
-  State<CategoryEdit> createState() => _CategoryEditState();
+  State<LocationEdit> createState() => _LocationEditState();
 }
 
-class _CategoryEditState extends State<CategoryEdit> {
+class _LocationEditState extends State<LocationEdit> {
   TextEditingController _controller = new TextEditingController();
 
   @override
@@ -29,8 +29,8 @@ class _CategoryEditState extends State<CategoryEdit> {
 
   @override
   Widget build(BuildContext context) {
-    CategoryService categoryService = CategoryService();
-    _controller.text = widget.categoryObject.name.toString();
+    LocationService locationService = LocationService();
+    _controller.text = widget.locationObject.name.toString();
 
     return Scaffold(
       appBar: AppBar(
@@ -46,7 +46,7 @@ class _CategoryEditState extends State<CategoryEdit> {
             children: [
             // SizedBox(height: 25),
             Text(
-              'Edytuj kategorię',
+              'Edytuj lokalizację',
               // widget.categoryObject.categoryId.toString() + widget.categoryObject.name.toString(),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -68,7 +68,7 @@ class _CategoryEditState extends State<CategoryEdit> {
                   // initialValue: widget.categoryObject.name.toString(),
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: 'Wprowadź nazwę kategorii',
+                    hintText: 'Wprowadź nazwę lokalizacji',
                   ),
                 ),
               ),
@@ -84,15 +84,15 @@ class _CategoryEditState extends State<CategoryEdit> {
                 ),
                 child: GestureDetector(
                   onTap: () {
-                    print(widget.categoryObject.categoryId.toString());
+                    print(widget.locationObject.locationId.toString());
                     print(_controller.text.toString());
                     // categoryService.editCategory(Category(
                     //   categoryId: widget.categoryObject.categoryId, 
                     //   name: _controller.text.toString()));
-                    Provider.of<CategoryProvider>(context, listen: false).editCategories(Category(
-                      categoryId: widget.categoryObject.categoryId, 
+                    Provider.of<LocationProvider>(context, listen: false).editLocations(Location(
+                      locationId: widget.locationObject.locationId, 
                       name: _controller.text.toString()));
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryPage()));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationPage()));
                   },
                   child: Center(
                     child: Text(

@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:inventoryapp/models/category_model.dart';
-import 'package:inventoryapp/screens/category_page.dart';
-import 'package:inventoryapp/services/category_services.dart';
-import 'package:inventoryapp/provider/category_provider.dart';
+import 'package:inventoryapp/models/producer_model.dart';
+import 'package:inventoryapp/screens/producer_page.dart';
+import 'package:inventoryapp/services/producer_services.dart';
+import 'package:inventoryapp/provider/producer_provider.dart';
 import 'package:provider/provider.dart';
 
-class CategoryEdit extends StatefulWidget {
-  final Category categoryObject;
+class ProducerEdit extends StatefulWidget {
+  final Producer producerObject;
   // const CategoryEdit({Key? key}) : super(key: key);
   // const CategoryEdit({super.key, required this.category});
-  const CategoryEdit ({ Key? key, required this.categoryObject}): super(key: key);
+  const ProducerEdit ({ Key? key, required this.producerObject}): super(key: key);
   
 
 
   @override
-  State<CategoryEdit> createState() => _CategoryEditState();
+  State<ProducerEdit> createState() => _ProducerEditState();
 }
 
-class _CategoryEditState extends State<CategoryEdit> {
+class _ProducerEditState extends State<ProducerEdit> {
   TextEditingController _controller = new TextEditingController();
 
   @override
@@ -29,8 +29,8 @@ class _CategoryEditState extends State<CategoryEdit> {
 
   @override
   Widget build(BuildContext context) {
-    CategoryService categoryService = CategoryService();
-    _controller.text = widget.categoryObject.name.toString();
+    ProducerService producerService = ProducerService();
+    _controller.text = widget.producerObject.name.toString();
 
     return Scaffold(
       appBar: AppBar(
@@ -46,7 +46,7 @@ class _CategoryEditState extends State<CategoryEdit> {
             children: [
             // SizedBox(height: 25),
             Text(
-              'Edytuj kategorię',
+              'Edytuj producenta',
               // widget.categoryObject.categoryId.toString() + widget.categoryObject.name.toString(),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -68,7 +68,7 @@ class _CategoryEditState extends State<CategoryEdit> {
                   // initialValue: widget.categoryObject.name.toString(),
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: 'Wprowadź nazwę kategorii',
+                    hintText: 'Wprowadź nazwę producenta',
                   ),
                 ),
               ),
@@ -84,15 +84,15 @@ class _CategoryEditState extends State<CategoryEdit> {
                 ),
                 child: GestureDetector(
                   onTap: () {
-                    print(widget.categoryObject.categoryId.toString());
+                    print(widget.producerObject.producerId.toString());
                     print(_controller.text.toString());
                     // categoryService.editCategory(Category(
                     //   categoryId: widget.categoryObject.categoryId, 
                     //   name: _controller.text.toString()));
-                    Provider.of<CategoryProvider>(context, listen: false).editCategories(Category(
-                      categoryId: widget.categoryObject.categoryId, 
+                    Provider.of<ProducerProvider>(context, listen: false).editProducers(Producer(
+                      producerId: widget.producerObject.producerId, 
                       name: _controller.text.toString()));
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryPage()));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProducerPage()));
                   },
                   child: Center(
                     child: Text(

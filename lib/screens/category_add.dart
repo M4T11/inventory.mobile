@@ -34,7 +34,8 @@ class _CategoryAddState extends State<CategoryAdd> {
 
     return Scaffold(
       appBar: AppBar(
-      title: const Text('Provider App'),
+      title: const Text('Inventory App'),
+      backgroundColor: Color(0xff235d3a),
       ),
       // backgroundColor: Colors.grey[300],
       // backgroundColor: Colors.white,

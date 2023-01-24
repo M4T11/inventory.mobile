@@ -30,7 +30,7 @@ class _NavPageState extends State<NavPage> {
 
   List<Widget> _buildScreens() {
         return [
-          Dashboard(),
+          HomePage(),
           CategoryPage(),
           CategoryAdd()
         ];
@@ -41,19 +41,19 @@ class _NavPageState extends State<NavPage> {
             PersistentBottomNavBarItem(
                 icon: Icon(Icons.home),
                 title: ("Home"),
-                activeColorPrimary: Colors.blue,
+                activeColorPrimary: Colors.green,
                 inactiveColorPrimary: Colors.grey,
             ),
             PersistentBottomNavBarItem(
                 icon: Icon(Icons.settings),
                 title: ("Settings"),
-                activeColorPrimary: Colors.blue,
+                activeColorPrimary: Colors.green,
                 inactiveColorPrimary: Colors.grey,
             ),
             PersistentBottomNavBarItem(
                 icon: Icon(Icons.sailing),
                 title: ("Settings"),
-                activeColorPrimary: Colors.blue,
+                activeColorPrimary: Colors.green,
                 inactiveColorPrimary: Colors.grey,
             ),
         ];

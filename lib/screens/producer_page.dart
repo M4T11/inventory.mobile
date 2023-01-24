@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:inventoryapp/models/category_model.dart';
-import 'package:inventoryapp/provider/category_provider.dart';
-import 'package:inventoryapp/screens/category_add.dart';
-import 'package:inventoryapp/screens/category_edit.dart';
-import 'package:inventoryapp/services/category_services.dart';
+import 'package:inventoryapp/models/producer_model.dart';
+import 'package:inventoryapp/provider/producer_provider.dart';
+import 'package:inventoryapp/screens/producer_add.dart';
+import 'package:inventoryapp/screens/producer_edit.dart';
+import 'package:inventoryapp/services/producer_services.dart';
 import 'package:provider/provider.dart';
 
 
-class CategoryPage extends StatefulWidget {
-  const CategoryPage({Key? key}) : super(key: key);
+class ProducerPage extends StatefulWidget {
+  const ProducerPage({Key? key}) : super(key: key);
 
   @override
-  State<CategoryPage> createState() => _CategoryPageState();
+  State<ProducerPage> createState() => _ProducerPageState();
 }
 
-class _CategoryPageState extends State<CategoryPage> {
+class _ProducerPageState extends State<ProducerPage> {
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<CategoryProvider>(context, listen: false).getAllCategories();
+      Provider.of<ProducerProvider>(context, listen: false).getAllProducers();
     });
     
   }
@@ -34,28 +34,28 @@ class _CategoryPageState extends State<CategoryPage> {
       title: const Text('Inventory App'),
       backgroundColor: Color(0xff235d3a),
       ),
-      body: Consumer<CategoryProvider>(
+      body: Consumer<ProducerProvider>(
         builder: (context, value, child) {
           if(value.isLoading) {
             return const Center(
               child: CircularProgressIndicator(),
               );
           }
-        final categories = value.categories;
+        final producers = value.producers;
         return RefreshIndicator(
-         onRefresh: () async => value.getAllCategories(),
+         onRefresh: () async => value.getAllProducers(),
          child: ListView.builder(
           physics: const AlwaysScrollableScrollPhysics(),
-          itemCount: categories.length,
+          itemCount: producers.length,
           itemBuilder: (context, index) {
-            final category = categories[index];
+            final producer = producers[index];
             return Slidable(
               startActionPane: ActionPane(
                 motion: StretchMotion(),
                 children: [
                   SlidableAction(
                     onPressed: ((context) {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryEdit(categoryObject: category)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProducerEdit(producerObject: producer)));
                     }),
                     icon: Icons.edit,
                     foregroundColor: Colors.white,
@@ -68,7 +68,7 @@ class _CategoryPageState extends State<CategoryPage> {
                   SlidableAction(
                     onPressed: ((context) {
                       // Future<int> response = CategoryService().deleteCategory(category.categoryId);
-                      value.deleteCategories(category.categoryId);
+                      value.deleteProducers(producer.producerId);
                       // setState(() { categories.removeWhere((element) => element.categoryId == category.categoryId); });
                       // setState(() { value.getAllCategories(); });                     
                     }),
@@ -82,10 +82,10 @@ class _CategoryPageState extends State<CategoryPage> {
                 leading: CircleAvatar(
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
-                  child: Text(category.categoryId.toString()),
+                  child: Text(producer.producerId.toString()),
                   // child: Text((index+1).toString()),
                   ),
-                  title: Text(category.name),
+                  title: Text(producer.name),
                   ),
             );
           }),
@@ -96,7 +96,7 @@ class _CategoryPageState extends State<CategoryPage> {
         child: FloatingActionButton(
           onPressed: () {Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CategoryAdd()),
+                MaterialPageRoute(builder: (context) => ProducerAdd()),
               );},
           child: const Icon(Icons.add),
           backgroundColor: Colors.green,

@@ -11,7 +11,8 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-      title: const Text('Provider App'),
+      title: const Text('Inventory App'),
+      backgroundColor: Color(0xff235d3a),
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 2.0),
@@ -27,7 +28,7 @@ class _DashboardState extends State<Dashboard> {
               margin: EdgeInsets.all(8.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Color.fromRGBO(220, 220, 220, 1.0),
+                  color: Color(0xff73c088),
                   borderRadius: BorderRadius.circular(12),
                   ),
                 child: InkWell(
@@ -40,21 +41,24 @@ class _DashboardState extends State<Dashboard> {
                       SizedBox(height: 50.0),
                       Center(
                           child: Icon(
-                        Icons.book,
+                        Icons.house,
                         size: 40.0,
-                        color: Colors.black,
+                        color: Colors.white,
                       )),
                       SizedBox(height: 20.0),
                       Center(
-                        child: Text("Ordbog",
+                        child: Text("Magazyn",
                             style:
-                                TextStyle(fontSize: 18.0, color: Colors.black)),
+                                TextStyle(fontSize: 18.0, color: Colors.white)),
                       )
                     ],
                   ),
                 ),
               )),
             // makeDashboardItem("Ordbog", Icons.book),
+            makeDashboardItem("Alphabet", Icons.alarm),
+            makeDashboardItem("Alphabet", Icons.alarm),
+            makeDashboardItem("Alphabet", Icons.alarm),
             makeDashboardItem("Alphabet", Icons.alarm),
             makeDashboardItem("Alphabet", Icons.alarm),
             makeDashboardItem("Alphabet", Icons.alarm)

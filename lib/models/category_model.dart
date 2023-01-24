@@ -16,6 +16,13 @@ Map<String, dynamic> toJson() => {
       'name': name,
 };
 
+factory Category.fromJson (Map<String,dynamic>json){
+      return Category(
+          categoryId: json['category_id'],
+          name: json['name']
+          );
+}
+
 }
 
 

@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:inventoryapp/models/category_model.dart';
-import 'package:inventoryapp/screens/category_page.dart';
-import 'package:inventoryapp/services/category_services.dart';
-import 'package:inventoryapp/provider/category_provider.dart';
+import 'package:inventoryapp/models/producer_model.dart';
+import 'package:inventoryapp/screens/producer_page.dart';
+import 'package:inventoryapp/services/producer_services.dart';
+import 'package:inventoryapp/provider/producer_provider.dart';
 import 'package:provider/provider.dart';
 
-class CategoryEdit extends StatefulWidget {
-  final Category categoryObject;
-  // const CategoryEdit({Key? key}) : super(key: key);
+class ProducerAdd extends StatefulWidget {
+  // final Category categoryObject;
+  const ProducerAdd({Key? key}) : super(key: key);
   // const CategoryEdit({super.key, required this.category});
-  const CategoryEdit ({ Key? key, required this.categoryObject}): super(key: key);
+  // const CategoryAdd ({ Key? key, required this.categoryObject}): super(key: key);
   
 
 
   @override
-  State<CategoryEdit> createState() => _CategoryEditState();
+  State<ProducerAdd> createState() => _ProducerAddState();
 }
 
-class _CategoryEditState extends State<CategoryEdit> {
+class _ProducerAddState extends State<ProducerAdd> {
   TextEditingController _controller = new TextEditingController();
 
   @override
@@ -29,8 +29,8 @@ class _CategoryEditState extends State<CategoryEdit> {
 
   @override
   Widget build(BuildContext context) {
-    CategoryService categoryService = CategoryService();
-    _controller.text = widget.categoryObject.name.toString();
+    ProducerService producerService = ProducerService();
+    // _controller.text = widget.categoryObject.name.toString();
 
     return Scaffold(
       appBar: AppBar(
@@ -38,7 +38,7 @@ class _CategoryEditState extends State<CategoryEdit> {
       backgroundColor: Color(0xff235d3a),
       ),
       // backgroundColor: Colors.grey[300],
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
           child: Column(
@@ -46,7 +46,7 @@ class _CategoryEditState extends State<CategoryEdit> {
             children: [
             // SizedBox(height: 25),
             Text(
-              'Edytuj kategorię',
+              'Dodaj nowego producenta',
               // widget.categoryObject.categoryId.toString() + widget.categoryObject.name.toString(),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -68,7 +68,7 @@ class _CategoryEditState extends State<CategoryEdit> {
                   // initialValue: widget.categoryObject.name.toString(),
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: 'Wprowadź nazwę kategorii',
+                    hintText: 'Wprowadź nazwę producenta',
                   ),
                 ),
               ),
@@ -84,15 +84,15 @@ class _CategoryEditState extends State<CategoryEdit> {
                 ),
                 child: GestureDetector(
                   onTap: () {
-                    print(widget.categoryObject.categoryId.toString());
-                    print(_controller.text.toString());
+                    // print(widget.categoryObject.categoryId.toString());
+                    // print(_controller.text.toString());
                     // categoryService.editCategory(Category(
                     //   categoryId: widget.categoryObject.categoryId, 
                     //   name: _controller.text.toString()));
-                    Provider.of<CategoryProvider>(context, listen: false).editCategories(Category(
-                      categoryId: widget.categoryObject.categoryId, 
+                    Provider.of<ProducerProvider>(context, listen: false).addProducer(Producer(
+                      producerId: 0, 
                       name: _controller.text.toString()));
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryPage()));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProducerPage()));
                   },
                   child: Center(
                     child: Text(

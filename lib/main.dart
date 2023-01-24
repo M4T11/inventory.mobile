@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:inventoryapp/provider/category_provider.dart';
+import 'package:inventoryapp/provider/ean_device_provider.dart';
+import 'package:inventoryapp/provider/location_provider.dart';
+import 'package:inventoryapp/provider/producer_provider.dart';
 import 'package:inventoryapp/screens/nav_page.dart';
 import 'package:provider/provider.dart';
 
@@ -13,10 +16,21 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context)=>CategoryProvider(),
-      child: const MaterialApp(
-        home: NavPage(),
+    // return ChangeNotifierProvider(
+    //   create: (context)=>CategoryProvider(),
+    //   child: const MaterialApp(
+    //     home: NavPage(),
+    //   ),
+    // );
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => CategoryProvider()),
+        ChangeNotifierProvider(create: (context) => ProducerProvider()),
+        ChangeNotifierProvider(create: (context) => LocationProvider()),
+        ChangeNotifierProvider(create: (context) => EanDeviceProvider())
+    ],
+    child: const MaterialApp(
+        home: NavPage()
       ),
     );
     
