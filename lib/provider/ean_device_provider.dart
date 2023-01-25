@@ -19,7 +19,7 @@ class EanDeviceProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteLocations(int id) async {
+  Future<void> deleteEanDevice(int id) async {
     isLoading = true;
     notifyListeners();
     _eanDeviceService.deleteEanDevice(id);
@@ -30,16 +30,16 @@ class EanDeviceProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Future<void> editLocations(Location location) async {
-  //   isLoading = true;
-  //   notifyListeners();
-  //   _locationService.editLocation(location);
-  //   final response = await _locationService.getAll();
+  Future<void> editEanDevice(EanDevice eanDevice) async {
+    isLoading = true;
+    notifyListeners();
+    _eanDeviceService.editEanDevice(eanDevice);
+    final response = await _eanDeviceService.getAll();
     
-  //   _locations = response;
-  //   isLoading = false;
-  //   notifyListeners();
-  // }
+    _eanDevices = response;
+    isLoading = false;
+    notifyListeners();
+  }
 
   Future<void> addEanDevice(EanDevice eanDevice) async {
     isLoading = true;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:inventoryapp/provider/ean_device_provider.dart';
 import 'package:inventoryapp/screens/ean_device_add.dart';
+import 'package:inventoryapp/screens/ean_device_edit.dart';
 import 'package:inventoryapp/screens/location_edit.dart';
 import 'package:inventoryapp/services/ean_device_services.dart';
 import 'package:provider/provider.dart';
@@ -54,7 +55,7 @@ class _EanDevicePageState extends State<EanDevicePage> {
                 children: [
                   SlidableAction(
                     onPressed: ((context) {
-                      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationEdit(locationObject: eanDevice)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDeviceEdit(eanDeviceObject: eanDevice)));
                     }),
                     icon: Icons.edit,
                     foregroundColor: Colors.white,
@@ -67,7 +68,7 @@ class _EanDevicePageState extends State<EanDevicePage> {
                   SlidableAction(
                     onPressed: ((context) {
                       // Future<int> response = CategoryService().deleteCategory(category.categoryId);
-                      value.deleteLocations(eanDevice.eanDeviceId);
+                      value.deleteEanDevice(eanDevice.eanDeviceId);
                       // setState(() { categories.removeWhere((element) => element.categoryId == category.categoryId); });
                       // setState(() { value.getAllCategories(); });                     
                     }),

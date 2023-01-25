@@ -28,26 +28,26 @@ class EanDeviceService {
     return response.statusCode;
   }
   
-//   Future<bool> editLocation(Location location) async {
-//     String url = 'http://127.0.0.1:8000/locations/id/' + location.locationId.toString();
-//     final uri = Uri.parse(url);
-//     try{
-//       final response = await http.put(
-//         uri,
-//         headers: <String, String>{
-//           'Content-Type': 'application/json; charset=UTF-8',
-//         },
-//         body: jsonEncode(location.toJson()),
-//       );
-//     if (response.statusCode == 200) {
-//       return true;
-//       } else {
-//         throw Exception('Failed to edit location');}
-//     }
-//     catch(e){
-//       rethrow;
-//       }
-//   }
+  Future<bool> editEanDevice(EanDevice eanDevice) async {
+    String url = 'http://127.0.0.1:8000/ean_devices/id/' + eanDevice.eanDeviceId.toString();
+    final uri = Uri.parse(url);
+    try{
+      final response = await http.put(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(eanDevice.toJson()),
+      );
+    if (response.statusCode == 200) {
+      return true;
+      } else {
+        throw Exception('Failed to edit EAN Device');}
+    }
+    catch(e){
+      rethrow;
+      }
+  }
 
   Future<bool> addEanDevice(EanDevice eanDevice) async {
     String url = 'http://127.0.0.1:8000/ean_devices/name';

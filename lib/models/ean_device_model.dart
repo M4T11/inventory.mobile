@@ -6,8 +6,6 @@ class EanDevice {
   final String ean;
   final Category category;
   final Producer producer;
-  // final int categoryId;
-  // final int producerId;
   final String model;
 
 EanDevice({
@@ -20,7 +18,7 @@ EanDevice({
 
 Map<String, dynamic> toJson() => {
       'ean_device_id': eanDeviceId,
-      'ean': eanDeviceId,
+      'ean': ean,
       'category': category.toJson(),
       'producer': producer.toJson(),
       'model': model,
