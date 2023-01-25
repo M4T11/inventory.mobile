@@ -8,9 +8,16 @@ Location({
 });
 
 Map<String, dynamic> toJson() => {
-      'category_id': locationId,
+      'location_id': locationId,
       'name': name,
 };
+
+factory Location.fromJson (Map<String,dynamic>json){
+      return Location(
+          locationId: json['location_id'],
+          name: json['name']
+          );
+}
 
 }
 

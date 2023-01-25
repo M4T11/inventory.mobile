@@ -308,11 +308,6 @@ class _EanDeviceEditState extends State<EanDeviceEdit> {
                   ),
                   child: GestureDetector(
                     onTap: () {
-                      // print(widget.categoryObject.categoryId.toString());
-                      // print(_controller.text.toString());
-                      // categoryService.editCategory(Category(
-                      //   categoryId: widget.categoryObject.categoryId, 
-                      //   name: _controller.text.toString()));
                       Category category = categories.firstWhere((x) => x.name == selectedValueCategory.toString());
                       Producer producer = producers.firstWhere((x) => x.name == selectedValueProducer.toString());
                       Provider.of<EanDeviceProvider>(context, listen: false).editEanDevice(

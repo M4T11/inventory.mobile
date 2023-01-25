@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:inventoryapp/models/category_model.dart';
-import 'package:inventoryapp/provider/category_provider.dart';
-import 'package:inventoryapp/screens/category_add.dart';
-import 'package:inventoryapp/screens/category_details.dart';
-import 'package:inventoryapp/screens/category_edit.dart';
-import 'package:inventoryapp/services/category_services.dart';
+import 'package:inventoryapp/provider/device_provider.dart';
+import 'package:inventoryapp/screens/device_add.dart';
+import 'package:inventoryapp/screens/device_details.dart';
+import 'package:inventoryapp/screens/device_edit.dart';
+import 'package:inventoryapp/services/device_services.dart';
 import 'package:provider/provider.dart';
 
 
-class CategoryPage extends StatefulWidget {
-  const CategoryPage({Key? key}) : super(key: key);
+class DevicePage extends StatefulWidget {
+  const DevicePage({Key? key}) : super(key: key);
 
   @override
-  State<CategoryPage> createState() => _CategoryPageState();
+  State<DevicePage> createState() => _DevicePageState();
 }
 
-class _CategoryPageState extends State<CategoryPage> {
+class _DevicePageState extends State<DevicePage> {
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<CategoryProvider>(context, listen: false).getAllCategories();
+      Provider.of<DeviceProvider>(context, listen: false).getAlldevices();
     });
     
   }
@@ -35,21 +34,21 @@ class _CategoryPageState extends State<CategoryPage> {
       title: const Text('Inventory App'),
       backgroundColor: Color(0xff235d3a),
       ),
-      body: Consumer<CategoryProvider>(
+      body: Consumer<DeviceProvider>(
         builder: (context, value, child) {
           if(value.isLoading) {
             return const Center(
               child: CircularProgressIndicator(),
               );
           }
-        final categories = value.categories;
+        final devices = value.devices;
         return RefreshIndicator(
-         onRefresh: () async => value.getAllCategories(),
+         onRefresh: () async => value.getAlldevices(),
          child: ListView.builder(
           physics: const AlwaysScrollableScrollPhysics(),
-          itemCount: categories.length,
+          itemCount: devices.length,
           itemBuilder: (context, index) {
-            final category = categories[index];
+            final device = devices[index];
             return GestureDetector(
               child: Slidable(
                 startActionPane: ActionPane(
@@ -57,7 +56,7 @@ class _CategoryPageState extends State<CategoryPage> {
                   children: [
                     SlidableAction(
                       onPressed: ((context) {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryEdit(categoryObject: category)));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeviceEdit(deviceObject: device)));
                       }),
                       icon: Icons.edit,
                       foregroundColor: Colors.white,
@@ -70,7 +69,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     SlidableAction(
                       onPressed: ((context) {
                         // Future<int> response = CategoryService().deleteCategory(category.categoryId);
-                        value.deleteCategories(category.categoryId);
+                        value.deleteDevice(device.deviceId);
                         // setState(() { categories.removeWhere((element) => element.categoryId == category.categoryId); });
                         // setState(() { value.getAllCategories(); });                     
                       }),
@@ -78,22 +77,22 @@ class _CategoryPageState extends State<CategoryPage> {
                       foregroundColor: Colors.white,
                       backgroundColor: Colors.red,
                       ),
-                ]),
-                
+                ]),           
                 child: ListTile(
                   leading: CircleAvatar(
                     backgroundColor: Colors.green,
                     foregroundColor: Colors.white,
-                    child: Text(category.categoryId.toString()),
+                    child: Text(device.deviceId.toString()),
                     // child: Text((index+1).toString()),
                     ),
-                    title: Text(category.name),
+                    title: Text(device.eanDevice.producer.name + " " + device.eanDevice.model),
+                    subtitle: Text(device.name + " " + device.serialNumber),
                     ),
               ),
               onTap: () {
                 Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CategoryDetails(categoryObject: category)),);
+                MaterialPageRoute(builder: (context) => DeviceDetails(deviceObject: device)),);
               },
             );
           }),
@@ -104,7 +103,7 @@ class _CategoryPageState extends State<CategoryPage> {
         child: FloatingActionButton(
           onPressed: () {Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CategoryAdd()),
+                MaterialPageRoute(builder: (context) => DeviceAdd()),
               );},
           child: const Icon(Icons.add),
           backgroundColor: Colors.green,

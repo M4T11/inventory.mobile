@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventoryapp/screens/category_page.dart';
+import 'package:inventoryapp/screens/device_page.dart';
 import 'package:inventoryapp/screens/ean_device_page.dart';
 import 'package:inventoryapp/screens/location_page.dart';
 import 'package:inventoryapp/screens/producer_page.dart';
@@ -37,7 +38,7 @@ class _HomePageState extends State<HomePage> {
                   // border: Border.all(width: 1, color: Color(0xff235d3a)),
                   ),
                 child: InkWell(
-                  onTap: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryPage()));},
+                  onTap: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => DevicePage()));},
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisSize: MainAxisSize.min,

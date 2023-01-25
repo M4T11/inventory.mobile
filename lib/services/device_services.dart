@@ -1,35 +1,35 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:inventoryapp/models/ean_device_model.dart';
+import 'package:inventoryapp/models/device_model.dart';
 
-class EanDeviceService {
-  Future <List<EanDevice>> getAll() async {
-    const url = 'http://127.0.0.1:8000/ean_devices/';
+class DeviceService {
+  Future <List<Device>> getAll() async {
+    const url = 'http://127.0.0.1:8000/devices/';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     if(response.statusCode == 200) {
       final json = jsonDecode(response.body) as List;
-      final eanDevices = json.map((e) {
-        return EanDevice.fromJson(e);
+      final devices = json.map((e) {
+        return Device.fromJson(e);
 
       }).toList();
-      return eanDevices;
+      return devices;
     }
     // throw "Smth went wrong";
     return [];
   }
 
-  Future<int> deleteEanDevice(int id) async {
-    String url = 'http://127.0.0.1:8000/ean_devices/id/' + id.toString();
+  Future<int> deleteDevice(int id) async {
+    String url = 'http://127.0.0.1:8000/devices/id/' + id.toString();
     final uri = Uri.parse(url);
     final response = await http.delete(uri);
     
     return response.statusCode;
   }
   
-  Future<bool> editEanDevice(EanDevice eanDevice) async {
-    String url = 'http://127.0.0.1:8000/ean_devices/id/' + eanDevice.eanDeviceId.toString();
+  Future<bool> editDevice(Device device) async {
+    String url = 'http://127.0.0.1:8000/devices/id/' + device.deviceId.toString();
     final uri = Uri.parse(url);
     try{
       final response = await http.put(
@@ -37,20 +37,21 @@ class EanDeviceService {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(eanDevice.toJson()),
+        body: jsonEncode(device.toJson()),
       );
     if (response.statusCode == 200) {
       return true;
       } else {
-        throw Exception('Failed to edit EAN Device');}
+        throw Exception('Failed to edit device');}
     }
     catch(e){
       rethrow;
       }
   }
 
-  Future<bool> addEanDevice(EanDevice eanDevice) async {
-    String url = 'http://127.0.0.1:8000/ean_devices/id';
+  Future<bool> addDevice(Device device) async {
+    // print(device.toJson());
+    String url = 'http://127.0.0.1:8000/devices/id';
     final uri = Uri.parse(url);
     try{
       final response = await http.post(
@@ -58,12 +59,12 @@ class EanDeviceService {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(eanDevice.toJson()),
+        body: jsonEncode(device.toJson()),
       );
     if (response.statusCode == 201) {
       return true;
       } else {
-        throw Exception('Failed to add EAN Device');}
+        throw Exception('Failed to add device');}
     }
     catch(e){
       rethrow;

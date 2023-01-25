@@ -301,17 +301,16 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
                   ),
                   child: GestureDetector(
                     onTap: () {
-                      // print(widget.categoryObject.categoryId.toString());
-                      // print(_controller.text.toString());
-                      // categoryService.editCategory(Category(
-                      //   categoryId: widget.categoryObject.categoryId, 
-                      //   name: _controller.text.toString()));
+                      Category category = categories.firstWhere((x) => x.name == selectedValueCategory.toString());
+                      Producer producer = producers.firstWhere((x) => x.name == selectedValueProducer.toString());
                       Provider.of<EanDeviceProvider>(context, listen: false).addEanDevice(
                         EanDevice(
                         eanDeviceId: 0,
                         ean: _controllerEAN.text.toString(),
-                        category: Category(categoryId: 0, name: selectedValueCategory.toString()),
-                        producer: Producer(producerId: 0, name: selectedValueProducer.toString()),
+                        category: category,
+                        producer: producer,
+                        // category: Category(categoryId: 0, name: selectedValueCategory.toString()),
+                        // producer: Producer(producerId: 0, name: selectedValueProducer.toString()),
                         model: _controllerModel.text.toString()));
                         Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDevicePage()));
                     },
