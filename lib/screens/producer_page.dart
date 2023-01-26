@@ -3,6 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:inventoryapp/models/producer_model.dart';
 import 'package:inventoryapp/provider/producer_provider.dart';
 import 'package:inventoryapp/screens/producer_add.dart';
+import 'package:inventoryapp/screens/producer_details.dart';
 import 'package:inventoryapp/screens/producer_edit.dart';
 import 'package:inventoryapp/services/producer_services.dart';
 import 'package:provider/provider.dart';
@@ -49,44 +50,51 @@ class _ProducerPageState extends State<ProducerPage> {
           itemCount: producers.length,
           itemBuilder: (context, index) {
             final producer = producers[index];
-            return Slidable(
-              startActionPane: ActionPane(
-                motion: StretchMotion(),
-                children: [
-                  SlidableAction(
-                    onPressed: ((context) {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProducerEdit(producerObject: producer)));
-                    }),
-                    icon: Icons.edit,
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.orange,
-                  ),
-              ]),
-              endActionPane: ActionPane(
-                motion: StretchMotion(),
-                children: [
-                  SlidableAction(
-                    onPressed: ((context) {
-                      // Future<int> response = CategoryService().deleteCategory(category.categoryId);
-                      value.deleteProducers(producer.producerId);
-                      // setState(() { categories.removeWhere((element) => element.categoryId == category.categoryId); });
-                      // setState(() { value.getAllCategories(); });                     
-                    }),
-                    icon: Icons.delete,
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.red,
+            return GestureDetector(
+              child: Slidable(
+                startActionPane: ActionPane(
+                  motion: StretchMotion(),
+                  children: [
+                    SlidableAction(
+                      onPressed: ((context) {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProducerEdit(producerObject: producer)));
+                      }),
+                      icon: Icons.edit,
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.orange,
                     ),
-              ]),
-              
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
-                  child: Text(producer.producerId.toString()),
-                  // child: Text((index+1).toString()),
-                  ),
-                  title: Text(producer.name),
-                  ),
+                ]),
+                endActionPane: ActionPane(
+                  motion: StretchMotion(),
+                  children: [
+                    SlidableAction(
+                      onPressed: ((context) {
+                        // Future<int> response = CategoryService().deleteCategory(category.categoryId);
+                        value.deleteProducers(producer.producerId);
+                        // setState(() { categories.removeWhere((element) => element.categoryId == category.categoryId); });
+                        // setState(() { value.getAllCategories(); });                     
+                      }),
+                      icon: Icons.delete,
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.red,
+                      ),
+                ]),
+                
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                    child: Text(producer.producerId.toString()),
+                    // child: Text((index+1).toString()),
+                    ),
+                    title: Text(producer.name),
+                    ),
+              ),
+              onTap: () {
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProducerDetails(producerObject: producer)));
+              },
             );
           }),
           );   
