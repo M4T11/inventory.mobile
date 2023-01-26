@@ -4,8 +4,18 @@ import 'package:http/http.dart' as http;
 import 'package:inventoryapp/models/category_model.dart';
 
 class CategoryService {
+  var local = false;
+
+
   Future <List<Category>> getAll() async {
-    const url = 'http://127.0.0.1:8000/categories/';
+    String url = "";
+    if (local) {
+      url = 'http://127.0.0.1:8000/categories/';
+
+    } else {
+      url = 'http://192.168.50.101:8000/categories/';
+
+    }
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     if(response.statusCode == 200) {
@@ -23,7 +33,14 @@ class CategoryService {
   }
 
   Future<int> deleteCategory(int id) async {
-    String url = 'http://127.0.0.1:8000/categories/id/' + id.toString();
+    String url = "";
+    if (local) {
+      url = 'http://127.0.0.1:8000/categories/id/' + id.toString();
+
+    } else {
+      url = 'http://192.168.50.101:8000/categories/id/' + id.toString();
+    }
+    
     final uri = Uri.parse(url);
     final response = await http.delete(uri);
     
@@ -31,7 +48,15 @@ class CategoryService {
   }
   
   Future<bool> editCategory(Category category) async {
-    String url = 'http://127.0.0.1:8000/categories/id/' + category.categoryId.toString();
+    String url = "";
+
+    if (local) {
+      url = 'http://127.0.0.1:8000/categories/id/' + category.categoryId.toString();
+
+    } else {
+      url = 'http://192.168.50.101:8000/categories/id/' + category.categoryId.toString();
+    }
+    
     final uri = Uri.parse(url);
     try{
       final response = await http.put(
@@ -52,7 +77,14 @@ class CategoryService {
   }
 
   Future<bool> addCategory(Category category) async {
-    String url = 'http://127.0.0.1:8000/categories/';
+    String url = "";
+    
+    if (local) {
+      url = 'http://127.0.0.1:8000/categories/';
+    } else {
+      url = 'http://192.168.50.101:8000/categories/';
+    }
+    
     final uri = Uri.parse(url);
     try{
       final response = await http.post(
@@ -71,7 +103,5 @@ class CategoryService {
       rethrow;
       }
   }
-
-
 
 }

@@ -76,24 +76,13 @@ class _CategoryEditState extends State<CategoryEdit> {
             SizedBox(height: 25),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Container(
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    print(widget.categoryObject.categoryId.toString());
-                    print(_controller.text.toString());
-                    // categoryService.editCategory(Category(
-                    //   categoryId: widget.categoryObject.categoryId, 
-                    //   name: _controller.text.toString()));
-                    Provider.of<CategoryProvider>(context, listen: false).editCategories(Category(
-                      categoryId: widget.categoryObject.categoryId, 
-                      name: _controller.text.toString()));
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryPage()));
-                  },
+              child: GestureDetector(
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(12),
+                  ),   
                   child: Center(
                     child: Text(
                       'Zapisz',
@@ -105,7 +94,13 @@ class _CategoryEditState extends State<CategoryEdit> {
                       ),
                     ),
                   ),
-                ),
+                  ),
+                onTap: () {
+                      Provider.of<CategoryProvider>(context, listen: false).editCategories(Category(
+                        categoryId: widget.categoryObject.categoryId, 
+                        name: _controller.text.toString()));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryPage()));
+                    },
               ),
             ),
       

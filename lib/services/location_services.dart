@@ -4,8 +4,16 @@ import 'package:http/http.dart' as http;
 import 'package:inventoryapp/models/location_model.dart';
 
 class LocationService {
+  var local = false;
+
   Future <List<Location>> getAll() async {
-    const url = 'http://127.0.0.1:8000/locations/';
+    String url = "";
+    if (local) {
+      url = 'http://127.0.0.1:8000/locations/';
+    } else {
+      url = 'http://192.168.50.101:8000/locations/';
+    }
+   
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     if(response.statusCode == 200) {
@@ -23,7 +31,13 @@ class LocationService {
   }
 
   Future<int> deleteLocation(int id) async {
-    String url = 'http://127.0.0.1:8000/locations/id/' + id.toString();
+    String url = "";
+    if (local) {
+      url = 'http://127.0.0.1:8000/locations/id/' + id.toString();
+    } else {
+      url = 'http://192.168.50.101:8000/locations/id/' + id.toString();
+    }
+
     final uri = Uri.parse(url);
     final response = await http.delete(uri);
     
@@ -31,7 +45,13 @@ class LocationService {
   }
   
   Future<bool> editLocation(Location location) async {
-    String url = 'http://127.0.0.1:8000/locations/id/' + location.locationId.toString();
+    String url = "";
+    if (local) {
+      url = 'http://127.0.0.1:8000/locations/id/' + location.locationId.toString();
+    } else {
+      url = 'http://192.168.50.101:8000/locations/id/' + location.locationId.toString();
+    }
+
     final uri = Uri.parse(url);
     try{
       final response = await http.put(
@@ -52,7 +72,13 @@ class LocationService {
   }
 
   Future<bool> addLocation(Location location) async {
-    String url = 'http://127.0.0.1:8000/locations/';
+    String url = "";
+    if (local) {
+      url = 'http://127.0.0.1:8000/locations/';
+    } else {
+      url = 'http://192.168.50.101:8000/locations/';
+    }
+
     final uri = Uri.parse(url);
     try{
       final response = await http.post(

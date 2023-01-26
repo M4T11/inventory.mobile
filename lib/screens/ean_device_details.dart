@@ -4,23 +4,23 @@ import 'package:inventoryapp/models/ean_device_model.dart';
 import 'package:inventoryapp/models/producer_model.dart';
 import 'package:inventoryapp/provider/ean_device_provider.dart';
 import 'package:inventoryapp/provider/producer_provider.dart';
+import 'package:inventoryapp/screens/ean_device_edit.dart';
 import 'package:inventoryapp/screens/ean_device_page.dart';
 import 'package:inventoryapp/provider/category_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-// import 'package:qr_scanner_plus/qr_scanner_plus.dart';
-import 'package:barcode_scan2/barcode_scan2.dart';
-// import 'package:mobile_scanner/mobile_scanner.dart';
 
 
-class EanDeviceAdd extends StatefulWidget {
-  const EanDeviceAdd({Key? key}) : super(key: key);
+class EanDeviceDetails extends StatefulWidget {
+  final EanDevice eanDeviceObject;
+  // const EanDeviceEdit({Key? key}) : super(key: key);
+  const EanDeviceDetails ({ Key? key, required this.eanDeviceObject}): super(key: key);
   
   @override
-  State<EanDeviceAdd> createState() => _EanDeviceAddState();
+  State<EanDeviceDetails> createState() => _EanDeviceDetailsState();
 }
 
-class _EanDeviceAddState extends State<EanDeviceAdd> {
+class _EanDeviceDetailsState extends State<EanDeviceDetails> {
 
 
     @override
@@ -31,15 +31,21 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
       Provider.of<CategoryProvider>(context, listen: false).getAllCategories();
       Provider.of<ProducerProvider>(context, listen: false).getAllProducers();
     });
+    selectedValueCategory = widget.eanDeviceObject.category.name;
+    selectedValueProducer = widget.eanDeviceObject.producer.name;
+    _controllerEAN.text = widget.eanDeviceObject.ean.toString();
+    _controllerModel.text = widget.eanDeviceObject.model.toString();
     
   }
 
-  TextEditingController _controllerEAN = new TextEditingController();
+  
   String? selectedValueCategory;
   final TextEditingController textEditingControllerCategory = TextEditingController();
   String? selectedValueProducer;
   final TextEditingController textEditingControllerProducer = TextEditingController();
-  TextEditingController _controllerModel = new TextEditingController();
+  final TextEditingController _controllerModel = TextEditingController();
+  final TextEditingController _controllerEAN =  TextEditingController();
+  
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -52,9 +58,8 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
 
   @override
   Widget build(BuildContext context) {
-
     // _controller.text = widget.categoryObject.name.toString();
-    
+
     return Scaffold(
       appBar: AppBar(
       title: const Text('Inventory App'),
@@ -78,7 +83,7 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
               children: [
               // SizedBox(height: 25),
               Text(
-                'Dodaj nowe urządzenie EAN',
+                'Szczegóły urządzenia EAN',
                 // widget.categoryObject.categoryId.toString() + widget.categoryObject.name.toString(),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -98,6 +103,7 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: TextField(
+                          enabled: false,
                           controller: _controllerEAN,
                           textAlign: TextAlign.center,
                           // initialValue: widget.categoryObject.name.toString(),
@@ -109,29 +115,12 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
                       ),
                     IconButton(
                       icon: Icon(Icons.camera_alt_rounded),
-                      onPressed: () async {
-                        var result = await BarcodeScanner.scan();
-                        print(result.type); // The result type (barcode, cancelled, failed)
-                        print(result.rawContent); // The barcode content
-                        print(result.format); // The barcode format (as enum)
-                        print(result.formatNote); // If a unknown format was sc
-                        
-                        if(result.format != 'unknown' && result.type != 'Cancelled' && result.rawContent.isNotEmpty) {
-                          _controllerEAN.text = result.rawContent.toString();
-                        }
+                      onPressed: () {
                         // do something
-                        // FlutterBarcodeScanner.scanBarcode(
-                        //                             "#ff6666", 
-                        //                             'CANCEL_BUTTON_TEXT', 
-                        //                             true, 
-                        //                             ScanMode.BARCODE);
-                        // var result = await BarcodeScanner.scan();
-                        // print(result.rawContent);
                       },
                     ),
                   ],
-                ),
-                
+                ),             
               ),
               SizedBox(height: 25),
               Padding(
@@ -156,11 +145,7 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
                     ),
                   )).toList(),
                   value: selectedValueCategory,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedValueCategory = value as String;
-                      });
-                    },
+                  onChanged: null,
                     buttonHeight: 50,
                     // buttonWidth: 200,
                     itemHeight: 40,
@@ -234,11 +219,7 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
                     ),
                   )).toList(),
                   value: selectedValueProducer,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedValueProducer = value as String;
-                      });
-                    },
+                  onChanged: null,
                     buttonHeight: 50,
                     // buttonWidth: 200,
                     itemHeight: 40,
@@ -299,6 +280,7 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: TextField(
+                    enabled: false,
                     controller: _controllerModel,
                     textAlign: TextAlign.center,
                     // initialValue: widget.categoryObject.name.toString(),
@@ -318,31 +300,21 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
                     decoration: BoxDecoration(
                       color: Colors.green,
                       borderRadius: BorderRadius.circular(12),
-                    ),                    
+                    ),
                     child: Center(
                       child: Text(
-                        'Zapisz',
+                        'Edytuj',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
+                          
                         ),
                       ),
                     ),
                   ),
                   onTap: () {
-                        Category category = categories.firstWhere((x) => x.name == selectedValueCategory.toString());
-                        Producer producer = producers.firstWhere((x) => x.name == selectedValueProducer.toString());
-                        Provider.of<EanDeviceProvider>(context, listen: false).addEanDevice(
-                          EanDevice(
-                          eanDeviceId: 0,
-                          ean: _controllerEAN.text.toString(),
-                          category: category,
-                          producer: producer,
-                          // category: Category(categoryId: 0, name: selectedValueCategory.toString()),
-                          // producer: Producer(producerId: 0, name: selectedValueProducer.toString()),
-                          model: _controllerModel.text.toString()));
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDevicePage()));
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDeviceEdit(eanDeviceObject: widget.eanDeviceObject)));
                       },
                 ),
               ),
@@ -354,4 +326,6 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
       ),
     );
   }
+
+
 }

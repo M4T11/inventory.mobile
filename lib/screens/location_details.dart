@@ -64,6 +64,7 @@ class _LocationDetailsState extends State<LocationDetails> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: TextField(
+                  enabled: false,
                   controller: _controller,
                   textAlign: TextAlign.center,
                   // initialValue: widget.categoryObject.name.toString(),
@@ -77,24 +78,13 @@ class _LocationDetailsState extends State<LocationDetails> {
             SizedBox(height: 25),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Container(
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    print(widget.locationObject.locationId.toString());
-                    print(_controller.text.toString());
-                    // categoryService.editCategory(Category(
-                    //   categoryId: widget.categoryObject.categoryId, 
-                    //   name: _controller.text.toString()));
-                    // Provider.of<LocationProvider>(context, listen: false).editLocations(Location(
-                    //   locationId: widget.locationObject.locationId, 
-                    //   name: _controller.text.toString()));
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationEdit(locationObject: widget.locationObject)));
-                  },
+              child: GestureDetector(
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(12),
+                  ),                    
                   child: Center(
                     child: Text(
                       'Edytuj',
@@ -107,6 +97,9 @@ class _LocationDetailsState extends State<LocationDetails> {
                     ),
                   ),
                 ),
+                onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationEdit(locationObject: widget.locationObject)));
+                    },
               ),
             ),
       

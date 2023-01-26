@@ -411,45 +411,44 @@ class _DeviceAddState extends State<DeviceAdd> {
               SizedBox(height: 25),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      var ean_device_selected = selectedValueEanDevice.toString().split(" ");
-                      var ean_selected = ean_device_selected.last.substring(1, ean_device_selected.last.length - 1);;
-                      // print(ean_selected);
-                      EanDevice eanDevice = eanDevices.firstWhere((x) => x.ean == ean_selected.toString());
-                      Location location = locations.firstWhere((x) => x.name == selectedValueLocation.toString());
-                      Provider.of<DeviceProvider>(context, listen: false).addDevice(
-                        Device(
-                        deviceId: 0,
-                        name: _controllerName.text.toString(),
-                        serialNumber: _controllerSerialnumber.text.toString(),
-                        description: _controllerDescription.text.toString(),
-                        eanDevice: eanDevice,
-                        location: location,
-                        status: selectedValueStatus.toString(),
-                        dateAdded: "2023-01-01",
-                        qrCode: "string",
-                        ));
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => DevicePage()));
-                    },
+                child: GestureDetector(
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: Center(
                       child: Text(
                         'Zapisz',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          
+                          fontSize: 18,                 
                         ),
                       ),
                     ),
-                  ),
+                    ),
+                  onTap: () {
+                        var ean_device_selected = selectedValueEanDevice.toString().split(" ");
+                        var ean_selected = ean_device_selected.last.substring(1, ean_device_selected.last.length - 1);;
+                        // print(ean_selected);
+                        EanDevice eanDevice = eanDevices.firstWhere((x) => x.ean == ean_selected.toString());
+                        Location location = locations.firstWhere((x) => x.name == selectedValueLocation.toString());
+                        Provider.of<DeviceProvider>(context, listen: false).addDevice(
+                          Device(
+                          deviceId: 0,
+                          name: _controllerName.text.toString(),
+                          serialNumber: _controllerSerialnumber.text.toString(),
+                          description: _controllerDescription.text.toString(),
+                          eanDevice: eanDevice,
+                          location: location,
+                          status: selectedValueStatus.toString(),
+                          dateAdded: "2023-01-01",
+                          qrCode: "string",
+                          ));
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => DevicePage()));
+                      },
                 ),
               ),
         

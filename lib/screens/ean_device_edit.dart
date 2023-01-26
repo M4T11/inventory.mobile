@@ -82,7 +82,7 @@ class _EanDeviceEditState extends State<EanDeviceEdit> {
               children: [
               // SizedBox(height: 25),
               Text(
-                'Dodaj nowe urządzenie EAN',
+                'Edytuj urządzenie EAN',
                 // widget.categoryObject.categoryId.toString() + widget.categoryObject.name.toString(),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -300,27 +300,13 @@ class _EanDeviceEditState extends State<EanDeviceEdit> {
               SizedBox(height: 25),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      Category category = categories.firstWhere((x) => x.name == selectedValueCategory.toString());
-                      Producer producer = producers.firstWhere((x) => x.name == selectedValueProducer.toString());
-                      Provider.of<EanDeviceProvider>(context, listen: false).editEanDevice(
-                        EanDevice(
-                        eanDeviceId: widget.eanDeviceObject.eanDeviceId,
-                        ean: _controllerEAN.text.toString(),
-                        category: category,
-                        producer: producer,
-                        // category: Category(categoryId: 0, name: selectedValueCategory.toString()),
-                        // producer: Producer(producerId: 0, name: selectedValueProducer.toString()),
-                        model: _controllerModel.text.toString()));
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDevicePage()));
-                    },
+                child: GestureDetector(
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: Center(
                       child: Text(
                         'Zapisz',
@@ -331,8 +317,22 @@ class _EanDeviceEditState extends State<EanDeviceEdit> {
                           
                         ),
                       ),
-                    ),
+                    ), 
                   ),
+                  onTap: () {
+                        Category category = categories.firstWhere((x) => x.name == selectedValueCategory.toString());
+                        Producer producer = producers.firstWhere((x) => x.name == selectedValueProducer.toString());
+                        Provider.of<EanDeviceProvider>(context, listen: false).editEanDevice(
+                          EanDevice(
+                          eanDeviceId: widget.eanDeviceObject.eanDeviceId,
+                          ean: _controllerEAN.text.toString(),
+                          category: category,
+                          producer: producer,
+                          // category: Category(categoryId: 0, name: selectedValueCategory.toString()),
+                          // producer: Producer(producerId: 0, name: selectedValueProducer.toString()),
+                          model: _controllerModel.text.toString()));
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDevicePage()));
+                      },
                 ),
               ),
         

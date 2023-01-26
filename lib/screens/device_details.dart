@@ -108,6 +108,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: TextField(
+                    enabled: false,
                     controller: _controllerName,
                     textAlign: TextAlign.center,
                     // initialValue: widget.categoryObject.name.toString(),
@@ -131,6 +132,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: TextField(
+                          enabled: false,
                           controller: _controllerSerialnumber,
                           textAlign: TextAlign.center,
                           // initialValue: widget.categoryObject.name.toString(),
@@ -159,6 +161,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: TextField(
+                    enabled: false,
                     controller: _controllerDescription,
                     textAlign: TextAlign.center,
                     // initialValue: widget.categoryObject.name.toString(),
@@ -175,7 +178,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                 child: Stack(
                   alignment: Alignment.centerRight,
                   children: <Widget>[
-                                      DropdownButtonHideUnderline(
+                    DropdownButtonHideUnderline(
                     child: DropdownButton2(
                       isExpanded: true,
                       hint: Text(
@@ -195,11 +198,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                       ),
                     )).toList(),
                     value: selectedValueEanDevice,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedValueEanDevice = value as String;
-                        });
-                      },
+                    onChanged: null,
                       iconSize: 0.0,
                       buttonHeight: 50,
                       // buttonWidth: 200,
@@ -282,11 +281,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                     ),
                   )).toList(),
                   value: selectedValueLocation,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedValueLocation = value as String;
-                      });
-                    },
+                  onChanged: null,
                     buttonHeight: 50,
                     // buttonWidth: 200,
                     itemHeight: 40,
@@ -360,11 +355,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                     ),
                   )).toList(),
                   value: selectedValueStatus,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedValueStatus = value as String;
-                      });
-                    },
+                  onChanged: null,
                     buttonHeight: 50,
                     // buttonWidth: 200,
                     itemHeight: 40,
@@ -418,33 +409,13 @@ class _DeviceDetailsState extends State<DeviceDetails> {
               SizedBox(height: 25),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      // var ean_device_selected = selectedValueEanDevice.toString().split(" ");
-                      // var ean_selected = ean_device_selected.last.substring(1, ean_device_selected.last.length - 1);;
-                      // // print(ean_selected);
-                      // EanDevice eanDevice = eanDevices.firstWhere((x) => x.ean == ean_selected.toString());
-                      // Location location = locations.firstWhere((x) => x.name == selectedValueLocation.toString());
-                      // Provider.of<DeviceProvider>(context, listen: false).editDevice(
-                      //   Device(
-                      //   deviceId: widget.deviceObject.deviceId,
-                      //   name: _controllerName.text.toString(),
-                      //   serialNumber: _controllerSerialnumber.text.toString(),
-                      //   description: _controllerDescription.text.toString(),
-                      //   eanDevice: eanDevice,
-                      //   location: location,
-                      //   status: selectedValueStatus.toString(),
-                      //   dateAdded: "2023-01-01",
-                      //   qrCode: "string",
-                      //   ));
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeviceEdit(deviceObject: widget.deviceObject)));
-                    },
+                child: GestureDetector(
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(12),
+                    ),                    
                     child: Center(
                       child: Text(
                         'Edytuj',
@@ -457,6 +428,9 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                       ),
                     ),
                   ),
+                  onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeviceEdit(deviceObject: widget.deviceObject)));
+                      },
                 ),
               ),
         

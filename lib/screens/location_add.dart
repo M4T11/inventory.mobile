@@ -76,24 +76,13 @@ class _LocationAddState extends State<LocationAdd> {
             SizedBox(height: 25),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Container(
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    // print(widget.categoryObject.categoryId.toString());
-                    // print(_controller.text.toString());
-                    // categoryService.editCategory(Category(
-                    //   categoryId: widget.categoryObject.categoryId, 
-                    //   name: _controller.text.toString()));
-                    Provider.of<LocationProvider>(context, listen: false).addLocation(Location(
-                      locationId: 0, 
-                      name: _controller.text.toString()));
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationPage()));
-                  },
+              child: GestureDetector(
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   child: Center(
                     child: Text(
                       'Zapisz',
@@ -106,6 +95,12 @@ class _LocationAddState extends State<LocationAdd> {
                     ),
                   ),
                 ),
+                onTap: () {
+                      Provider.of<LocationProvider>(context, listen: false).addLocation(Location(
+                        locationId: 0, 
+                        name: _controller.text.toString()));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationPage()));
+                    },
               ),
             ),
       

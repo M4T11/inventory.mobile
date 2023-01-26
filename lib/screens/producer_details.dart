@@ -77,27 +77,16 @@ class _ProducerDetailsState extends State<ProducerDetails> {
             SizedBox(height: 25),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Container(
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    print(widget.producerObject.producerId.toString());
-                    print(_controller.text.toString());
-                    // categoryService.editCategory(Category(
-                    //   categoryId: widget.categoryObject.categoryId, 
-                    //   name: _controller.text.toString()));
-                    Provider.of<ProducerProvider>(context, listen: false).editProducers(Producer(
-                      producerId: widget.producerObject.producerId, 
-                      name: _controller.text.toString()));
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProducerEdit(producerObject: widget.producerObject)));
-                  },
+              child: GestureDetector(
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(12),
+                  ), 
                   child: Center(
                     child: Text(
-                      'Edytuj',
+                      'Edutuj',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -105,11 +94,16 @@ class _ProducerDetailsState extends State<ProducerDetails> {
                         
                       ),
                     ),
-                  ),
+                  ), 
                 ),
+                onTap: () {
+                      Provider.of<ProducerProvider>(context, listen: false).editProducers(Producer(
+                        producerId: widget.producerObject.producerId, 
+                        name: _controller.text.toString()));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProducerEdit(producerObject: widget.producerObject)));
+                    },
               ),
-            ),
-      
+            ),     
           ]),
         ),
       ),

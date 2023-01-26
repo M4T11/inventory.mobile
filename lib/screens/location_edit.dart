@@ -76,24 +76,13 @@ class _LocationEditState extends State<LocationEdit> {
             SizedBox(height: 25),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Container(
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    print(widget.locationObject.locationId.toString());
-                    print(_controller.text.toString());
-                    // categoryService.editCategory(Category(
-                    //   categoryId: widget.categoryObject.categoryId, 
-                    //   name: _controller.text.toString()));
-                    Provider.of<LocationProvider>(context, listen: false).editLocations(Location(
-                      locationId: widget.locationObject.locationId, 
-                      name: _controller.text.toString()));
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationPage()));
-                  },
+              child: GestureDetector(
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(12),
+                  ),             
                   child: Center(
                     child: Text(
                       'Zapisz',
@@ -104,8 +93,14 @@ class _LocationEditState extends State<LocationEdit> {
                         
                       ),
                     ),
-                  ),
+                  ),          
                 ),
+                onTap: () {
+                      Provider.of<LocationProvider>(context, listen: false).editLocations(Location(
+                        locationId: widget.locationObject.locationId, 
+                        name: _controller.text.toString()));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationPage()));
+                    },
               ),
             ),
       

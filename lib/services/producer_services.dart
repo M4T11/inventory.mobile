@@ -4,8 +4,16 @@ import 'package:http/http.dart' as http;
 import 'package:inventoryapp/models/producer_model.dart';
 
 class ProducerService {
+  var local = false;
+
   Future <List<Producer>> getAll() async {
-    const url = 'http://127.0.0.1:8000/producers/';
+    String url = "";
+    if (local) {
+      url = 'http://127.0.0.1:8000/producers/';
+    } else {
+      url = 'http://192.168.50.101:8000/producers/';
+    }
+
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     if(response.statusCode == 200) {
@@ -23,7 +31,13 @@ class ProducerService {
   }
 
   Future<int> deleteProducer(int id) async {
-    String url = 'http://127.0.0.1:8000/producers/id/' + id.toString();
+    String url = "";
+    if (local) {
+      url = 'http://127.0.0.1:8000/producers/id/' + id.toString();
+    } else {
+      url = 'http://192.168.50.101:8000/producers/id/' + id.toString();
+    }
+
     final uri = Uri.parse(url);
     final response = await http.delete(uri);
     
@@ -31,7 +45,13 @@ class ProducerService {
   }
   
   Future<bool> editProducer(Producer producer) async {
-    String url = 'http://127.0.0.1:8000/producers/id/' + producer.producerId.toString();
+    String url = "";
+    if (local) {
+      url = 'http://127.0.0.1:8000/producers/id/' + producer.producerId.toString();
+    } else {
+      url = 'http://192.168.50.101:8000/producers/id/' + producer.producerId.toString();
+    }
+
     final uri = Uri.parse(url);
     try{
       final response = await http.put(
@@ -52,7 +72,13 @@ class ProducerService {
   }
 
   Future<bool> addProducer(Producer producer) async {
-    String url = 'http://127.0.0.1:8000/producers/';
+    String url = "";
+    if (local) {
+      url = 'http://127.0.0.1:8000/producers/';
+    } else {
+      url = 'http://192.168.50.101:8000/producers/';
+    }
+  
     final uri = Uri.parse(url);
     try{
       final response = await http.post(
