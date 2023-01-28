@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inventoryapp/screens/category_add.dart';
 import 'package:inventoryapp/screens/category_page.dart';
 import 'package:inventoryapp/screens/home_page.dart';
-import 'package:inventoryapp/widgets/dashboard.dart';
+import 'package:inventoryapp/screens/test.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class NavPage extends StatefulWidget {
@@ -32,7 +32,7 @@ class _NavPageState extends State<NavPage> {
         return [
           HomePage(),
           CategoryPage(),
-          CategoryAdd()
+          Test()
         ];
     }
 
@@ -69,7 +69,7 @@ class _NavPageState extends State<NavPage> {
         confineInSafeArea: true,
         backgroundColor: Colors.white, // Default is Colors.white.
         handleAndroidBackButtonPress: true, // Default is true.
-        resizeToAvoidBottomInset: true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
+        resizeToAvoidBottomInset: false, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
         stateManagement: true, // Default is true.
         hideNavigationBarWhenKeyboardShows: true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
         decoration: NavBarDecoration(

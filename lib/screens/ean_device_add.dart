@@ -73,281 +73,277 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
           final producers = producerProvider.producers;
           return SafeArea(
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-              // SizedBox(height: 25),
-              Text(
-                'Dodaj nowe urządzenie EAN',
-                // widget.categoryObject.categoryId.toString() + widget.categoryObject.name.toString(),
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
+              child: SingleChildScrollView(
+                reverse: true,
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  // SizedBox(height: 25),
+                  Text(
+                    'Dodaj nowe urządzenie EAN',
+                    // widget.categoryObject.categoryId.toString() + widget.categoryObject.name.toString(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                      ),
                   ),
-              ),
-              SizedBox(height: 25),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Stack(
-                  alignment: Alignment.centerRight,
-                  children: <Widget>[
-                    Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          border: Border.all(color: Colors.white),
+                  SizedBox(height: 25),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Stack(
+                      alignment: Alignment.centerRight,
+                      children: <Widget>[
+                        Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              border: Border.all(color: Colors.white),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: TextField(
+                              controller: _controllerEAN,
+                              textAlign: TextAlign.center,
+                              // initialValue: widget.categoryObject.name.toString(),
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Wprowadź nr EAN przedmiotu',
+                              ),
+                            ),
+                          ),
+                        IconButton(
+                          icon: Icon(Icons.camera_alt_rounded),
+                          onPressed: () async {
+                            var result = await BarcodeScanner.scan();
+                            print(result.type); // The result type (barcode, cancelled, failed)
+                            print(result.rawContent); // The barcode content
+                            print(result.format); // The barcode format (as enum)
+                            print(result.formatNote); // If a unknown format was sc
+                            
+                            if(result.format != 'unknown' && result.type != 'Cancelled' && result.rawContent.isNotEmpty) {
+                              _controllerEAN.text = result.rawContent.toString();
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    
+                  ),
+                  SizedBox(height: 25),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        isExpanded: true,
+                        hint: Text(
+                          'Wybierz kategorię przedmiotu',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).hintColor,
+                          ),
+                        ),
+                        items: categories.map((item) => DropdownMenuItem<String>(
+                        value: item.name,
+                        child: Text(
+                          item.name,
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      )).toList(),
+                      value: selectedValueCategory,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedValueCategory = value as String;
+                          });
+                        },
+                        buttonHeight: 50,
+                        // buttonWidth: 200,
+                        itemHeight: 40,
+                        dropdownMaxHeight: 200,
+                        buttonDecoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.black26,
+                            ),
+                            color: Colors.grey[200],
+                            ),
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.grey[200],
+                          ),
+                        searchController: textEditingControllerCategory,
+                        searchInnerWidget: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 8,
+                          bottom: 4,
+                          right: 8,
+                          left: 8,
                         ),
-                        child: TextField(
-                          controller: _controllerEAN,
-                          textAlign: TextAlign.center,
-                          // initialValue: widget.categoryObject.name.toString(),
+                        child: TextFormField(
+                          controller: textEditingControllerCategory,
                           decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Wprowadź nr EAN przedmiotu',
+                          isDense: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 8,
+                          ),
+                          hintText: 'Wyszukaj kategorię...',
+                          hintStyle: const TextStyle(fontSize: 12),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    IconButton(
-                      icon: Icon(Icons.camera_alt_rounded),
-                      onPressed: () async {
-                        var result = await BarcodeScanner.scan();
-                        print(result.type); // The result type (barcode, cancelled, failed)
-                        print(result.rawContent); // The barcode content
-                        print(result.format); // The barcode format (as enum)
-                        print(result.formatNote); // If a unknown format was sc
-                        
-                        if(result.format != 'unknown' && result.type != 'Cancelled' && result.rawContent.isNotEmpty) {
-                          _controllerEAN.text = result.rawContent.toString();
-                        }
-                        // do something
-                        // FlutterBarcodeScanner.scanBarcode(
-                        //                             "#ff6666", 
-                        //                             'CANCEL_BUTTON_TEXT', 
-                        //                             true, 
-                        //                             ScanMode.BARCODE);
-                        // var result = await BarcodeScanner.scan();
-                        // print(result.rawContent);
-                      },
-                    ),
-                  ],
-                ),
-                
-              ),
-              SizedBox(height: 25),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton2(
-                    isExpanded: true,
-                    hint: Text(
-                      'Wybierz kategorię przedmiotu',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).hintColor,
-                      ),
-                    ),
-                    items: categories.map((item) => DropdownMenuItem<String>(
-                    value: item.name,
-                    child: Text(
-                      item.name,
-                      style: const TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                  )).toList(),
-                  value: selectedValueCategory,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedValueCategory = value as String;
-                      });
-                    },
-                    buttonHeight: 50,
-                    // buttonWidth: 200,
-                    itemHeight: 40,
-                    dropdownMaxHeight: 200,
-                    buttonDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.black26,
+                        // searchMatchFn: (item, searchValue) {
+                        //   return (item.value.toString().contains(searchValue));
+                        //   },
+                          //This to clear the search value when you close the menu
+                          onMenuStateChange: (isOpen) {
+                            if (!isOpen) {
+                              textEditingControllerCategory.clear();
+                              }
+                              },
+                        ))
+                  ),
+                  SizedBox(height: 25),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        isExpanded: true,
+                        hint: Text(
+                          'Wybierz producenta przedmiotu',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).hintColor,
+                          ),
                         ),
+                        items: producers.map((item) => DropdownMenuItem<String>(
+                        value: item.name,
+                        child: Text(
+                          item.name,
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      )).toList(),
+                      value: selectedValueProducer,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedValueProducer = value as String;
+                          });
+                        },
+                        buttonHeight: 50,
+                        // buttonWidth: 200,
+                        itemHeight: 40,
+                        dropdownMaxHeight: 200,
+                        buttonDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.black26,
+                            ),
+                            color: Colors.grey[200],
+                            ),
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.grey[200],
+                          ),
+                        searchController: textEditingControllerProducer,
+                        searchInnerWidget: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 8,
+                          bottom: 4,
+                          right: 8,
+                          left: 8,
+                        ),
+                        child: TextFormField(
+                          controller: textEditingControllerProducer,
+                          decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 8,
+                          ),
+                          hintText: 'Wyszukaj producenta...',
+                          hintStyle: const TextStyle(fontSize: 12),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                        ),
+                        // searchMatchFn: (item, searchValue) {
+                        //   return (item.value.toString().contains(searchValue));
+                        //   },
+                          //This to clear the search value when you close the menu
+                          onMenuStateChange: (isOpen) {
+                            if (!isOpen) {
+                              textEditingControllerProducer.clear();
+                              }
+                              },
+                        ))
+                  ),
+                  SizedBox(height: 25),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Container(
+                      decoration: BoxDecoration(
                         color: Colors.grey[200],
+                        border: Border.all(color: Colors.white),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: TextField(
+                        controller: _controllerModel,
+                        textAlign: TextAlign.center,
+                        // initialValue: widget.categoryObject.name.toString(),
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Wprowadź model przedmiotu',
                         ),
-                    dropdownDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.grey[200],
                       ),
-                    searchController: textEditingControllerCategory,
-                    searchInnerWidget: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 8,
-                      bottom: 4,
-                      right: 8,
-                      left: 8,
                     ),
-                    child: TextFormField(
-                      controller: textEditingControllerCategory,
-                      decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 8,
-                      ),
-                      hintText: 'Wyszukaj kategorię...',
-                      hintStyle: const TextStyle(fontSize: 12),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                  ),
+                  SizedBox(height: 25),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: GestureDetector(
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(12),
+                        ),                    
+                        child: Center(
+                          child: Text(
+                            'Zapisz',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    // searchMatchFn: (item, searchValue) {
-                    //   return (item.value.toString().contains(searchValue));
-                    //   },
-                      //This to clear the search value when you close the menu
-                      onMenuStateChange: (isOpen) {
-                        if (!isOpen) {
-                          textEditingControllerCategory.clear();
-                          }
+                      onTap: () {
+                            Category category = categories.firstWhere((x) => x.name == selectedValueCategory.toString());
+                            Producer producer = producers.firstWhere((x) => x.name == selectedValueProducer.toString());
+                            Provider.of<EanDeviceProvider>(context, listen: false).addEanDevice(
+                              EanDevice(
+                              eanDeviceId: 0,
+                              ean: _controllerEAN.text.toString(),
+                              category: category,
+                              producer: producer,
+                              // category: Category(categoryId: 0, name: selectedValueCategory.toString()),
+                              // producer: Producer(producerId: 0, name: selectedValueProducer.toString()),
+                              model: _controllerModel.text.toString()));
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDevicePage()));
                           },
-                    ))
-              ),
-              SizedBox(height: 25),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton2(
-                    isExpanded: true,
-                    hint: Text(
-                      'Wybierz producenta przedmiotu',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).hintColor,
-                      ),
-                    ),
-                    items: producers.map((item) => DropdownMenuItem<String>(
-                    value: item.name,
-                    child: Text(
-                      item.name,
-                      style: const TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                  )).toList(),
-                  value: selectedValueProducer,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedValueProducer = value as String;
-                      });
-                    },
-                    buttonHeight: 50,
-                    // buttonWidth: 200,
-                    itemHeight: 40,
-                    dropdownMaxHeight: 200,
-                    buttonDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.black26,
-                        ),
-                        color: Colors.grey[200],
-                        ),
-                    dropdownDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.grey[200],
-                      ),
-                    searchController: textEditingControllerProducer,
-                    searchInnerWidget: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 8,
-                      bottom: 4,
-                      right: 8,
-                      left: 8,
-                    ),
-                    child: TextFormField(
-                      controller: textEditingControllerProducer,
-                      decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 8,
-                      ),
-                      hintText: 'Wyszukaj producenta...',
-                      hintStyle: const TextStyle(fontSize: 12),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                    ),
-                    // searchMatchFn: (item, searchValue) {
-                    //   return (item.value.toString().contains(searchValue));
-                    //   },
-                      //This to clear the search value when you close the menu
-                      onMenuStateChange: (isOpen) {
-                        if (!isOpen) {
-                          textEditingControllerProducer.clear();
-                          }
-                          },
-                    ))
-              ),
-              SizedBox(height: 25),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: TextField(
-                    controller: _controllerModel,
-                    textAlign: TextAlign.center,
-                    // initialValue: widget.categoryObject.name.toString(),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Wprowadź model przedmiotu',
                     ),
                   ),
-                ),
-              ),
-              SizedBox(height: 25),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: GestureDetector(
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(12),
-                    ),                    
-                    child: Center(
-                      child: Text(
-                        'Zapisz',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                        Category category = categories.firstWhere((x) => x.name == selectedValueCategory.toString());
-                        Producer producer = producers.firstWhere((x) => x.name == selectedValueProducer.toString());
-                        Provider.of<EanDeviceProvider>(context, listen: false).addEanDevice(
-                          EanDevice(
-                          eanDeviceId: 0,
-                          ean: _controllerEAN.text.toString(),
-                          category: category,
-                          producer: producer,
-                          // category: Category(categoryId: 0, name: selectedValueCategory.toString()),
-                          // producer: Producer(producerId: 0, name: selectedValueProducer.toString()),
-                          model: _controllerModel.text.toString()));
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDevicePage()));
-                      },
-                ),
-              ),
-        
-            ]),
+                      
+                ]),
+              )
           ),
         );
         }

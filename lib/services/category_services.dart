@@ -13,7 +13,7 @@ class CategoryService {
       url = 'http://127.0.0.1:8000/categories/';
 
     } else {
-      url = 'http://192.168.50.101:8000/categories/';
+      url = 'http://192.168.50.103:8000/categories/';
 
     }
     final uri = Uri.parse(url);
@@ -38,7 +38,7 @@ class CategoryService {
       url = 'http://127.0.0.1:8000/categories/id/' + id.toString();
 
     } else {
-      url = 'http://192.168.50.101:8000/categories/id/' + id.toString();
+      url = 'http://192.168.50.103:8000/categories/id/' + id.toString();
     }
     
     final uri = Uri.parse(url);
@@ -54,7 +54,7 @@ class CategoryService {
       url = 'http://127.0.0.1:8000/categories/id/' + category.categoryId.toString();
 
     } else {
-      url = 'http://192.168.50.101:8000/categories/id/' + category.categoryId.toString();
+      url = 'http://192.168.50.103:8000/categories/id/' + category.categoryId.toString();
     }
     
     final uri = Uri.parse(url);
@@ -82,7 +82,7 @@ class CategoryService {
     if (local) {
       url = 'http://127.0.0.1:8000/categories/';
     } else {
-      url = 'http://192.168.50.101:8000/categories/';
+      url = 'http://192.168.50.103:8000/categories/';
     }
     
     final uri = Uri.parse(url);
