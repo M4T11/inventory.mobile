@@ -12,7 +12,7 @@ class DeviceService {
     if (local) {
       url = 'http://127.0.0.1:8000/devices/';
     } else {
-      url = 'http://192.168.50.103:8000/devices/';
+      url = 'http://192.168.50.104:8000/devices/';
     }
     final uri = Uri.parse(url);
     final response = await http.get(uri);
@@ -33,7 +33,7 @@ class DeviceService {
     if (local) {
       url = 'http://127.0.0.1:8000/devices/id/' + id.toString();
     } else {
-      url = 'http://192.168.50.103:8000/devices/id/' + id.toString();
+      url = 'http://192.168.50.104:8000/devices/id/' + id.toString();
     }
     final uri = Uri.parse(url);
     final response = await http.delete(uri);
@@ -46,7 +46,7 @@ class DeviceService {
     if (local) {
       url = 'http://127.0.0.1:8000/devices/id/' + device.deviceId.toString();
     } else {
-      url = 'http://192.168.50.103:8000/devices/id/' + device.deviceId.toString();
+      url = 'http://192.168.50.104:8000/devices/id/' + device.deviceId.toString();
     }
     
     final uri = Uri.parse(url);
@@ -73,7 +73,7 @@ class DeviceService {
     if (local) {
       url = 'http://127.0.0.1:8000/devices/id';
     } else {
-      url = 'http://192.168.50.103:8000/devices/id';
+      url = 'http://192.168.50.104:8000/devices/id';
     }
     
     final uri = Uri.parse(url);

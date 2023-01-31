@@ -9,6 +9,7 @@ import 'package:inventoryapp/screens/device_edit.dart';
 import 'package:inventoryapp/screens/device_page.dart';
 import 'package:provider/provider.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter_spinbox/material.dart';
 
 
 class DeviceDetails extends StatefulWidget {
@@ -21,7 +22,8 @@ class DeviceDetails extends StatefulWidget {
 
 class _DeviceDetailsState extends State<DeviceDetails> {
 
-  List<String> deviceStatus = ["Nowe", "Używane", "Do naprawy", "Do zdjęć", "Do wystawienia", "Na części"]; 
+  List<String> deviceCondition = ["Nowe", "Używane"]; 
+  List<String> deviceStatus = ["Do naprawy", "Do wystawienia", "Do zdjęć", "Na części"]; 
 
     @override
   void initState() {
@@ -34,6 +36,8 @@ class _DeviceDetailsState extends State<DeviceDetails> {
     selectedValueEanDevice= widget.deviceObject.eanDevice.producer.name + " " + widget.deviceObject.eanDevice.model + " (" + widget.deviceObject.eanDevice.ean + ")";
     selectedValueLocation = widget.deviceObject.location.name;
     selectedValueStatus = widget.deviceObject.status;
+    selectedValueCondition = widget.deviceObject.condition;
+    quantity = widget.deviceObject.quantity.toDouble();
     _controllerSerialnumber.text = widget.deviceObject.serialNumber.toString();
     _controllerName.text = widget.deviceObject.name.toString();
     _controllerDescription.text = widget.deviceObject.description.toString(); 
@@ -44,12 +48,16 @@ class _DeviceDetailsState extends State<DeviceDetails> {
   TextEditingController _controllerName = new TextEditingController();
   TextEditingController _controllerDescription = new TextEditingController();
 
+
+  late double quantity;
   String? selectedValueEanDevice;
   final TextEditingController textEditingControllerEanDevice = TextEditingController();
   String? selectedValueLocation;
   final TextEditingController textEditingControllerLocation = TextEditingController();
   String? selectedValueStatus;
   final TextEditingController textEditingControllerStatus = TextEditingController();
+  String? selectedValueCondition;
+  final TextEditingController textEditingControllerCondition = TextEditingController();
   
   @override
   void dispose() {
@@ -60,14 +68,12 @@ class _DeviceDetailsState extends State<DeviceDetails> {
     textEditingControllerEanDevice.dispose();
     textEditingControllerLocation.dispose();
     textEditingControllerStatus.dispose();
+    textEditingControllerCondition.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
-    // _controller.text = widget.categoryObject.name.toString();
-
     return Scaffold(
       appBar: AppBar(
       title: const Text('Inventory App'),
@@ -98,7 +104,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                   fontSize: 24,
                   ),
               ),
-              SizedBox(height: 25),
+              SizedBox(height: 15),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Container(
@@ -119,7 +125,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                   ),
                 ),
               ),
-              SizedBox(height: 25),
+              SizedBox(height: 15),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Stack(
@@ -151,7 +157,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                   ],
                 ),               
               ),
-              SizedBox(height: 25),
+              SizedBox(height: 15),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Container(
@@ -172,7 +178,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                   ),
                 ),
               ),
-              SizedBox(height: 25),
+              SizedBox(height: 15),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Stack(
@@ -258,7 +264,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                   ],
                 ),
               ),
-              SizedBox(height: 25),
+              SizedBox(height: 15),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: DropdownButtonHideUnderline(
@@ -332,7 +338,106 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                           },
                     ))
               ),
-              SizedBox(height: 25),
+              SizedBox(height: 15),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        border: Border.all(color: Colors.white),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: SpinBox(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(vertical: 14),
+                        ),
+                        readOnly: true,
+                        enabled: false,
+                        min: 1,
+                        max: 1000,
+                        value: quantity,
+                        onChanged: null,
+                      )
+                    ),
+                  ),
+              SizedBox(height: 15),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton2(
+                    isExpanded: true,
+                    hint: Text(
+                      'Wybierz stan przedmiotu',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).hintColor,
+                      ),
+                    ),
+                    items: deviceCondition.map((item) => DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(
+                      item,
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  )).toList(),
+                  value: selectedValueCondition,
+                  onChanged: null,
+                    buttonHeight: 50,
+                    // buttonWidth: 200,
+                    itemHeight: 40,
+                    dropdownMaxHeight: 200,
+                    buttonDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: Colors.black26,
+                        ),
+                        color: Colors.grey[200],
+                        ),
+                    dropdownDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.grey[200],
+                      ),
+                    searchController: textEditingControllerCondition,
+                    searchInnerWidget: Padding(
+                    padding: const EdgeInsets.only(
+                      top: 8,
+                      bottom: 4,
+                      right: 8,
+                      left: 8,
+                    ),
+                    // child: TextFormField(
+                    //   controller: textEditingControllerStatus,
+                    //   decoration: InputDecoration(
+                    //   isDense: true,
+                    //   contentPadding: const EdgeInsets.symmetric(
+                    //     horizontal: 10,
+                    //     vertical: 8,
+                    //   ),
+                    //   hintText: 'Wyszukaj status dla przedmiotu...',
+                    //   hintStyle: const TextStyle(fontSize: 12),
+                    //   border: OutlineInputBorder(
+                    //     borderRadius: BorderRadius.circular(8),
+                    //       ),
+                    //     ),
+                    //   ),
+                    ),
+                    // searchMatchFn: (item, searchValue) {
+                    //   return (item.value.toString().contains(searchValue));
+                    //   },
+                      //This to clear the search value when you close the menu
+                      onMenuStateChange: (isOpen) {
+                        if (!isOpen) {
+                          textEditingControllerCondition.clear();
+                          }
+                          },
+                    ))
+              ),
+              SizedBox(height: 15),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: DropdownButtonHideUnderline(
@@ -406,7 +511,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                           },
                     ))
               ),
-              SizedBox(height: 25),
+              SizedBox(height: 15),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: GestureDetector(

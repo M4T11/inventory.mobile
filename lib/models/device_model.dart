@@ -8,6 +8,8 @@ class Device {
   final String description;
   final EanDevice eanDevice;
   final Location location;
+  final int quantity;
+  final String condition;
   final String status;
   final String dateAdded;
   final String qrCode;
@@ -19,6 +21,8 @@ Device({
   required this.description,
   required this.eanDevice,
   required this.location,
+  required this.quantity,
+  required this.condition,
   required this.status,
   required this.dateAdded,
   required this.qrCode
@@ -31,6 +35,8 @@ Map<String, dynamic> toJson() => {
       'description': description,
       'ean_device': eanDevice.toJson(),
       'location': location.toJson(),
+      'quantity': quantity,
+      'condition': condition,
       'status': status,
       'date_added': dateAdded,
       'qr_code': qrCode
@@ -44,6 +50,8 @@ factory Device.fromJson (Map<String,dynamic>json){
       description: json['description'],
       eanDevice: EanDevice.fromJson(json['ean_device']),
       location: Location.fromJson(json['location']),
+      quantity: json['quantity'],
+      condition: json['condition'],
       status: json['status'],
       dateAdded: json['date_added'],
       qrCode: json['qr_code'],
