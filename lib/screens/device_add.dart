@@ -6,6 +6,8 @@ import 'package:inventoryapp/provider/device_provider.dart';
 import 'package:inventoryapp/provider/ean_device_provider.dart';
 import 'package:inventoryapp/provider/location_provider.dart';
 import 'package:inventoryapp/screens/device_page.dart';
+import 'package:inventoryapp/screens/ean_device_add.dart';
+import 'package:inventoryapp/screens/location_add.dart';
 import 'package:provider/provider.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
@@ -118,7 +120,7 @@ class _DeviceAddState extends State<DeviceAdd> {
                       fontSize: 24,
                       ),
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Container(
@@ -138,7 +140,7 @@ class _DeviceAddState extends State<DeviceAdd> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Stack(
@@ -177,7 +179,7 @@ class _DeviceAddState extends State<DeviceAdd> {
                       ],
                     ),               
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Container(
@@ -197,13 +199,13 @@ class _DeviceAddState extends State<DeviceAdd> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Stack(
                       alignment: Alignment.centerRight,
                       children: <Widget>[
-                                          DropdownButtonHideUnderline(
+                        DropdownButtonHideUnderline(
                         child: DropdownButton2(
                           isExpanded: true,
                           hint: Text(
@@ -280,92 +282,142 @@ class _DeviceAddState extends State<DeviceAdd> {
                           )),
                           IconButton(
                           icon: Icon(Icons.camera_alt_rounded),
-                          onPressed: () {
+                          onPressed: () async {
                             // do something
+                            var camera_result_ean = await BarcodeScanner.scan();
+                              print(camera_result_ean.type); // The result type (barcode, cancelled, failed)
+                              print(camera_result_ean.rawContent); // The barcode content
+                              print(camera_result_ean.format); // The barcode format (as enum)
+                              print(camera_result_ean.formatNote); // If a unknown format was sc
+                              
+                              if(camera_result_ean.format != 'unknown' && camera_result_ean.type != 'Cancelled' && camera_result_ean.rawContent.isNotEmpty) {
+                                EanDevice temp_ean = eanDevices.firstWhere((x) => x.ean == camera_result_ean.rawContent.toString());
+                                print(temp_ean.model);
+                                setState(() {
+                                  selectedValueEanDevice = temp_ean.producer.name + " " + temp_ean.model + " (" + temp_ean.ean + ")";
+                                },);
+                                
+                              }
                           },
                         ),
+                        Positioned(
+                          right: 35, 
+                        child: IconButton(
+                          onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDeviceAdd(forwarding: true,)));}, 
+                          icon: Icon(Icons.add))),
                       ],
                     ),
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        hint: Text(
-                          'Wybierz lokalizację przedmiotu',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).hintColor,
-                          ),
-                        ),
-                        items: locations.map((item) => DropdownMenuItem<String>(
-                        value: item.name,
-                        child: Text(
-                          item.name,
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      )).toList(),
-                      value: selectedValueLocation,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedValueLocation = value as String;
-                          });
-                        },
-                        buttonHeight: 50,
-                        // buttonWidth: 200,
-                        itemHeight: 40,
-                        dropdownMaxHeight: 200,
-                        buttonDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.black26,
+                    child: Stack(
+                      alignment: Alignment.centerRight,
+                      children: <Widget>[
+                        DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          isExpanded: true,
+                          hint: Text(
+                            'Wybierz lokalizację przedmiotu',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).hintColor,
                             ),
+                          ),
+                          items: locations.map((item) => DropdownMenuItem<String>(
+                          value: item.name,
+                          child: Text(
+                            item.name,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        )).toList(),
+                        value: selectedValueLocation,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedValueLocation = value as String;
+                            });
+                          },
+                          iconSize: 0.0,
+                          buttonHeight: 50,
+                          // buttonWidth: 200,
+                          itemHeight: 40,
+                          dropdownMaxHeight: 200,
+                          buttonDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.black26,
+                              ),
+                              color: Colors.grey[200],
+                              ),
+                          dropdownDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
                             color: Colors.grey[200],
                             ),
-                        dropdownDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Colors.grey[200],
+                          searchController: textEditingControllerLocation,
+                          searchInnerWidget: Padding(
+                          padding: const EdgeInsets.only(
+                            top: 8,
+                            bottom: 4,
+                            right: 8,
+                            left: 8,
                           ),
-                        searchController: textEditingControllerLocation,
-                        searchInnerWidget: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 8,
-                          bottom: 4,
-                          right: 8,
-                          left: 8,
-                        ),
-                        child: TextFormField(
-                          controller: textEditingControllerLocation,
-                          decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 8,
-                          ),
-                          hintText: 'Wyszukaj lokalizację...',
-                          hintStyle: const TextStyle(fontSize: 12),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                          child: TextFormField(
+                            controller: textEditingControllerLocation,
+                            decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 8,
+                            ),
+                            hintText: 'Wyszukaj lokalizację...',
+                            hintStyle: const TextStyle(fontSize: 12),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        // searchMatchFn: (item, searchValue) {
-                        //   return (item.value.toString().contains(searchValue));
-                        //   },
-                          //This to clear the search value when you close the menu
-                          onMenuStateChange: (isOpen) {
-                            if (!isOpen) {
-                              textEditingControllerLocation.clear();
+                          // searchMatchFn: (item, searchValue) {
+                          //   return (item.value.toString().contains(searchValue));
+                          //   },
+                            //This to clear the search value when you close the menu
+                            onMenuStateChange: (isOpen) {
+                              if (!isOpen) {
+                                textEditingControllerLocation.clear();
+                                }
+                                },
+                          )),
+                          IconButton(
+                          icon: Icon(Icons.camera_alt_rounded),
+                          onPressed: () async {
+                            // do something
+                            var camera_result_location = await BarcodeScanner.scan();
+                              print(camera_result_location.type); // The result type (barcode, cancelled, failed)
+                              print(camera_result_location.rawContent); // The barcode content
+                              print(camera_result_location.format); // The barcode format (as enum)
+                              print(camera_result_location.formatNote); // If a unknown format was sc
+                              
+                              if(camera_result_location.format != 'unknown' && camera_result_location.type != 'Cancelled' && camera_result_location.rawContent.isNotEmpty) {
+                                Location temp_location = locations.firstWhere((x) => x.name == camera_result_location.rawContent.toString());
+                                print(temp_location.name);
+                                setState(() {
+                                  selectedValueLocation = temp_location.name;
+                                },);
+                                
                               }
-                              },
-                        ))
+                          },
+                        ),
+                        Positioned(
+                          right: 35, 
+                        child: IconButton(
+                          onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationAdd(forwarding: true,)));}, 
+                          icon: Icon(Icons.add))),
+                      ]
+                    )
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Container(
@@ -390,7 +442,7 @@ class _DeviceAddState extends State<DeviceAdd> {
                       )
                     ),
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: DropdownButtonHideUnderline(
@@ -468,7 +520,7 @@ class _DeviceAddState extends State<DeviceAdd> {
                               },
                         ))
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: DropdownButtonHideUnderline(
@@ -546,7 +598,7 @@ class _DeviceAddState extends State<DeviceAdd> {
                               },
                         ))
                   ),
-                  SizedBox(height: 15),
+                  SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: GestureDetector(

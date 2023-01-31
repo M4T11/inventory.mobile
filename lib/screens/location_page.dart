@@ -104,7 +104,7 @@ class _LocationPageState extends State<LocationPage> {
         child: FloatingActionButton(
           onPressed: () {Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LocationAdd()),
+                MaterialPageRoute(builder: (context) => LocationAdd(forwarding: false,)),
               );},
           child: const Icon(Icons.add),
           backgroundColor: Colors.green,

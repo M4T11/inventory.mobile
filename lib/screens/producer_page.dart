@@ -104,7 +104,7 @@ class _ProducerPageState extends State<ProducerPage> {
         child: FloatingActionButton(
           onPressed: () {Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ProducerAdd()),
+                MaterialPageRoute(builder: (context) => ProducerAdd(forwarding: false,)),
               );},
           child: const Icon(Icons.add),
           backgroundColor: Colors.green,

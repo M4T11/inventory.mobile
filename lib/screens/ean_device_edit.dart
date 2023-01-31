@@ -4,10 +4,13 @@ import 'package:inventoryapp/models/ean_device_model.dart';
 import 'package:inventoryapp/models/producer_model.dart';
 import 'package:inventoryapp/provider/ean_device_provider.dart';
 import 'package:inventoryapp/provider/producer_provider.dart';
+import 'package:inventoryapp/screens/category_add.dart';
 import 'package:inventoryapp/screens/ean_device_page.dart';
 import 'package:inventoryapp/provider/category_provider.dart';
+import 'package:inventoryapp/screens/producer_add.dart';
 import 'package:provider/provider.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 class EanDeviceEdit extends StatefulWidget {
@@ -117,9 +120,17 @@ class _EanDeviceEditState extends State<EanDeviceEdit> {
                           ),
                         IconButton(
                           icon: Icon(Icons.camera_alt_rounded),
-                          onPressed: () {
-                            // do something
-                          },
+                          onPressed: () async {
+                              var result = await BarcodeScanner.scan();
+                              print(result.type); // The result type (barcode, cancelled, failed)
+                              print(result.rawContent); // The barcode content
+                              print(result.format); // The barcode format (as enum)
+                              print(result.formatNote); // If a unknown format was sc
+                              
+                              if(result.format != 'unknown' && result.type != 'Cancelled' && result.rawContent.isNotEmpty) {
+                                _controllerEAN.text = result.rawContent.toString();
+                              }
+                            },
                         ),
                       ],
                     ),
@@ -128,158 +139,176 @@ class _EanDeviceEditState extends State<EanDeviceEdit> {
                   SizedBox(height: 25),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        hint: Text(
-                          'Wybierz kategorię przedmiotu',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).hintColor,
-                          ),
-                        ),
-                        items: categories.map((item) => DropdownMenuItem<String>(
-                        value: item.name,
-                        child: Text(
-                          item.name,
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      )).toList(),
-                      value: selectedValueCategory,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedValueCategory = value as String;
-                          });
-                        },
-                        buttonHeight: 50,
-                        // buttonWidth: 200,
-                        itemHeight: 40,
-                        dropdownMaxHeight: 200,
-                        buttonDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.black26,
+                    child: Stack(
+                      alignment: Alignment.centerRight,
+                      children: <Widget>[
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          isExpanded: true,
+                          hint: Text(
+                            'Wybierz kategorię przedmiotu',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).hintColor,
                             ),
+                          ),
+                          items: categories.map((item) => DropdownMenuItem<String>(
+                          value: item.name,
+                          child: Text(
+                            item.name,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        )).toList(),
+                        value: selectedValueCategory,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedValueCategory = value as String;
+                            });
+                          },
+                          iconSize: 0.0,
+                          buttonHeight: 50,
+                          // buttonWidth: 200,
+                          itemHeight: 40,
+                          dropdownMaxHeight: 200,
+                          buttonDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.black26,
+                              ),
+                              color: Colors.grey[200],
+                              ),
+                          dropdownDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
                             color: Colors.grey[200],
                             ),
-                        dropdownDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Colors.grey[200],
+                          searchController: textEditingControllerCategory,
+                          searchInnerWidget: Padding(
+                          padding: const EdgeInsets.only(
+                            top: 8,
+                            bottom: 4,
+                            right: 8,
+                            left: 8,
                           ),
-                        searchController: textEditingControllerCategory,
-                        searchInnerWidget: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 8,
-                          bottom: 4,
-                          right: 8,
-                          left: 8,
-                        ),
-                        child: TextFormField(
-                          controller: textEditingControllerCategory,
-                          decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 8,
-                          ),
-                          hintText: 'Wyszukaj kategorię...',
-                          hintStyle: const TextStyle(fontSize: 12),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                          child: TextFormField(
+                            controller: textEditingControllerCategory,
+                            decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 8,
+                            ),
+                            hintText: 'Wyszukaj kategorię...',
+                            hintStyle: const TextStyle(fontSize: 12),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        // searchMatchFn: (item, searchValue) {
-                        //   return (item.value.toString().contains(searchValue));
-                        //   },
-                          //This to clear the search value when you close the menu
-                          onMenuStateChange: (isOpen) {
-                            if (!isOpen) {
-                              textEditingControllerCategory.clear();
-                              }
-                              },
-                        ))
+                          // searchMatchFn: (item, searchValue) {
+                          //   return (item.value.toString().contains(searchValue));
+                          //   },
+                            //This to clear the search value when you close the menu
+                            onMenuStateChange: (isOpen) {
+                              if (!isOpen) {
+                                textEditingControllerCategory.clear();
+                                }
+                                },
+                          )),
+                          IconButton(
+                              onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryAdd(forwarding: true,)));}, 
+                              icon: Icon(Icons.add)),
+                        ]
+                    )
                   ),
                   SizedBox(height: 25),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        hint: Text(
-                          'Wybierz producenta przedmiotu',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).hintColor,
-                          ),
-                        ),
-                        items: producers.map((item) => DropdownMenuItem<String>(
-                        value: item.name,
-                        child: Text(
-                          item.name,
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      )).toList(),
-                      value: selectedValueProducer,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedValueProducer = value as String;
-                          });
-                        },
-                        buttonHeight: 50,
-                        // buttonWidth: 200,
-                        itemHeight: 40,
-                        dropdownMaxHeight: 200,
-                        buttonDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.black26,
+                    child: Stack(
+                      alignment: Alignment.centerRight,
+                      children: <Widget>[
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          isExpanded: true,
+                          hint: Text(
+                            'Wybierz producenta przedmiotu',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).hintColor,
                             ),
+                          ),
+                          items: producers.map((item) => DropdownMenuItem<String>(
+                          value: item.name,
+                          child: Text(
+                            item.name,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        )).toList(),
+                        value: selectedValueProducer,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedValueProducer = value as String;
+                            });
+                          },
+                          iconSize: 0.0,
+                          buttonHeight: 50,
+                          // buttonWidth: 200,
+                          itemHeight: 40,
+                          dropdownMaxHeight: 200,
+                          buttonDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.black26,
+                              ),
+                              color: Colors.grey[200],
+                              ),
+                          dropdownDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
                             color: Colors.grey[200],
                             ),
-                        dropdownDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Colors.grey[200],
+                          searchController: textEditingControllerProducer,
+                          searchInnerWidget: Padding(
+                          padding: const EdgeInsets.only(
+                            top: 8,
+                            bottom: 4,
+                            right: 8,
+                            left: 8,
                           ),
-                        searchController: textEditingControllerProducer,
-                        searchInnerWidget: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 8,
-                          bottom: 4,
-                          right: 8,
-                          left: 8,
-                        ),
-                        child: TextFormField(
-                          controller: textEditingControllerProducer,
-                          decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 8,
-                          ),
-                          hintText: 'Wyszukaj producenta...',
-                          hintStyle: const TextStyle(fontSize: 12),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                          child: TextFormField(
+                            controller: textEditingControllerProducer,
+                            decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 8,
+                            ),
+                            hintText: 'Wyszukaj producenta...',
+                            hintStyle: const TextStyle(fontSize: 12),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        // searchMatchFn: (item, searchValue) {
-                        //   return (item.value.toString().contains(searchValue));
-                        //   },
-                          //This to clear the search value when you close the menu
-                          onMenuStateChange: (isOpen) {
-                            if (!isOpen) {
-                              textEditingControllerProducer.clear();
-                              }
-                              },
-                        ))
+                          // searchMatchFn: (item, searchValue) {
+                          //   return (item.value.toString().contains(searchValue));
+                          //   },
+                            //This to clear the search value when you close the menu
+                            onMenuStateChange: (isOpen) {
+                              if (!isOpen) {
+                                textEditingControllerProducer.clear();
+                                }
+                                },
+                          )),
+                          IconButton(
+                              onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProducerAdd(forwarding: true,)));}, 
+                              icon: Icon(Icons.add)),
+                        ]
+                    )
                   ),
                   SizedBox(height: 25),
                   Padding(

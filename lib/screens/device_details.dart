@@ -104,7 +104,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                   fontSize: 24,
                   ),
               ),
-              SizedBox(height: 15),
+              SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Container(
@@ -125,7 +125,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                   ),
                 ),
               ),
-              SizedBox(height: 15),
+              SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Stack(
@@ -150,14 +150,12 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                       ),
                     IconButton(
                       icon: Icon(Icons.camera_alt_rounded),
-                      onPressed: () {
-                        // do something
-                      },
+                      onPressed: null,
                     ),
                   ],
                 ),               
               ),
-              SizedBox(height: 15),
+              SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Container(
@@ -178,7 +176,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                   ),
                 ),
               ),
-              SizedBox(height: 15),
+              SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Stack(
@@ -257,88 +255,107 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                       )),
                       IconButton(
                       icon: Icon(Icons.camera_alt_rounded),
-                      onPressed: () {
-                        // do something
-                      },
+                      onPressed: null,
                     ),
+                    Positioned(
+                            right: 35, 
+                          child: IconButton(
+                            onPressed: null, 
+                            icon: Icon(Icons.add))),
+
                   ],
                 ),
               ),
-              SizedBox(height: 15),
+              SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton2(
-                    isExpanded: true,
-                    hint: Text(
-                      'Wybierz lokalizację przedmiotu',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).hintColor,
-                      ),
-                    ),
-                    items: locations.map((item) => DropdownMenuItem<String>(
-                    value: item.name,
-                    child: Text(
-                      item.name,
-                      style: const TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                  )).toList(),
-                  value: selectedValueLocation,
-                  onChanged: null,
-                    buttonHeight: 50,
-                    // buttonWidth: 200,
-                    itemHeight: 40,
-                    dropdownMaxHeight: 200,
-                    buttonDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.black26,
+                child: Stack(
+                  alignment: Alignment.centerRight,
+                  children: <Widget>[
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton2(
+                      isExpanded: true,
+                      hint: Text(
+                        'Wybierz lokalizację przedmiotu',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).hintColor,
                         ),
+                      ),
+                      items: locations.map((item) => DropdownMenuItem<String>(
+                      value: item.name,
+                      child: Text(
+                        item.name,
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    )).toList(),
+                    value: selectedValueLocation,
+                    onChanged: null,
+                      iconSize: 0.0,
+                      buttonHeight: 50,
+                      // buttonWidth: 200,
+                      itemHeight: 40,
+                      dropdownMaxHeight: 200,
+                      buttonDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Colors.black26,
+                          ),
+                          color: Colors.grey[200],
+                          ),
+                      dropdownDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
                         color: Colors.grey[200],
                         ),
-                    dropdownDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.grey[200],
+                      searchController: textEditingControllerLocation,
+                      searchInnerWidget: Padding(
+                      padding: const EdgeInsets.only(
+                        top: 8,
+                        bottom: 4,
+                        right: 8,
+                        left: 8,
                       ),
-                    searchController: textEditingControllerLocation,
-                    searchInnerWidget: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 8,
-                      bottom: 4,
-                      right: 8,
-                      left: 8,
-                    ),
-                    child: TextFormField(
-                      controller: textEditingControllerLocation,
-                      decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 8,
-                      ),
-                      hintText: 'Wyszukaj lokalizację...',
-                      hintStyle: const TextStyle(fontSize: 12),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                      child: TextFormField(
+                        controller: textEditingControllerLocation,
+                        decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 8,
+                        ),
+                        hintText: 'Wyszukaj lokalizację...',
+                        hintStyle: const TextStyle(fontSize: 12),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    // searchMatchFn: (item, searchValue) {
-                    //   return (item.value.toString().contains(searchValue));
-                    //   },
-                      //This to clear the search value when you close the menu
-                      onMenuStateChange: (isOpen) {
-                        if (!isOpen) {
-                          textEditingControllerLocation.clear();
-                          }
-                          },
-                    ))
+                      // searchMatchFn: (item, searchValue) {
+                      //   return (item.value.toString().contains(searchValue));
+                      //   },
+                        //This to clear the search value when you close the menu
+                        onMenuStateChange: (isOpen) {
+                          if (!isOpen) {
+                            textEditingControllerLocation.clear();
+                            }
+                            },
+                      )),
+                      IconButton(
+                          icon: Icon(Icons.camera_alt_rounded),
+                          onPressed: null,
+                        ),
+                        Positioned(
+                          right: 35, 
+                          child: IconButton(
+                          onPressed: null, 
+                          icon: Icon(Icons.add))),
+                  ]
+                )
               ),
-              SizedBox(height: 15),
+              SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Container(
@@ -363,7 +380,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                       )
                     ),
                   ),
-              SizedBox(height: 15),
+              SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: DropdownButtonHideUnderline(
@@ -437,7 +454,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                           },
                     ))
               ),
-              SizedBox(height: 15),
+              SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: DropdownButtonHideUnderline(
@@ -511,7 +528,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                           },
                     ))
               ),
-              SizedBox(height: 15),
+              SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: GestureDetector(

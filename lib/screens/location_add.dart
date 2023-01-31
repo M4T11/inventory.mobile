@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventoryapp/models/location_model.dart';
+import 'package:inventoryapp/screens/device_add.dart';
 import 'package:inventoryapp/screens/location_page.dart';
 import 'package:inventoryapp/services/location_services.dart';
 import 'package:inventoryapp/provider/location_provider.dart';
@@ -7,13 +8,12 @@ import 'package:provider/provider.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 class LocationAdd extends StatefulWidget {
-  // final Category categoryObject;
-  const LocationAdd({Key? key}) : super(key: key);
-  // const CategoryEdit({super.key, required this.category});
-  // const CategoryAdd ({ Key? key, required this.categoryObject}): super(key: key);
+  final bool forwarding;
+
+  const LocationAdd ({ Key? key, required this.forwarding}): super(key: key);
+
   
-
-
+  
   @override
   State<LocationAdd> createState() => _LocationAddState();
 }
@@ -101,7 +101,12 @@ class _LocationAddState extends State<LocationAdd> {
                         Provider.of<LocationProvider>(context, listen: false).addLocation(Location(
                           locationId: 0, 
                           name: _controller.text.toString()));
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationPage()));
+                          if (widget.forwarding) {
+                            Navigator.of(context).pop();
+                          } else {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationPage()));
+                          }
+                          
                       },
                 ),
               ),

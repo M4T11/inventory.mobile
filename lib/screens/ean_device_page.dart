@@ -104,7 +104,7 @@ class _EanDevicePageState extends State<EanDevicePage> {
         child: FloatingActionButton(
           onPressed: () {Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => EanDeviceAdd()),
+                MaterialPageRoute(builder: (context) => EanDeviceAdd(forwarding: false,)),
               );},
           child: const Icon(Icons.add),
           backgroundColor: Colors.green,

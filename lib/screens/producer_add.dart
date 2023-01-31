@@ -7,10 +7,9 @@ import 'package:provider/provider.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 class ProducerAdd extends StatefulWidget {
-  // final Category categoryObject;
-  const ProducerAdd({Key? key}) : super(key: key);
-  // const CategoryEdit({super.key, required this.category});
-  // const CategoryAdd ({ Key? key, required this.categoryObject}): super(key: key);
+  final bool forwarding;
+
+  const ProducerAdd ({ Key? key, required this.forwarding}): super(key: key);
   
 
 
@@ -101,7 +100,11 @@ class _ProducerAddState extends State<ProducerAdd> {
                         Provider.of<ProducerProvider>(context, listen: false).addProducer(Producer(
                           producerId: 0, 
                           name: _controller.text.toString()));
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProducerPage()));
+                          if (widget.forwarding) {
+                            Navigator.of(context).pop();
+                          } else {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProducerPage()));
+                          }                         
                       },
                 ),
               ),

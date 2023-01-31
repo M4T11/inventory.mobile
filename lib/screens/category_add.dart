@@ -7,10 +7,9 @@ import 'package:provider/provider.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 class CategoryAdd extends StatefulWidget {
-  // final Category categoryObject;
-  const CategoryAdd({Key? key}) : super(key: key);
-  // const CategoryEdit({super.key, required this.category});
-  // const CategoryAdd ({ Key? key, required this.categoryObject}): super(key: key);
+    final bool forwarding;
+
+    const CategoryAdd ({ Key? key, required this.forwarding}): super(key: key);
   
 
 
@@ -101,7 +100,12 @@ class _CategoryAddState extends State<CategoryAdd> {
                         Provider.of<CategoryProvider>(context, listen: false).addCategories(Category(
                           categoryId: 0, 
                           name: _controller.text.toString()));
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryPage()));
+                          if (widget.forwarding) {
+                            Navigator.of(context).pop();
+                          } else {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryPage()));
+                          }  
+                          
                       },
                 ),
               ),
