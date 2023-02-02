@@ -18,7 +18,7 @@ class EanDeviceService {
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     if(response.statusCode == 200) {
-      final json = jsonDecode(response.body) as List;
+      final json = jsonDecode(utf8.decode(response.bodyBytes, allowMalformed: true)) as List;
       final eanDevices = json.map((e) {
         return EanDevice.fromJson(e);
 

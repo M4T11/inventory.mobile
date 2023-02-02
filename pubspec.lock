@@ -179,6 +179,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0"
+  multi_dropdown:
+    dependency: "direct main"
+    description:
+      name: multi_dropdown
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.7"
   nested:
     dependency: transitive
     description:
@@ -277,6 +284,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.5"
+  quiver:
+    dependency: "direct main"
+    description:
+      name: quiver
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.1"
   sky_engine:
     dependency: transitive
     description: flutter

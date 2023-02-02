@@ -17,7 +17,7 @@ class LocationService {
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     if(response.statusCode == 200) {
-      final json = jsonDecode(response.body) as List;
+      final json = jsonDecode(utf8.decode(response.bodyBytes, allowMalformed: true)) as List;
       final locations = json.map((e) {
         return Location(
           locationId: e['location_id'], 

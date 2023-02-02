@@ -10,6 +10,8 @@ import 'package:inventoryapp/screens/device_page.dart';
 import 'package:provider/provider.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_spinbox/material.dart';
+import 'dart:convert';
+import 'package:quiver/collection.dart';
 
 
 class DeviceDetails extends StatefulWidget {
@@ -21,6 +23,33 @@ class DeviceDetails extends StatefulWidget {
 }
 
 class _DeviceDetailsState extends State<DeviceDetails> {
+
+  List<String> itemsDescription = [
+  'Do wyczyszczenia',
+  'Do sprawdzenia',
+  ];
+  List<String> itemsDescriptionMouse = [
+        'Do wyczyszczenia',
+        'Do sprawdzenia',
+        'Nie działa LPM',
+        'Nie działa PPM',
+        'Switche do wymiany',
+        'Enkoder do wymiany',
+        'Boczki do przyklejenia',
+        'Klawisze się ruszają',
+        'Przewód do wymiany',
+        'Dołożyc nadajnik',
+        ];
+
+  List<String> itemsDescriptionHeadphones =[
+      'Do wyczyszczenia',
+      'Do sprawdzenia',
+      'Potencjometr do wymiany',
+      'Nie działa PS',
+      'Nie działa LS',
+      'Jack do wymiany'
+      ];
+  List<String> selectedItemsDescription = [];
 
   List<String> deviceCondition = ["Nowe", "Używane"]; 
   List<String> deviceStatus = ["Do naprawy", "Do wystawienia", "Do zdjęć", "Na części"]; 
@@ -40,13 +69,58 @@ class _DeviceDetailsState extends State<DeviceDetails> {
     quantity = widget.deviceObject.quantity.toDouble();
     _controllerSerialnumber.text = widget.deviceObject.serialNumber.toString();
     _controllerName.text = widget.deviceObject.name.toString();
-    _controllerDescription.text = widget.deviceObject.description.toString(); 
+    // _controllerDescription.text = widget.deviceObject.description.toString(); 
+
+    Map selected = json.decode(widget.deviceObject.description);
+
+    selected.keys.forEach((key) {
+      // print(key);
+      selectedItemsDescription.add(key);
+    });  
+    
+
+    if(widget.deviceObject.eanDevice.category.name.toString() == 'Mysz') {
+
+      if(listsEqual(itemsDescriptionMouse, selectedItemsDescription)) {
+        itemsDescription = itemsDescriptionMouse;
+      } else {
+        var missing = selectedItemsDescription.where((e) => !itemsDescriptionMouse.contains(e));
+        
+        itemsDescription = itemsDescriptionMouse + missing.toList();
+      }
+
+      
+
+    } else if (widget.deviceObject.eanDevice.category.name.toString() == 'Klawiatura') {
+
+      itemsDescription = itemsDescription;
+
+      if(listsEqual(itemsDescription, selectedItemsDescription)) {
+        itemsDescription = itemsDescription;
+      } else {
+        var missing = selectedItemsDescription.where((e) => !itemsDescription.contains(e));
+      
+        itemsDescription = itemsDescription + missing.toList();
+      }
+
+    } else if (widget.deviceObject.eanDevice.category.name.toString() == 'Słuchawki') {
+
+      
+      if(listsEqual(itemsDescriptionMouse, selectedItemsDescription)) {
+        itemsDescription = itemsDescriptionHeadphones;
+      } else {
+        var missing = selectedItemsDescription.where((e) => !itemsDescriptionHeadphones.contains(e));
+      
+        itemsDescription = itemsDescriptionHeadphones + missing.toList();
+      }
+    }
+
     
   }
 
   TextEditingController _controllerSerialnumber = new TextEditingController();
   TextEditingController _controllerName = new TextEditingController();
-  TextEditingController _controllerDescription = new TextEditingController();
+  // TextEditingController _controllerDescription = new TextEditingController();
 
 
   late double quantity;
@@ -64,7 +138,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
     // Clean up the controller when the widget is disposed.
     _controllerSerialnumber.dispose();
     _controllerName.dispose();
-    _controllerDescription.dispose();
+    // _controllerDescription.dispose();
     textEditingControllerEanDevice.dispose();
     textEditingControllerLocation.dispose();
     textEditingControllerStatus.dispose();
@@ -155,27 +229,27 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                   ],
                 ),               
               ),
-              SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: TextField(
-                    enabled: false,
-                    controller: _controllerDescription,
-                    textAlign: TextAlign.center,
-                    // initialValue: widget.categoryObject.name.toString(),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Wprowadź opis przedmiotu (opcjonalne)',
-                    ),
-                  ),
-                ),
-              ),
+              // SizedBox(height: 10),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              //   child: Container(
+              //     decoration: BoxDecoration(
+              //       color: Colors.grey[200],
+              //       border: Border.all(color: Colors.white),
+              //       borderRadius: BorderRadius.circular(12),
+              //     ),
+              //     child: TextField(
+              //       enabled: false,
+              //       controller: _controllerDescription,
+              //       textAlign: TextAlign.center,
+              //       // initialValue: widget.categoryObject.name.toString(),
+              //       decoration: InputDecoration(
+              //         border: InputBorder.none,
+              //         hintText: 'Wprowadź opis przedmiotu (opcjonalne)',
+              //       ),
+              //     ),
+              //   ),
+              // ),
               SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -354,6 +428,113 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                           icon: Icon(Icons.add))),
                   ]
                 )
+              ),
+              SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Stack(
+                        alignment: Alignment.centerRight,
+                        children: <Widget>[
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            isExpanded: true,
+                            hint: Align(
+                              alignment: AlignmentDirectional.center,
+                              child: Text(
+                                'Opis przedmiotu',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Theme.of(context).hintColor,
+                                ),
+                              ),
+                            ),
+                            items: itemsDescription.map((item) {
+                              return DropdownMenuItem<String>(
+                                value: item,
+                                //disable default onTap to avoid closing menu when selecting an item
+                                enabled: false,
+                                child: StatefulBuilder(
+                                  builder: (context, menuSetState) {
+                                    final _isSelected = selectedItemsDescription.contains(item);
+                                    return InkWell(
+                                      onTap: () {
+                                        _isSelected
+                                                ? selectedItemsDescription.remove(item)
+                                                : selectedItemsDescription.add(item);
+                                        //This rebuilds the StatefulWidget to update the button's text
+                                        setState(() {});
+                                        //This rebuilds the dropdownMenu Widget to update the check mark
+                                        menuSetState(() {});
+                                      },
+                                      child: Container(
+                                        height: double.infinity,
+                                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                        child: Row(
+                                          children: [
+                                            _isSelected
+                                                    ? const Icon(Icons.check_box_outlined)
+                                                    : const Icon(Icons.check_box_outline_blank),
+                                            const SizedBox(width: 16),
+                                            Text(
+                                              item,
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            }).toList(),
+                            //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
+                            value: selectedItemsDescription.isEmpty ? null : selectedItemsDescription.last,
+                            onChanged: null,
+                            iconSize: 0.0,
+                            buttonHeight: 50,
+                            // buttonWidth: 140,
+                            itemHeight: 40,
+                            dropdownMaxHeight: 200,
+                            itemPadding: EdgeInsets.zero,
+                            buttonDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.black26,
+                                ),
+                                color: Colors.grey[200],
+                                ),
+                            dropdownDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.grey[200],
+                              ),
+                            selectedItemBuilder: (context) {
+                              return itemsDescription.map(
+                                        (item) {
+                                  return Container(
+                                    alignment: AlignmentDirectional.center,
+                                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                    child: Text(
+                                      selectedItemsDescription.join(', '),
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      maxLines: 1,
+                                    ),
+                                  );
+                                },
+                              ).toList();
+                            },
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: null
+                        ),
+                        ]
+                      ),
               ),
               SizedBox(height: 10),
                   Padding(

@@ -19,7 +19,7 @@ class CategoryService {
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     if(response.statusCode == 200) {
-      final json = jsonDecode(response.body) as List;
+      final json = jsonDecode(utf8.decode(response.bodyBytes, allowMalformed: true)) as List;
       final categories = json.map((e) {
         return Category(
           categoryId: e['category_id'], 

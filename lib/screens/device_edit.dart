@@ -13,6 +13,8 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:flutter_spinbox/material.dart';
 import 'package:barcode_scan2/barcode_scan2.dart';
+import 'dart:convert';
+import 'package:quiver/collection.dart';
 
 
 class DeviceEdit extends StatefulWidget {
@@ -24,6 +26,33 @@ class DeviceEdit extends StatefulWidget {
 }
 
 class _DeviceEditState extends State<DeviceEdit> {
+
+  List<String> itemsDescription = [
+  'Do wyczyszczenia',
+  'Do sprawdzenia',
+  ];
+  List<String> itemsDescriptionMouse = [
+        'Do wyczyszczenia',
+        'Do sprawdzenia',
+        'Nie działa LPM',
+        'Nie działa PPM',
+        'Switche do wymiany',
+        'Enkoder do wymiany',
+        'Boczki do przyklejenia',
+        'Klawisze się ruszają',
+        'Przewód do wymiany',
+        'Dołożyc nadajnik',
+        ];
+
+  List<String> itemsDescriptionHeadphones =[
+      'Do wyczyszczenia',
+      'Do sprawdzenia',
+      'Potencjometr do wymiany',
+      'Nie działa PS',
+      'Nie działa LS',
+      'Jack do wymiany'
+      ];
+  List<String> selectedItemsDescription = [];
 
   List<String> deviceCondition = ["Nowe", "Używane"]; 
   List<String> deviceStatus = ["Do naprawy", "Do wystawienia", "Do zdjęć", "Na części"]; 
@@ -60,12 +89,59 @@ class _DeviceEditState extends State<DeviceEdit> {
     //         //use setState to rebuild the widget
     //         setState(() {});
     //     });
+
+    Map selected = json.decode(widget.deviceObject.description);
+
+    selected.keys.forEach((key) {
+      // print(key);
+      selectedItemsDescription.add(key);
+    });
+
+    if(widget.deviceObject.eanDevice.category.name.toString() == 'Mysz') {
+
+      if(listsEqual(itemsDescriptionMouse, selectedItemsDescription)) {
+        itemsDescription = itemsDescriptionMouse;
+      } else {
+        var missing = selectedItemsDescription.where((e) => !itemsDescriptionMouse.contains(e));
+        
+        itemsDescription = itemsDescriptionMouse + missing.toList();
+      }
+
+      
+
+    } else if (widget.deviceObject.eanDevice.category.name.toString() == 'Klawiatura') {
+
+      itemsDescription = itemsDescription;
+
+      if(listsEqual(itemsDescription, selectedItemsDescription)) {
+        itemsDescription = itemsDescription;
+      } else {
+        var missing = selectedItemsDescription.where((e) => !itemsDescription.contains(e));
+      
+        itemsDescription = itemsDescription + missing.toList();
+      }
+
+    } else if (widget.deviceObject.eanDevice.category.name.toString() == 'Słuchawki') {
+
+      
+      if(listsEqual(itemsDescriptionMouse, selectedItemsDescription)) {
+        itemsDescription = itemsDescriptionHeadphones;
+      } else {
+        var missing = selectedItemsDescription.where((e) => !itemsDescriptionHeadphones.contains(e));
+      
+        itemsDescription = itemsDescriptionHeadphones + missing.toList();
+      }
+    }
+
+
     
   }
 
   TextEditingController _controllerSerialnumber = new TextEditingController();
   TextEditingController _controllerName = new TextEditingController();
   TextEditingController _controllerDescription = new TextEditingController();
+
+  TextEditingController _textControllerAlertDialog = new TextEditingController();
 
   late bool spinEnabled;
   late bool spinReadOnly;
@@ -187,26 +263,26 @@ class _DeviceEditState extends State<DeviceEdit> {
                       ],
                     ),               
                   ),
-                  SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: TextField(
-                        controller: _controllerDescription,
-                        textAlign: TextAlign.center,
-                        // initialValue: widget.categoryObject.name.toString(),
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Wprowadź opis przedmiotu (opcjonalne)',
-                        ),
-                      ),
-                    ),
-                  ),
+                  // SizedBox(height: 10),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  //   child: Container(
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.grey[200],
+                  //       border: Border.all(color: Colors.white),
+                  //       borderRadius: BorderRadius.circular(12),
+                  //     ),
+                  //     child: TextField(
+                  //       controller: _controllerDescription,
+                  //       textAlign: TextAlign.center,
+                  //       // initialValue: widget.categoryObject.name.toString(),
+                  //       decoration: InputDecoration(
+                  //         border: InputBorder.none,
+                  //         hintText: 'Wprowadź opis przedmiotu (opcjonalne)',
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -236,6 +312,22 @@ class _DeviceEditState extends State<DeviceEdit> {
                         onChanged: (value) {
                           setState(() {
                             selectedValueEanDevice = value as String;
+                            var ean_device_selected = selectedValueEanDevice.toString().split(" ");
+                            var ean_selected = ean_device_selected.last.substring(1, ean_device_selected.last.length - 1);;
+                            EanDevice eanDevice = eanDevices.firstWhere((x) => x.ean == ean_selected.toString());
+                            if(eanDevice.category.name == 'Mysz') {
+
+                                selectedItemsDescription.clear();
+                                itemsDescription = itemsDescriptionMouse;
+
+                            } else if (eanDevice.category.name == 'Klawiatura') {
+                                selectedItemsDescription.clear();
+                                itemsDescription = itemsDescription;
+
+                            } else if (eanDevice.category.name == 'Słuchawki') {
+                                 selectedItemsDescription.clear();
+                                 itemsDescription = itemsDescriptionHeadphones;
+                            }
                             });
                           },
                           iconSize: 0.0,
@@ -425,6 +517,163 @@ class _DeviceEditState extends State<DeviceEdit> {
                           icon: Icon(Icons.add))),
                       ]
                     )
+                  ),
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Stack(
+                        alignment: Alignment.centerRight,
+                        children: <Widget>[
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            isExpanded: true,
+                            hint: Align(
+                              alignment: AlignmentDirectional.center,
+                              child: Text(
+                                'Opis przedmiotu',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Theme.of(context).hintColor,
+                                ),
+                              ),
+                            ),
+                            items: itemsDescription.map((item) {
+                              return DropdownMenuItem<String>(
+                                value: item,
+                                //disable default onTap to avoid closing menu when selecting an item
+                                enabled: false,
+                                child: StatefulBuilder(
+                                  builder: (context, menuSetState) {
+                                    final _isSelected = selectedItemsDescription.contains(item);
+                                    return InkWell(
+                                      onTap: () {
+                                        _isSelected
+                                                ? selectedItemsDescription.remove(item)
+                                                : selectedItemsDescription.add(item);
+                                        //This rebuilds the StatefulWidget to update the button's text
+                                        setState(() {});
+                                        //This rebuilds the dropdownMenu Widget to update the check mark
+                                        menuSetState(() {});
+                                      },
+                                      child: Container(
+                                        height: double.infinity,
+                                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                        child: Row(
+                                          children: [
+                                            _isSelected
+                                                    ? const Icon(Icons.check_box_outlined)
+                                                    : const Icon(Icons.check_box_outline_blank),
+                                            const SizedBox(width: 16),
+                                            Text(
+                                              item,
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            }).toList(),
+                            //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
+                            value: selectedItemsDescription.isEmpty ? null : selectedItemsDescription.last,
+                            onChanged: (value) {},
+                            iconSize: 0.0,
+                            buttonHeight: 50,
+                            // buttonWidth: 140,
+                            itemHeight: 40,
+                            dropdownMaxHeight: 200,
+                            itemPadding: EdgeInsets.zero,
+                            buttonDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.black26,
+                                ),
+                                color: Colors.grey[200],
+                                ),
+                            dropdownDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.grey[200],
+                              ),
+                            selectedItemBuilder: (context) {
+                              return itemsDescription.map(
+                                        (item) {
+                                  return Container(
+                                    alignment: AlignmentDirectional.center,
+                                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                    child: Text(
+                                      selectedItemsDescription.join(', '),
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      maxLines: 1,
+                                    ),
+                                  );
+                                },
+                              ).toList();
+                            },
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () {
+                            // do something
+                            showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                              // title: const Text('Dodaj do opisu'),
+                              content: TextField(
+                                          controller: _textControllerAlertDialog,
+                                          autofocus: true,
+                                          decoration: const InputDecoration(
+                                                hintText: "Dodaj do opisu",
+                                                enabledBorder: UnderlineInputBorder(      
+                                                  borderSide: BorderSide(color: Colors.green),   
+                                                  ),  
+                                                focusedBorder: UnderlineInputBorder(
+                                                  borderSide: BorderSide(color: Colors.green),
+                                                  ),  
+                                                ),
+                                                
+                                                
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              style: TextButton.styleFrom(
+                                                foregroundColor: Colors.pink,
+                                              ),
+                                              child: Text('Anuluj',),
+                                              onPressed: () {
+                                                _textControllerAlertDialog.clear();
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            TextButton(
+                                              style: TextButton.styleFrom(
+                                                foregroundColor: Colors.green,
+                                              ),
+                                              child: Text('Dodaj'),
+                                              onPressed: () {
+                                                setState((){
+                                                  //  _items.add(textController.text)  // 👈 add list item to the list
+                                                   itemsDescription.add(_textControllerAlertDialog.text);
+                                                   selectedItemsDescription.add(_textControllerAlertDialog.text);
+                                                 });
+                                                 print(selectedItemsDescription);
+                                                Navigator.pop(context, _textControllerAlertDialog.text);
+                                                _textControllerAlertDialog.clear();
+                                              },
+                                            ),
+                              ],
+                            ));
+                          },
+                        ),
+                        ]
+                      ),
                   ),
                   SizedBox(height: 10),
                   Padding(
@@ -630,6 +879,7 @@ class _DeviceEditState extends State<DeviceEdit> {
                         ),
                       ),
                       onTap: () {
+                            Map mapDescription = {for (var item in selectedItemsDescription) '"$item"' : 0};
                             var ean_device_selected = selectedValueEanDevice.toString().split(" ");
                             var ean_selected = ean_device_selected.last.substring(1, ean_device_selected.last.length - 1);;
                             // print(ean_selected);
@@ -640,7 +890,8 @@ class _DeviceEditState extends State<DeviceEdit> {
                               deviceId: widget.deviceObject.deviceId,
                               name: _controllerName.text.toString(),
                               serialNumber: _controllerSerialnumber.text.toString(),
-                              description: _controllerDescription.text.toString(),
+                              // description: _controllerDescription.text.toString(),
+                              description: mapDescription.toString(),
                               eanDevice: eanDevice,
                               location: location,
                               quantity: quantity.toInt(),
