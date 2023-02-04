@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inventoryapp/screens/category_add.dart';
 import 'package:inventoryapp/screens/category_page.dart';
 import 'package:inventoryapp/screens/home_page.dart';
+import 'package:inventoryapp/screens/main_page.dart';
 import 'package:inventoryapp/screens/test.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
@@ -32,7 +33,7 @@ class _NavPageState extends State<NavPage> {
         return [
           HomePage(),
           CategoryPage(),
-          Test()
+          MainPage()
         ];
     }
 

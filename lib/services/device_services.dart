@@ -28,6 +28,24 @@ class DeviceService {
     return [];
   }
 
+  Future <Device> getDeviceBySN(String sn) async {
+    String url = "";
+    
+    if (local) {
+      url = 'http://127.0.0.1:8000/devices/sn/' + sn;
+    } else {
+      url = 'http://192.168.50.104:8000/devices/sn/' + sn;
+    }
+    final uri = Uri.parse(url);
+    final response = await http.get(uri);
+    if(response.statusCode == 200) {
+      final json = jsonDecode(utf8.decode(response.bodyBytes, allowMalformed: true));
+      final Device device = Device.fromJson(json);
+    }
+    throw "Don't find device";
+    // return;
+  }
+
   Future<int> deleteDevice(int id) async {
     String url = "";
     if (local) {

@@ -809,7 +809,7 @@ class _DeviceEditState extends State<DeviceEdit> {
                         buttonHeight: 50,
                         // buttonWidth: 200,
                         itemHeight: 40,
-                        dropdownMaxHeight: 200,
+                        dropdownMaxHeight: 130,
                         buttonDecoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(

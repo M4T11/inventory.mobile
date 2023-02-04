@@ -25,9 +25,30 @@ class DeviceAdd extends StatefulWidget {
 class _DeviceAddState extends State<DeviceAdd> {
 
   List<String> itemsDescription = [
-  'Do wyczyszczenia',
-  'Do sprawdzenia',
-  ];
+    'Do wyczyszczenia',
+    'Do sprawdzenia',
+    ];
+  List<String> itemsDescriptionMouse = [
+        'Do wyczyszczenia',
+        'Do sprawdzenia',
+        'Nie działa LPM',
+        'Nie działa PPM',
+        'Switche do wymiany',
+        'Enkoder do wymiany',
+        'Boczki do przyklejenia',
+        'Klawisze się ruszają',
+        'Przewód do wymiany',
+        'Dołożyc nadajnik',
+        ];
+
+  List<String> itemsDescriptionHeadphones =[
+      'Do wyczyszczenia',
+      'Do sprawdzenia',
+      'Potencjometr do wymiany',
+      'Nie działa PS',
+      'Nie działa LS',
+      'Jack do wymiany'
+      ];
   List<String> selectedItemsDescription = [];
 
 
@@ -231,37 +252,15 @@ class _DeviceAddState extends State<DeviceAdd> {
                             if(eanDevice.category.name == 'Mysz') {
 
                                 selectedItemsDescription.clear();
-                                itemsDescription = [
-                                  'Do wyczyszczenia',
-                                  'Do sprawdzenia',
-                                  'Nie działa LPM',
-                                  'Nie działa PPM',
-                                  'Switche do wymiany',
-                                  'Enkoder do wymiany',
-                                  'Boczki do przyklejenia',
-                                  'Klawisze się ruszają',
-                                  'Przewód do wymiany',
-                                  'Dołożyc nadajnik',
-                                  ];
+                                itemsDescription = itemsDescriptionMouse;
 
                             } else if (eanDevice.category.name == 'Klawiatura') {
                                 selectedItemsDescription.clear();
-                                itemsDescription = [
-                                  'Do wyczyszczenia',
-                                  'Do sprawdzenia',
-                                  ];
+                                itemsDescription = itemsDescription;
 
                             } else if (eanDevice.category.name == 'Słuchawki') {
                                  selectedItemsDescription.clear();
-                                 itemsDescription = [
-                                  'Do wyczyszczenia',
-                                  'Do sprawdzenia',
-                                  'Potencjometr do wymiany',
-                                  'Nie działa PS',
-                                  'Nie działa LS',
-                                  'Jack do wymiany'
-                                  ];
-
+                                 itemsDescription = itemsDescriptionHeadphones;
                             }
                             });
                           },
@@ -330,6 +329,22 @@ class _DeviceAddState extends State<DeviceAdd> {
                                 print(temp_ean.model);
                                 setState(() {
                                   selectedValueEanDevice = temp_ean.producer.name + " " + temp_ean.model + " (" + temp_ean.ean + ")";
+                                  EanDevice eanDevice = eanDevices.firstWhere((x) => x.ean == temp_ean.ean.toString());
+                                  
+                                  if(eanDevice.category.name == 'Mysz') {
+
+                                      selectedItemsDescription.clear();
+                                      itemsDescription = itemsDescriptionMouse;
+
+                                  } else if (eanDevice.category.name == 'Klawiatura') {
+                                      selectedItemsDescription.clear();
+                                      itemsDescription = itemsDescription;
+
+                                  } else if (eanDevice.category.name == 'Słuchawki') {
+                                      selectedItemsDescription.clear();
+                                      itemsDescription = itemsDescriptionHeadphones;
+                                  }
+                                  
                                 },);
                                 
                               }
@@ -743,7 +758,7 @@ class _DeviceAddState extends State<DeviceAdd> {
                         buttonHeight: 50,
                         // buttonWidth: 200,
                         itemHeight: 40,
-                        dropdownMaxHeight: 200,
+                        dropdownMaxHeight: 130,
                         buttonDecoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
