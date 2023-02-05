@@ -10,6 +10,7 @@ import 'package:inventoryapp/screens/producer_page.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:barcode_scan2/barcode_scan2.dart';
+import 'package:inventoryapp/screens/repair_page.dart';
 import 'package:provider/provider.dart';
 import 'package:inventoryapp/provider/device_provider.dart';
 import 'package:collection/collection.dart';
@@ -21,6 +22,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
     final TextEditingController _controllerSearch =  TextEditingController();
+    final TextEditingController _controllerRepair =  TextEditingController();
 
     @override
     void initState() {
@@ -67,6 +69,7 @@ class _MainPageState extends State<MainPage> {
                     crossAxisCount: 1,
                     padding: EdgeInsets.all(3.0),
                     children: <Widget>[
+                      // WYSZUKAJ
                       FlipCard(
                         fill: Fill.fillBack, // Fill the back side of the card to make in the same size as the front.
                         direction: FlipDirection.HORIZONTAL, // default
@@ -120,40 +123,10 @@ class _MainPageState extends State<MainPage> {
                                     child: TextField(
                                       textInputAction: TextInputAction.search,
                                       onSubmitted: (value) {
-                                        print("search");
                                         Device? device_sn = devices.firstWhereOrNull((x) => x.serialNumber == _controllerSearch.text.toString());
                                         Device? device_qr = devices.firstWhereOrNull((x) => x.qrCode == _controllerSearch.text.toString());
-                                        print(device_qr);
-                                        print(device_sn);
-                                      },
-                                      controller: _controllerSearch,
-                                      textAlign: TextAlign.center,
-                                      // initialValue: widget.categoryObject.name.toString(),
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'Wprowadź SN lub kod QR przedmiotu',
-                                      ),
-                                    ),
-                                  ),
-                                IconButton(
-                                  icon: Icon(Icons.camera_alt_rounded),
-                                  onPressed: () async {
-                                      var result = await BarcodeScanner.scan();
-                                      print(result.type); // The result type (barcode, cancelled, failed)
-                                      print(result.rawContent); // The barcode content
-                                      print(result.format); // The barcode format (as enum)
-                                      print(result.formatNote); // If a unknown format was sc
-                                      
-                                      
-                                      if(result.format != 'unknown' && result.type != 'Cancelled' && result.rawContent.isNotEmpty) {
-                                        _controllerSearch.text = result.rawContent.toString();
-                                        Device? device_sn = devices.firstWhereOrNull((x) => x.serialNumber == _controllerSearch.text.toString());
-                                        Device? device_qr = devices.firstWhereOrNull((x) => x.qrCode == _controllerSearch.text.toString());
-                                        print(device_qr);
-                                        print(device_sn);
 
                                         if (device_sn == null && device_qr == null) {
-                                          print('HALO');
                                           showDialog<String>(
                                             context: context,
                                             builder: (BuildContext context) => AlertDialog(
@@ -193,6 +166,73 @@ class _MainPageState extends State<MainPage> {
                                           }
                                           
                                         }
+
+                                      },
+                                      controller: _controllerSearch,
+                                      textAlign: TextAlign.center,
+                                      // initialValue: widget.categoryObject.name.toString(),
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Wprowadź SN lub kod QR przedmiotu',
+                                      ),
+                                    ),
+                                  ),
+                                IconButton(
+                                  icon: Icon(Icons.camera_alt_rounded),
+                                  onPressed: () async {
+                                      var result = await BarcodeScanner.scan();
+                                      print(result.type); // The result type (barcode, cancelled, failed)
+                                      print(result.rawContent); // The barcode content
+                                      print(result.format); // The barcode format (as enum)
+                                      print(result.formatNote); // If a unknown format was sc
+                                      
+                                      
+                                      if(result.format != 'unknown' && result.type != 'Cancelled' && result.rawContent.isNotEmpty) {
+                                        _controllerSearch.text = result.rawContent.toString();
+                                        Device? device_sn = devices.firstWhereOrNull((x) => x.serialNumber == _controllerSearch.text.toString());
+                                        Device? device_qr = devices.firstWhereOrNull((x) => x.qrCode == _controllerSearch.text.toString());
+
+                                        if (device_sn == null && device_qr == null) {
+                                          showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) => AlertDialog(
+                                            title: const Text('UWAGA'),
+                                            content: const Text('Nie znaleziono urządzenia'),
+                                            actions: [
+                                            TextButton(
+                                              style: TextButton.styleFrom(
+                                                foregroundColor: Colors.pink,
+                                              ),
+                                              child: Text('Anuluj',),
+                                              onPressed: () {
+                                                _controllerSearch.clear();
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            TextButton(
+                                              style: TextButton.styleFrom(
+                                                foregroundColor: Colors.green,
+                                              ),
+                                              child: Text('Dodaj'),
+                                              onPressed: () {
+                                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeviceAdd()));
+                                                
+                                              },
+                                            ),
+                                          ]    
+                                          ));
+                                          
+                                        } else {
+                                          if (device_qr != null) {
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeviceDetails(deviceObject: device_qr)));
+                                          } 
+                                          if (device_sn != null) {
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeviceDetails(deviceObject: device_sn)));
+
+                                          }
+                                          
+                                        }
+                                        _controllerSearch.clear();
                                       }
                                       
                                     },
@@ -202,43 +242,180 @@ class _MainPageState extends State<MainPage> {
                           ),
                         ),
                       ),
-                        // LOKALIZACJE
-                        Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          ),
-                        elevation: 1.0,
-                        margin: EdgeInsets.all(15.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xff73c088),
-                            borderRadius: BorderRadius.circular(12),
+                      // NAPRAWA
+                        FlipCard(
+                        fill: Fill.fillBack, // Fill the back side of the card to make in the same size as the front.
+                        direction: FlipDirection.HORIZONTAL, // default
+                        side: CardSide.FRONT, // The side to initially display.
+                        front: Container(
+                            margin: EdgeInsets.all(15.0),
+                            decoration: BoxDecoration(
+                              color: Color(0xff73c088),
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                          child: InkWell(
-                            onTap: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationPage()));},
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisSize: MainAxisSize.min,
-                              verticalDirection: VerticalDirection.down,
+                          child: Column (
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            // SizedBox(height: 50.0),
+                            Center(
+                              child: Text('NAPRAW PRZEDMIOT',
+                              style: GoogleFonts.montserrat(textStyle: TextStyle(fontSize: 18.0, color: Colors.white, fontWeight: FontWeight.bold))),
+                              // TextStyle(fontSize: 25.0, color: Colors.white, fontWeight: FontWeight.bold, fontFamily: GoogleFonts.montserrat())),
+                            ),
+                            SizedBox(height: 20.0),
+                            Center(
+                                child: Icon(
+                              Icons.home_repair_service_rounded,
+                              size: 40.0,
+                              color: Colors.white,
+                            )),
+                            
+                            ],
+                          ),
+                        ),
+                        back: Container(
+                            margin: EdgeInsets.all(15.0),
+                            decoration: BoxDecoration(
+                              color: Color(0xff73c088),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          child: Center(
+                            child: Stack(
+                              alignment: Alignment.centerRight,
                               children: <Widget>[
-                                SizedBox(height: 50.0),
-                                Center(
-                                    child: Icon(
-                                  Icons.map_rounded,
-                                  size: 40.0,
-                                  color: Colors.white,
-                                )),
-                                SizedBox(height: 20.0),
-                                Center(
-                                  child: Text("Lokalizacje",
-                                      style:
-                                          TextStyle(fontSize: 18.0, color: Colors.white)),
-                                )
+                                Container(
+                                  width: 300,
+                                  height: 60,
+                                  padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      border: Border.all(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: TextField(
+                                      textInputAction: TextInputAction.search,
+                                      onSubmitted: (value) {
+                                        Device? device_sn = devices.firstWhereOrNull((x) => x.serialNumber == _controllerRepair.text.toString());
+                                        Device? device_qr = devices.firstWhereOrNull((x) => x.qrCode == _controllerRepair.text.toString());
+
+                                        if (device_sn == null && device_qr == null) {
+                                          showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) => AlertDialog(
+                                            title: const Text('UWAGA'),
+                                            content: const Text('Nie znaleziono urządzenia'),
+                                            actions: [
+                                            TextButton(
+                                              style: TextButton.styleFrom(
+                                                foregroundColor: Colors.pink,
+                                              ),
+                                              child: Text('OK',),
+                                              onPressed: () {
+                                                _controllerRepair.clear();
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            // TextButton(
+                                            //   style: TextButton.styleFrom(
+                                            //     foregroundColor: Colors.green,
+                                            //   ),
+                                            //   child: Text('Wyszukaj ponownie'),
+                                            //   onPressed: () {
+                                            //     Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeviceAdd()));
+                                                
+                                            //   },
+                                            // ),
+                                          ]    
+                                          ));
+                                          
+                                        } else {
+                                          if (device_qr != null) {
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => RepairPage(deviceObject: device_qr)));
+                                          } 
+                                          if (device_sn != null) {
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => RepairPage(deviceObject: device_sn)));
+
+                                          }
+                                          
+                                        }
+
+                                      },
+                                      controller: _controllerRepair,
+                                      textAlign: TextAlign.center,
+                                      // initialValue: widget.categoryObject.name.toString(),
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Wprowadź SN lub kod QR przedmiotu',
+                                      ),
+                                    ),
+                                  ),
+                                IconButton(
+                                  icon: Icon(Icons.camera_alt_rounded),
+                                  onPressed: () async {
+                                      var result = await BarcodeScanner.scan();
+                                      print(result.type); // The result type (barcode, cancelled, failed)
+                                      print(result.rawContent); // The barcode content
+                                      print(result.format); // The barcode format (as enum)
+                                      print(result.formatNote); // If a unknown format was sc
+                                      
+                                      
+                                      if(result.format != 'unknown' && result.type != 'Cancelled' && result.rawContent.isNotEmpty) {
+                                        _controllerRepair.text = result.rawContent.toString();
+                                        Device? device_sn = devices.firstWhereOrNull((x) => x.serialNumber == _controllerRepair.text.toString());
+                                        Device? device_qr = devices.firstWhereOrNull((x) => x.qrCode == _controllerRepair.text.toString());
+
+                                        if (device_sn == null && device_qr == null) {
+                                          showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) => AlertDialog(
+                                            title: const Text('UWAGA'),
+                                            content: const Text('Nie znaleziono urządzenia'),
+                                            actions: [
+                                            TextButton(
+                                              style: TextButton.styleFrom(
+                                                foregroundColor: Colors.pink,
+                                              ),
+                                              child: Text('OK',),
+                                              onPressed: () {
+                                                _controllerSearch.clear();
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            // TextButton(
+                                            //   style: TextButton.styleFrom(
+                                            //     foregroundColor: Colors.green,
+                                            //   ),
+                                            //   child: Text('Dodaj'),
+                                            //   onPressed: () {
+                                            //     Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeviceAdd()));
+                                                
+                                            //   },
+                                            // ),
+                                          ]    
+                                          ));
+                                          
+                                        } else {
+                                          if (device_qr != null) {
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => RepairPage(deviceObject: device_qr)));
+                                          } 
+                                          if (device_sn != null) {
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => RepairPage(deviceObject: device_sn)));
+
+                                          }
+                                          
+                                        }
+                                        _controllerRepair.clear();
+                                      }
+                                      
+                                    },
+                                ),
                               ],
                             ),
                           ),
-                        )),
-                        // KATEGORIE
+                        ),
+                      ), 
+                      // KATEGORIE
                         Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),

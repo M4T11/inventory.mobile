@@ -13,6 +13,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:flutter_spinbox/material.dart';
 import 'package:barcode_scan2/barcode_scan2.dart';
+import 'package:intl/intl.dart';
 
 class DeviceAdd extends StatefulWidget {
   const DeviceAdd({Key? key}) : super(key: key);
@@ -827,16 +828,28 @@ class _DeviceAddState extends State<DeviceAdd> {
                         ),
                         ),
                       onTap: () {
-                            Map mapDescription = {for (var item in selectedItemsDescription) '"$item"' : 0};
+                            Map mapDescription = {for (var item in selectedItemsDescription) '"$item"' : false};
                             var ean_device_selected = selectedValueEanDevice.toString().split(" ");
                             var ean_selected = ean_device_selected.last.substring(1, ean_device_selected.last.length - 1);;
                             // print(ean_selected);
                             EanDevice eanDevice = eanDevices.firstWhere((x) => x.ean == ean_selected.toString());
                             Location location = locations.firstWhere((x) => x.name == selectedValueLocation.toString());
+                            var name = "";
+                            if (_controllerName.text.isEmpty) {
+                              final DateTime now = DateTime.now();
+                              final DateFormat formatter = DateFormat('yyyy-MM-dd');
+                              final String formatted = formatter.format(now);
+                              
+                              name = "[" + formatted + "]" + " " + eanDevice.producer.toString() + " " + eanDevice.model.toString();
+
+                            } else {
+
+                              name = _controllerName.text.toString();
+                            }
                             Provider.of<DeviceProvider>(context, listen: false).addDevice(
                               Device(
                               deviceId: 0,
-                              name: _controllerName.text.toString(),
+                              name: name,
                               serialNumber: _controllerSerialnumber.text.toString(),
                               // description: _controllerDescription.text.toString(),
                               description: mapDescription.toString(),

@@ -53,6 +53,7 @@ dependencies:
   quiver: ^3.2.1
   flip_card: ^0.7.0
   google_fonts: ^4.0.2
+  intl: ^0.18.0
 
 dev_dependencies:
   flutter_test:

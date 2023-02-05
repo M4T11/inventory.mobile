@@ -879,7 +879,9 @@ class _DeviceEditState extends State<DeviceEdit> {
                         ),
                       ),
                       onTap: () {
-                            Map mapDescription = {for (var item in selectedItemsDescription) '"$item"' : 0};
+                        // TODO update wartosci, ktore sa rozne
+                            Map mapDescription = {for (var item in selectedItemsDescription) '"$item"' : false};
+                            print(mapDescription);
                             var ean_device_selected = selectedValueEanDevice.toString().split(" ");
                             var ean_selected = ean_device_selected.last.substring(1, ean_device_selected.last.length - 1);;
                             // print(ean_selected);
