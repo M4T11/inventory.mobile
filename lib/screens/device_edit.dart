@@ -53,6 +53,8 @@ class _DeviceEditState extends State<DeviceEdit> {
       'Jack do wymiany'
       ];
   List<String> selectedItemsDescription = [];
+  late Map selected_copy;
+  Map mapDescriptionToSave = {};
 
   List<String> deviceCondition = ["Nowe", "Używane"]; 
   List<String> deviceStatus = ["Do naprawy", "Do wystawienia", "Do zdjęć", "Na części"]; 
@@ -91,6 +93,7 @@ class _DeviceEditState extends State<DeviceEdit> {
     //     });
 
     Map selected = json.decode(widget.deviceObject.description);
+    selected_copy = json.decode(widget.deviceObject.description);
 
     selected.keys.forEach((key) {
       // print(key);
@@ -880,8 +883,29 @@ class _DeviceEditState extends State<DeviceEdit> {
                       ),
                       onTap: () {
                         // TODO update wartosci, ktore sa rozne
-                            Map mapDescription = {for (var item in selectedItemsDescription) '"$item"' : false};
-                            print(mapDescription);
+                            // selectedItemsDescription.forEach((element) {
+                            //   if(!selected_copy.containsKey(element)) {
+                            //     selected_copy[element] = false;
+                            //   }
+                            // });
+                            // selected_copy.keys.forEach((key) {
+                            //   if(!selectedItemsDescription.contains(key.toString())) {
+                            //     selected_copy.remove(key);
+                            //   }
+                            // });
+                            
+                            selectedItemsDescription.forEach((element) {
+                              if(selected_copy.containsKey(element)) {
+                                mapDescriptionToSave[element] = selected_copy[element];
+                              }
+                              else {
+                                mapDescriptionToSave[element] = false;
+                              }                             
+                              
+                            });
+                            mapDescriptionToSave = mapDescriptionToSave.map((key, value) => MapEntry('"$key"', value));
+                            // Map mapDescription = {for (var item in selectedItemsDescription) '"$item"' : false};
+                            // print(mapDescriptionToSave);
                             var ean_device_selected = selectedValueEanDevice.toString().split(" ");
                             var ean_selected = ean_device_selected.last.substring(1, ean_device_selected.last.length - 1);;
                             // print(ean_selected);
@@ -893,7 +917,7 @@ class _DeviceEditState extends State<DeviceEdit> {
                               name: _controllerName.text.toString(),
                               serialNumber: _controllerSerialnumber.text.toString(),
                               // description: _controllerDescription.text.toString(),
-                              description: mapDescription.toString(),
+                              description: mapDescriptionToSave.toString(),
                               eanDevice: eanDevice,
                               location: location,
                               quantity: quantity.toInt(),

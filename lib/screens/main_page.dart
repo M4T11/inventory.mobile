@@ -166,6 +166,7 @@ class _MainPageState extends State<MainPage> {
                                           }
                                           
                                         }
+                                        _controllerSearch.clear();
 
                                       },
                                       controller: _controllerSearch,
@@ -339,6 +340,7 @@ class _MainPageState extends State<MainPage> {
                                           }
                                           
                                         }
+                                        _controllerRepair.clear();
 
                                       },
                                       controller: _controllerRepair,

@@ -840,7 +840,7 @@ class _DeviceAddState extends State<DeviceAdd> {
                               final DateFormat formatter = DateFormat('yyyy-MM-dd');
                               final String formatted = formatter.format(now);
                               
-                              name = "[" + formatted + "]" + " " + eanDevice.producer.toString() + " " + eanDevice.model.toString();
+                              name = "[" + formatted + "]" + " " + eanDevice.producer.name.toString() + " " + eanDevice.model.toString();
 
                             } else {
 
