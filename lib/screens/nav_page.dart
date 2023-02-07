@@ -14,7 +14,7 @@ class NavPage extends StatefulWidget {
 }
 
 class _NavPageState extends State<NavPage> {
-  PersistentTabController _controller = PersistentTabController(initialIndex: 0);
+  PersistentTabController _controller = PersistentTabController(initialIndex: 1);
 
   // int _selectedIndex = 0;
 
@@ -32,22 +32,22 @@ class _NavPageState extends State<NavPage> {
   List<Widget> _buildScreens() {
         return [
           HomePage(),
-          CategoryPage(),
-          MainPage()
+          MainPage(),
+          CategoryPage()
         ];
     }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
         return [
             PersistentBottomNavBarItem(
-                icon: Icon(Icons.home),
-                title: ("Home"),
+                icon: Icon(Icons.dashboard),
+                title: ("Dashboard"),
                 activeColorPrimary: Colors.green,
                 inactiveColorPrimary: Colors.grey,
             ),
             PersistentBottomNavBarItem(
-                icon: Icon(Icons.settings),
-                title: ("Settings"),
+                icon: Icon(Icons.home),
+                title: ("Home"),
                 activeColorPrimary: Colors.green,
                 inactiveColorPrimary: Colors.grey,
             ),

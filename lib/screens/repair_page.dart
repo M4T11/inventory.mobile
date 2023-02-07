@@ -34,7 +34,7 @@ class _RepairPageState extends State<RepairPage> {
         title: const Text('Inventory App'),
         backgroundColor: Color(0xff235d3a),
         ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Container(
         height: 50,
         margin: const EdgeInsets.all(10),
@@ -82,20 +82,25 @@ class _RepairPageState extends State<RepairPage> {
               const SizedBox(height: 10),
       
               // The checkboxes will be here
-              Column(
-                  children: repairMapCasted.keys.map((String key) {
-                return CheckboxListTile(
-                    value: repairMapCasted[key],
-                    title: Text(key),
-                    onChanged: (newValue) {
-                      setState(() {
-                        print(repairMapCasted[key]);
-                        print(newValue);
-                        repairMapCasted[key] = newValue;
-                        print(repairMapCasted);
-                      });
-                    });
-              }).toList()),
+              Container(
+                height: 0.65 * MediaQuery.of(context).size.height,
+                child: SingleChildScrollView(
+                  child: Column(
+                      children: repairMapCasted.keys.map((String key) {
+                    return CheckboxListTile(
+                        value: repairMapCasted[key],
+                        title: Text(key),
+                        onChanged: (newValue) {
+                          setState(() {
+                            print(repairMapCasted[key]);
+                            print(newValue);
+                            repairMapCasted[key] = newValue;
+                            print(repairMapCasted);
+                          });
+                        });
+                  }).toList()),
+                ),
+              ),
       
               // // Display the result here
               // const SizedBox(height: 10),

@@ -69,6 +69,42 @@ class _MainPageState extends State<MainPage> {
                     crossAxisCount: 1,
                     padding: EdgeInsets.all(3.0),
                     children: <Widget>[
+                      // DODAJ
+                        Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          ),
+                        elevation: 1.0,
+                        margin: EdgeInsets.all(15.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xff73c088),
+                            borderRadius: BorderRadius.circular(12),
+                            ),
+                          child: InkWell(
+                            onTap: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeviceAdd()));},
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisSize: MainAxisSize.min,
+                              verticalDirection: VerticalDirection.down,
+                              children: <Widget>[
+                                SizedBox(height: 50.0),
+                                Center(
+                                  child: Text("DODAJ URZĄDZENIE",
+                                  style: GoogleFonts.montserrat(textStyle: TextStyle(fontSize: 18.0, color: Colors.white, fontWeight: FontWeight.bold)))                                       
+                                ),
+                                SizedBox(height: 20.0),
+                                Center(
+                                    child: Icon(
+                                  Icons.add_box_rounded,
+                                  size: 40.0,
+                                  color: Colors.white,
+                                )),
+                                
+                              ],
+                            ),
+                          ),
+                        )),
                       // WYSZUKAJ
                       FlipCard(
                         fill: Fill.fillBack, // Fill the back side of the card to make in the same size as the front.
@@ -417,42 +453,6 @@ class _MainPageState extends State<MainPage> {
                           ),
                         ),
                       ), 
-                      // KATEGORIE
-                        Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          ),
-                        elevation: 1.0,
-                        margin: EdgeInsets.all(15.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xff73c088),
-                            borderRadius: BorderRadius.circular(12),
-                            ),
-                          child: InkWell(
-                            onTap: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryPage()));},
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisSize: MainAxisSize.min,
-                              verticalDirection: VerticalDirection.down,
-                              children: <Widget>[
-                                SizedBox(height: 50.0),
-                                Center(
-                                    child: Icon(
-                                  Icons.category_rounded,
-                                  size: 40.0,
-                                  color: Colors.white,
-                                )),
-                                SizedBox(height: 20.0),
-                                Center(
-                                  child: Text("Kategorie",
-                                      style:
-                                          TextStyle(fontSize: 18.0, color: Colors.white)),
-                                )
-                              ],
-                            ),
-                          ),
-                        )),
                         
                     ],
                   ),
