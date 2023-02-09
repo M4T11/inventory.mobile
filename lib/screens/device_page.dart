@@ -29,19 +29,19 @@ class _DevicePageState extends State<DevicePage> {
   
 
   List <String> selected_category = [];
-  List<Category> category_list = [];
+  // List<Category> category_list = [];
   List<String> category_names_list = [];
   
   List <String> selected_locations = [];
-  List<Location> locations_list = [];
+  // List<Location> locations_list = [];
   List<String> locations_names_list = [];
 
   List <String> selected_producers = [];
-  List<Producer> producers_list = [];
+  // List<Producer> producers_list = [];
   List<String> producers_names_list = [];
 
   List <String> selected_ean_devices = [];
-  List<EanDevice> ean_devices_list = [];
+  // List<EanDevice> ean_devices_list = [];
   List<EanDevice> ean_devices_per_producer_list = [];
   List<String> ean_devices_names_list = [];
   List<String> ean_devices_per_producer_names_list = [];
@@ -63,28 +63,37 @@ class _DevicePageState extends State<DevicePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       Provider.of<DeviceProvider>(context, listen: false).getAlldevices();
       Provider.of<CategoryProvider>(context, listen: false).getAllCategories();
       Provider.of<LocationProvider>(context, listen: false).getAllLocations();
       Provider.of<ProducerProvider>(context, listen: false).getAllProducers();
       Provider.of<EanDeviceProvider>(context, listen: false).getAllEanDevices();
 
-    });
     devices_list = Provider.of<DeviceProvider>(context, listen: false).devices;
-    category_list = Provider.of<CategoryProvider>(context, listen: false).categories;
-    locations_list = Provider.of<LocationProvider>(context, listen: false).locations;
-    producers_list = Provider.of<ProducerProvider>(context, listen: false).producers;
-    ean_devices_list = Provider.of<EanDeviceProvider>(context, listen: false).eanDevices;
+    // category_list = Provider.of<CategoryProvider>(context, listen: false).categories;
+    // locations_list = Provider.of<LocationProvider>(context, listen: false).locations;
+    // producers_list = Provider.of<ProducerProvider>(context, listen: false).producers;
+    // ean_devices_list = Provider.of<EanDeviceProvider>(context, listen: false).eanDevices;
     
-    category_names_list = category_list.map((category) => category.name).toList();
-    locations_names_list = locations_list.map((location) => location.name).toList();
-    producers_names_list = producers_list.map((producer) => producer.name).toList();
-    ean_devices_names_list = ean_devices_list.map((eanDevice) => eanDevice.model).toList();
+    // category_names_list = category_list.map((category) => category.name).toList();
+    // locations_names_list = locations_list.map((location) => location.name).toList();
+    // producers_names_list = producers_list.map((producer) => producer.name).toList();
+    // ean_devices_names_list = ean_devices_list.map((eanDevice) => eanDevice.model).toList();
 
     devices_list_to_display = devices_list;
+
+    });
+    
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // put your logic from initState here
+    
+  }
+  
   void filterDevices() {
     devices_list_filtered = devices_list;
 
@@ -169,32 +178,48 @@ class _DevicePageState extends State<DevicePage> {
     // print(devices_list);
   }
 
-  void updateModels() {
+  List<String> updateModels(List<EanDevice> ean_devices_list) {
+    // if(selected_producers.isNotEmpty) {
+    //   // ean_devices_names_list = ean_devices_list.map((eanDevice) => eanDevice.model).toList();
+    //   ean_devices_per_producer_list = ean_devices_list.where((element) => selected_producers.contains(element.producer.name.toString())).toList();
+    //   ean_devices_per_producer_names_list = ean_devices_per_producer_list.map((eanDevice) => eanDevice.model).toList();
+    //   print(ean_devices_per_producer_names_list);
+    //   setState(() {
+    //     selected_ean_devices.clear();
+    //   ean_devices_names_list = ean_devices_per_producer_names_list;
+    //   });
+    // } else {
+    //   setState(() {
+    //   selected_ean_devices.clear();
+    //   ean_devices_names_list = ean_devices_list.map((eanDevice) => eanDevice.model).toList();
+    //   });
+    // }
+    
+
     if(selected_producers.isNotEmpty) {
       // ean_devices_names_list = ean_devices_list.map((eanDevice) => eanDevice.model).toList();
       ean_devices_per_producer_list = ean_devices_list.where((element) => selected_producers.contains(element.producer.name.toString())).toList();
       ean_devices_per_producer_names_list = ean_devices_per_producer_list.map((eanDevice) => eanDevice.model).toList();
       print(ean_devices_per_producer_names_list);
-      setState(() {
-        selected_ean_devices.clear();
+      // selected_ean_devices.clear();
       ean_devices_names_list = ean_devices_per_producer_names_list;
-      });
     } else {
-      setState(() {
-      selected_ean_devices.clear();
+      // selected_ean_devices.clear();
       ean_devices_names_list = ean_devices_list.map((eanDevice) => eanDevice.model).toList();
-      });
     }
 
+    return ean_devices_names_list;
+
+
   }
+  
 
   void _showSheet() {
-    print(category_names_list);
-    print(locations_names_list);
-    print(producers_names_list);
-    print(ean_devices_names_list);
-    print(Provider.of<CategoryProvider>(context, listen: false).categories);
-    if(category_names_list.isNotEmpty && locations_names_list.isNotEmpty && producers_names_list.isNotEmpty && ean_devices_names_list.isNotEmpty) {
+    // print(category_names_list);
+    // print(locations_names_list);
+    // print(producers_names_list);
+    // print(ean_devices_names_list);
+    // print(category_list);
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -206,141 +231,194 @@ class _DevicePageState extends State<DevicePage> {
       builder: (context) {
         return StatefulBuilder(
             builder: (BuildContext context, StateSetter setState /*You can rename this!*/) {
-              return DraggableScrollableSheet(
-                expand: false,
-                builder: (_, controller) {
-                  return SingleChildScrollView(
-                    // controller: controller,
-                    child: Container(                 
-                      decoration: BoxDecoration(borderRadius: BorderRadius.only(topRight: Radius.circular(25.0), topLeft: Radius.circular(25.0),)),
-                      // color: Colors.blue[500],
-                      // child: ListView.builder(
-                        // controller: controller, // set this too
-                      //   itemBuilder: (_, i) => ListTile(title: Text('Item $i')),
-                      // ),
-                      child: Container(
-                    margin: EdgeInsets.all(15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              'Filtruj',
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21)
-                              // style: kTextLabelTheme,
+              return Consumer4<CategoryProvider, LocationProvider, ProducerProvider, EanDeviceProvider>(
+                builder: (context, categoryProvider, locationProvider, producerProvider, eanDeviceProvider, child) {
+                  if(categoryProvider.isLoading || locationProvider.isLoading || producerProvider.isLoading || eanDeviceProvider.isLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                      );
+                  }
+                  // devices_list = Provider.of<DeviceProvider>(context, listen: false).devices;
+                  // category_list = Provider.of<CategoryProvider>(context, listen: false).categories;
+                  // locations_list = Provider.of<LocationProvider>(context, listen: false).locations;
+                  // producers_list = Provider.of<ProducerProvider>(context, listen: false).producers;
+                  // ean_devices_list = Provider.of<EanDeviceProvider>(context, listen: false).eanDevices;
+                  
+                category_names_list = categoryProvider.categories.map((category) => category.name).toList();
+                locations_names_list = locationProvider.locations.map((location) => location.name).toList();
+                producers_names_list = producerProvider.producers.map((producer) => producer.name).toList();
+                // ean_devices_names_list = eanDeviceProvider.eanDevices.map((eanDevice) => eanDevice.model).toList();
+                ean_devices_names_list = updateModels(eanDeviceProvider.eanDevices);
+                print(ean_devices_names_list);
+                return DraggableScrollableSheet(
+                  expand: false,
+                  builder: (_, controller) {
+                    return SingleChildScrollView(
+                      // controller: controller,
+                      child: Container(                 
+                        decoration: BoxDecoration(borderRadius: BorderRadius.only(topRight: Radius.circular(25.0), topLeft: Radius.circular(25.0),)),
+                        // color: Colors.blue[500],
+                        // child: ListView.builder(
+                          // controller: controller, // set this too
+                        //   itemBuilder: (_, i) => ListTile(title: Text('Item $i')),
+                        // ),
+                        child: Container(
+                      margin: EdgeInsets.all(15.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Text(
+                                'Filtruj',
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21)
+                                // style: kTextLabelTheme,
+                              ),
+                              Text(
+                                ' wyniki',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(top: 30.0),
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  'Kategorie',
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21)
+                                ),
+                                
+                              ],
                             ),
-                            Text(
-                              ' wyniki',
-                              style: TextStyle(fontSize: 20),
+                          ),
+                          ChipsChoice<String>.multiple(
+                            value: selected_category,
+                            onChanged: (val) => {setState(() => selected_category = val), print(selected_category), filterDevices()},
+                            choiceItems: C2Choice.listFrom<String, String>(
+                              source: category_names_list,
+                              value: (i, v) => v,
+                              label: (i, v) => v,
                             ),
-                          ],
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(top: 30.0),
-                          child: Row(
-                            children: <Widget>[
-                              Text(
-                                'Kategorie',
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21)
-                              ),
+                            choiceCheckmark: true,
+                            // choiceStyle: C2ChipStyle.outlined(),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(top: 15.0),
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  'Lokalizacje',
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21)
+                                ),
+                                
+                              ],
+                            ),
+                          ),
+                          ChipsChoice<String>.multiple(
+                            value: selected_locations,
+                            onChanged: (val) => {setState(() => selected_locations = val), print(selected_locations), filterDevices()},
+                            choiceItems: C2Choice.listFrom<String, String>(
+                              source: locations_names_list,
+                              value: (i, v) => v,
+                              label: (i, v) => v,
+                            ),
+                            choiceCheckmark: true,
+                            // choiceStyle: C2ChipStyle.outlined(),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(top: 15.0),
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  'Producent',
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21)
+                                ),
+                                
+                              ],
+                            ),
+                          ),
+                          ChipsChoice<String>.multiple(
+                            value: selected_producers,
+                            onChanged: (val) => {
+                              setState(() => selected_producers = val), 
+                              print(selected_producers),
+                              print(selected_ean_devices),
+                              if(selected_ean_devices.isNotEmpty && selected_producers.isNotEmpty) {
+                                setState((() {
+                                  selected_ean_devices.clear();
+                                  
+                                })),   
+                                updateModels(eanDeviceProvider.eanDevices)
+                              },
                               
-                            ],
-                          ),
-                        ),
-                        ChipsChoice<String>.multiple(
-                          value: selected_category,
-                          onChanged: (val) => {setState(() => selected_category = val), print(selected_category), filterDevices()},
-                          choiceItems: C2Choice.listFrom<String, String>(
-                            source: category_names_list,
-                            value: (i, v) => v,
-                            label: (i, v) => v,
-                          ),
-                          choiceCheckmark: true,
-                          // choiceStyle: C2ChipStyle.outlined(),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(top: 15.0),
-                          child: Row(
-                            children: <Widget>[
-                              Text(
-                                'Lokalizacje',
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21)
-                              ),
+                              filterDevices(), 
                               
-                            ],
+                              },
+                            choiceItems: C2Choice.listFrom<String, String>(
+                              source: producers_names_list,
+                              value: (i, v) => v,
+                              label: (i, v) => v,
+                            ),
+                            choiceCheckmark: true,
+                            // choiceStyle: C2ChipStyle.outlined(),
                           ),
-                        ),
-                        ChipsChoice<String>.multiple(
-                          value: selected_locations,
-                          onChanged: (val) => {setState(() => selected_locations = val), print(selected_locations), filterDevices()},
-                          choiceItems: C2Choice.listFrom<String, String>(
-                            source: locations_names_list,
-                            value: (i, v) => v,
-                            label: (i, v) => v,
+                          Container(
+                            padding: EdgeInsets.only(top: 15.0),
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  'Model',
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21)
+                                ),
+                                
+                              ],
+                            ),
                           ),
-                          choiceCheckmark: true,
-                          // choiceStyle: C2ChipStyle.outlined(),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(top: 15.0),
-                          child: Row(
-                            children: <Widget>[
-                              Text(
-                                'Producent',
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21)
-                              ),
-                              
-                            ],
+                          ChipsChoice<String>.multiple(
+                            value: selected_ean_devices,
+                            onChanged: (val) => {setState(() => selected_ean_devices = val), print(selected_ean_devices), filterDevices()},
+                            choiceItems: C2Choice.listFrom<String, String>(
+                              source: ean_devices_names_list,
+                              value: (i, v) => v,
+                              label: (i, v) => v,
+                            ),
+                            choiceCheckmark: true,
+                            // choiceStyle: C2ChipStyle.outlined(),
                           ),
-                        ),
-                        ChipsChoice<String>.multiple(
-                          value: selected_producers,
-                          onChanged: (val) => {setState(() => selected_producers = val), print(selected_producers), filterDevices(), updateModels()},
-                          choiceItems: C2Choice.listFrom<String, String>(
-                            source: producers_names_list,
-                            value: (i, v) => v,
-                            label: (i, v) => v,
-                          ),
-                          choiceCheckmark: true,
-                          // choiceStyle: C2ChipStyle.outlined(),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(top: 15.0),
-                          child: Row(
-                            children: <Widget>[
-                              Text(
-                                'Model',
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21)
-                              ),
-                              
-                            ],
-                          ),
-                        ),
-                        ChipsChoice<String>.multiple(
-                          value: selected_ean_devices,
-                          onChanged: (val) => {setState(() => selected_ean_devices = val), print(selected_ean_devices), filterDevices()},
-                          choiceItems: C2Choice.listFrom<String, String>(
-                            source: ean_devices_names_list,
-                            value: (i, v) => v,
-                            label: (i, v) => v,
-                          ),
-                          choiceCheckmark: true,
-                          // choiceStyle: C2ChipStyle.outlined(),
-                        ),
-                    ]),
-                    )),
-                  );
+                      ]),
+                      )),
+                    );
+                  },
+                );
                 },
               );
       });
       },
     );
-  } else {
-    print('laduje');
-
-  }
 }
+// void _showSheet1() {
+//     if(category_names_list.isNotEmpty && locations_names_list.isNotEmpty && producers_names_list.isNotEmpty && ean_devices_names_list.isNotEmpty) {
+//       _showSheet();
+//     } else {
+//       // devices_list = Provider.of<DeviceProvider>(context, listen: false).devices;
+//       // category_list = Provider.of<CategoryProvider>(context, listen: false).categories;
+//       // locations_list = Provider.of<LocationProvider>(context, listen: false).locations;
+//       // producers_list = Provider.of<ProducerProvider>(context, listen: false).producers;
+//       // ean_devices_list = Provider.of<EanDeviceProvider>(context, listen: false).eanDevices;
+      
+//       // category_names_list = category_list.map((category) => category.name).toList();
+//       // locations_names_list = locations_list.map((location) => location.name).toList();
+//       // producers_names_list = producers_list.map((producer) => producer.name).toList();
+//       // ean_devices_names_list = ean_devices_list.map((eanDevice) => eanDevice.model).toList();
+
+//       // devices_list_to_display = devices_list;
+      
+//       _showSheet();
+
+//     }
+
+//   }
 
   @override
   Widget build(BuildContext context) {
