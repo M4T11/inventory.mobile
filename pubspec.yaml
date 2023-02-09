@@ -54,6 +54,7 @@ dependencies:
   flip_card: ^0.7.0
   google_fonts: ^4.0.2
   intl: ^0.18.0
+  chips_choice: ^3.0.0
 
 dev_dependencies:
   flutter_test:
