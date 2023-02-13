@@ -18,15 +18,17 @@ import 'package:provider/provider.dart';
 import 'package:chips_choice/chips_choice.dart';
 
 
-class DevicePage extends StatefulWidget {
-  const DevicePage({Key? key}) : super(key: key);
+class DevicePageModel extends StatefulWidget {
+  final String deviceEAN;
+  const DevicePageModel ({ Key? key, required this.deviceEAN}): super(key: key);
+  // const DevicePageModel({Key? key}) : super(key: key);
 
   @override
-  State<DevicePage> createState() => _DevicePageState();
+  State<DevicePageModel> createState() => _DevicePageModelState();
 }
 
-class _DevicePageState extends State<DevicePage> {
-  
+class _DevicePageModelState extends State<DevicePageModel> {
+      
   bool flagFiltering = false;
   List <String> selected_category = [];
   // List<Category> category_list = [];
@@ -49,7 +51,6 @@ class _DevicePageState extends State<DevicePage> {
   List<Device> devices_list = [];
   List<Device> devices_list_filtered = [];
   List<Device> devices_list_to_display = [];
-  
 
   @override
   void initState() {
@@ -62,24 +63,26 @@ class _DevicePageState extends State<DevicePage> {
       Provider.of<ProducerProvider>(context, listen: false).getAllProducers();
       Provider.of<EanDeviceProvider>(context, listen: false).getAllEanDevices();
 
+    // devices_list = Provider.of<DeviceProvider>(context, listen: false).devices;
+    // print(widget.deviceEAN.toString());
+    // devices_list = devices_list.where((element) => element.eanDevice.ean == widget.deviceEAN).toList();
+    // print(devices_list);
+
+
+
+    // devices_list_to_display = devices_list;
+
     });
-  
+    print('HALO' + widget.deviceEAN.toString());
     
   }
 
-
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   // put your logic from initState here
-  //     print('HALO');
-  //     devices_list = Provider.of<DeviceProvider>(context, listen: false).devices;
-  //     devices_list_to_display = devices_list;
-  //     for (var age in devices_list_to_display) {
-  //     print(age.eanDevice.ean.toString());
-  //     }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // put your logic from initState here
     
-  // }
+  }
   
   void filterDevices() {
     devices_list_filtered = devices_list;
@@ -205,11 +208,6 @@ class _DevicePageState extends State<DevicePage> {
                       child: CircularProgressIndicator(),
                       );
                   }
-                  // devices_list = Provider.of<DeviceProvider>(context, listen: false).devices;
-                  // category_list = Provider.of<CategoryProvider>(context, listen: false).categories;
-                  // locations_list = Provider.of<LocationProvider>(context, listen: false).locations;
-                  // producers_list = Provider.of<ProducerProvider>(context, listen: false).producers;
-                  // ean_devices_list = Provider.of<EanDeviceProvider>(context, listen: false).eanDevices;
                   
                 category_names_list = categoryProvider.categories.map((category) => category.name).toList();
                 locations_names_list = locationProvider.locations.map((location) => location.name).toList();
@@ -384,78 +382,94 @@ class _DevicePageState extends State<DevicePage> {
               );
           }
         
-        devices_list = value.devices;
+        devices_list = value.devices.where((element) => element.eanDevice.ean == widget.deviceEAN).toList();
         if (!flagFiltering) {
           devices_list_to_display = devices_list;
         }
-        
+
         return RefreshIndicator(
-         onRefresh: () async => {value.getAlldevices(), selected_category.clear(), selected_locations.clear(), selected_producers.clear(), selected_ean_devices.clear()},
-         child: ListView.builder(
-          physics: const AlwaysScrollableScrollPhysics(),
-          itemCount: devices_list_to_display.length,
-          itemBuilder: (context, index) {
-            final device = devices_list_to_display[index];
-            return GestureDetector(
-              child: Slidable(
-                startActionPane: ActionPane(
-                  motion: StretchMotion(),
-                  children: [
-                    SlidableAction(
-                      onPressed: ((context) {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeviceEdit(deviceObject: device)));
-                      }),
-                      icon: Icons.edit,
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.orange,
-                    ),
-                ]),
-                endActionPane: ActionPane(
-                  motion: StretchMotion(),
-                  children: [
-                    SlidableAction(
-                      onPressed: ((context) {
-                        // Future<int> response = CategoryService().deleteCategory(category.categoryId);
-                        value.deleteDevice(device.deviceId);
-                        // setState(() { categories.removeWhere((element) => element.categoryId == category.categoryId); });
-                        // setState(() { value.getAllCategories(); });                     
-                      }),
-                      icon: Icons.delete,
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.red,
-                      ),
-                ]),           
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    child: Text(device.deviceId.toString()),
-                    // child: Text((index+1).toString()),
-                    ),
-                    title: Text(device.eanDevice.producer.name + " " + device.eanDevice.model),
-                    subtitle: Text(device.name + " " + device.serialNumber),
-                    ),
+         onRefresh: () async => {selected_category.clear(), selected_locations.clear(), selected_producers.clear(), selected_ean_devices.clear()},
+         child: Column(
+           children: [
+            SizedBox(height: 25),
+            Text(
+                'Znaleziono ' + devices_list_to_display.length.toString() + ' urządzeń:',
+                // widget.categoryObject.categoryId.toString() + widget.categoryObject.name.toString(),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  ),
               ),
-              onTap: () {
-                Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DeviceDetails(deviceObject: device)),);
-              },
-            );
-          }),
+            SizedBox(height: 25),
+            ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemCount: devices_list_to_display.length,
+            itemBuilder: (context, index) {
+              final device = devices_list_to_display[index];
+              return GestureDetector(
+                child: Slidable(
+                  startActionPane: ActionPane(
+                    motion: StretchMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: ((context) {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeviceEdit(deviceObject: device)));
+                        }),
+                        icon: Icons.edit,
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.orange,
+                      ),
+                  ]),
+                  endActionPane: ActionPane(
+                    motion: StretchMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: ((context) {
+                          // Future<int> response = CategoryService().deleteCategory(category.categoryId);
+                          value.deleteDevice(device.deviceId);
+                          // setState(() { categories.removeWhere((element) => element.categoryId == category.categoryId); });
+                          // setState(() { value.getAllCategories(); });                     
+                        }),
+                        icon: Icons.delete,
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.red,
+                        ),
+                  ]),           
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                      // child: Text(device.deviceId.toString()),
+                      child: Text((index+1).toString()),
+                      ),
+                      title: Text(device.eanDevice.producer.name + " " + device.eanDevice.model),
+                      subtitle: Text(device.name + " " + device.serialNumber),
+                      ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DeviceDetails(deviceObject: device)),);
+                },
+              );
+            }),
+           ]
+         ),
           );   
       }),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 10.0),
-        child: FloatingActionButton(
-          onPressed: () {Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DeviceAdd()),
-              );},
-          child: const Icon(Icons.add),
-          backgroundColor: Colors.green,
-        ),
-      ),
+      // floatingActionButton: Padding(
+      //   padding: const EdgeInsets.only(bottom: 10.0),
+      //   child: FloatingActionButton(
+      //     onPressed: () {Navigator.push(
+      //           context,
+      //           MaterialPageRoute(builder: (context) => DeviceAdd()),
+      //         );},
+      //     child: const Icon(Icons.add),
+      //     backgroundColor: Colors.green,
+      //   ),
+      // ),
     );
   }
 }

@@ -53,7 +53,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
 
   List<String> deviceCondition = ["Nowe", "Używane"]; 
   List<String> deviceStatus = ["Do naprawy", "Do wystawienia", "Do zdjęć", "Na części"]; 
-
+    
     @override
   void initState() {
     // TODO: implement initState
@@ -62,6 +62,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
       Provider.of<EanDeviceProvider>(context, listen: false).getAllEanDevices();
       Provider.of<LocationProvider>(context, listen: false).getAllLocations();
     });
+    // print(widget.deviceObject.eanDevice.ean.toString());
     selectedValueEanDevice= widget.deviceObject.eanDevice.producer.name + " " + widget.deviceObject.eanDevice.model + " (" + widget.deviceObject.eanDevice.ean + ")";
     selectedValueLocation = widget.deviceObject.location.name;
     selectedValueStatus = widget.deviceObject.status;

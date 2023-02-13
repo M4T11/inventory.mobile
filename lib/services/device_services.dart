@@ -12,13 +12,14 @@ class DeviceService {
     if (local) {
       url = 'http://127.0.0.1:8000/devices/';
     } else {
-      url = 'http://192.168.50.101:8000/devices/';
+      url = 'http://192.168.50.102:8000/devices/';
     }
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     if(response.statusCode == 200) {
       final json = jsonDecode(utf8.decode(response.bodyBytes, allowMalformed: true)) as List;
       final devices = json.map((e) {
+        // print('SERVICE' + Device.fromJson(e).eanDevice.ean.toString());
         return Device.fromJson(e);
 
       }).toList();
@@ -34,7 +35,7 @@ class DeviceService {
     if (local) {
       url = 'http://127.0.0.1:8000/devices/sn/' + sn;
     } else {
-      url = 'http://192.168.50.101:8000/devices/sn/' + sn;
+      url = 'http://192.168.50.102:8000/devices/sn/' + sn;
     }
     final uri = Uri.parse(url);
     final response = await http.get(uri);
@@ -51,7 +52,7 @@ class DeviceService {
     if (local) {
       url = 'http://127.0.0.1:8000/devices/id/' + id.toString();
     } else {
-      url = 'http://192.168.50.101:8000/devices/id/' + id.toString();
+      url = 'http://192.168.50.102:8000/devices/id/' + id.toString();
     }
     final uri = Uri.parse(url);
     final response = await http.delete(uri);
@@ -64,7 +65,7 @@ class DeviceService {
     if (local) {
       url = 'http://127.0.0.1:8000/devices/id/' + device.deviceId.toString();
     } else {
-      url = 'http://192.168.50.101:8000/devices/id/' + device.deviceId.toString();
+      url = 'http://192.168.50.102:8000/devices/id/' + device.deviceId.toString();
     }
     
     final uri = Uri.parse(url);
@@ -91,7 +92,7 @@ class DeviceService {
     if (local) {
       url = 'http://127.0.0.1:8000/devices/id';
     } else {
-      url = 'http://192.168.50.101:8000/devices/id';
+      url = 'http://192.168.50.102:8000/devices/id';
     }
     
     final uri = Uri.parse(url);

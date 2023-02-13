@@ -14,7 +14,9 @@ import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:flutter_spinbox/material.dart';
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:intl/intl.dart';
+import 'package:collection/collection.dart'; 
 
+// Po dodaniu z menu glownego lista wszystkich nie jest odswiezona
 class DeviceAdd extends StatefulWidget {
   const DeviceAdd({Key? key}) : super(key: key);
   
@@ -326,9 +328,10 @@ class _DeviceAddState extends State<DeviceAdd> {
                               print(camera_result_ean.formatNote); // If a unknown format was sc
                               
                               if(camera_result_ean.format != 'unknown' && camera_result_ean.type != 'Cancelled' && camera_result_ean.rawContent.isNotEmpty) {
-                                EanDevice temp_ean = eanDevices.firstWhere((x) => x.ean == camera_result_ean.rawContent.toString());
-                                print(temp_ean.model);
-                                setState(() {
+                                EanDevice? temp_ean = eanDevices.firstWhereOrNull((x) => x.ean == camera_result_ean.rawContent.toString());
+                                
+                                if (temp_ean != null) {
+                                  setState(() {
                                   selectedValueEanDevice = temp_ean.producer.name + " " + temp_ean.model + " (" + temp_ean.ean + ")";
                                   EanDevice eanDevice = eanDevices.firstWhere((x) => x.ean == temp_ean.ean.toString());
                                   
@@ -347,6 +350,38 @@ class _DeviceAddState extends State<DeviceAdd> {
                                   }
                                   
                                 },);
+                                } else {
+                                  showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) => AlertDialog(
+                                            title: const Text('UWAGA'),
+                                            content: const Text('Nie znaleziono urządzenia o podanym numerze EAN'),
+                                            actions: [
+                                            TextButton(
+                                              style: TextButton.styleFrom(
+                                                foregroundColor: Colors.pink,
+                                              ),
+                                              child: Text('Anuluj',),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            TextButton(
+                                              style: TextButton.styleFrom(
+                                                foregroundColor: Colors.green,
+                                              ),
+                                              child: Text('Dodaj'),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDeviceAdd(forwarding: true,)));
+                                                
+                                              },
+                                            ),
+                                          ]    
+                                          ));
+
+                                }
+                                
                                 
                               }
                           },
@@ -451,12 +486,43 @@ class _DeviceAddState extends State<DeviceAdd> {
                               print(camera_result_location.formatNote); // If a unknown format was sc
                               
                               if(camera_result_location.format != 'unknown' && camera_result_location.type != 'Cancelled' && camera_result_location.rawContent.isNotEmpty) {
-                                Location temp_location = locations.firstWhere((x) => x.name == camera_result_location.rawContent.toString());
-                                print(temp_location.name);
-                                setState(() {
+                                Location? temp_location = locations.firstWhereOrNull((x) => x.name == camera_result_location.rawContent.toString());
+                                print(temp_location);
+                                if(temp_location != null) {
+                                  setState(() {
                                   selectedValueLocation = temp_location.name;
-                                },);
-                                
+                                  },);
+                                } else {
+                                  showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) => AlertDialog(
+                                            title: const Text('UWAGA'),
+                                            content: const Text('Nie znaleziono lokalizacji'),
+                                            actions: [
+                                            TextButton(
+                                              style: TextButton.styleFrom(
+                                                foregroundColor: Colors.pink,
+                                              ),
+                                              child: Text('Anuluj',),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            TextButton(
+                                              style: TextButton.styleFrom(
+                                                foregroundColor: Colors.green,
+                                              ),
+                                              child: Text('Dodaj'),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationAdd(forwarding: true,)));
+                                                
+                                              },
+                                            ),
+                                          ]    
+                                          ));
+
+                                }                              
                               }
                           },
                         ),
