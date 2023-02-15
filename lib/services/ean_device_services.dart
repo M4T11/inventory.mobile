@@ -12,7 +12,7 @@ class EanDeviceService {
     if (local) {
       url = 'http://127.0.0.1:8000/ean_devices/';
     } else {
-      url = 'http://192.168.50.102:8000/ean_devices/';
+      url = 'http://192.168.50.103:8000/ean_devices/';
     }
 
     final uri = Uri.parse(url);
@@ -35,7 +35,7 @@ class EanDeviceService {
     if (local) {
       url = 'http://127.0.0.1:8000/ean_devices/id/' + id.toString();
     } else {
-      url = 'http://192.168.50.102:8000/ean_devices/id/' + id.toString();
+      url = 'http://192.168.50.103:8000/ean_devices/id/' + id.toString();
     }
     
     final uri = Uri.parse(url);
@@ -50,7 +50,7 @@ class EanDeviceService {
     if (local) {
       url = 'http://127.0.0.1:8000/ean_devices/id/' + eanDevice.eanDeviceId.toString();
     } else {
-      url = 'http://192.168.50.102:8000/ean_devices/id/' + eanDevice.eanDeviceId.toString();
+      url = 'http://192.168.50.103:8000/ean_devices/id/' + eanDevice.eanDeviceId.toString();
     }
     
     final uri = Uri.parse(url);
@@ -78,7 +78,7 @@ class EanDeviceService {
     if (local) {
       url = 'http://127.0.0.1:8000/ean_devices/id';
     } else {
-      url = 'http://192.168.50.102:8000/ean_devices/id';
+      url = 'http://192.168.50.103:8000/ean_devices/id';
     }
 
     final uri = Uri.parse(url);

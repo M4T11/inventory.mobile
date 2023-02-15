@@ -20,7 +20,8 @@ import 'package:chips_choice/chips_choice.dart';
 
 class DevicePageModel extends StatefulWidget {
   final String deviceEAN;
-  const DevicePageModel ({ Key? key, required this.deviceEAN}): super(key: key);
+  final bool location;
+  const DevicePageModel ({ Key? key, required this.deviceEAN, required this.location}): super(key: key);
   // const DevicePageModel({Key? key}) : super(key: key);
 
   @override
@@ -381,8 +382,12 @@ class _DevicePageModelState extends State<DevicePageModel> {
               child: CircularProgressIndicator(),
               );
           }
+        if (widget.location) {
+          devices_list = value.devices.where((element) => element.location.name == widget.deviceEAN).toList();
+        } else {
+          devices_list = value.devices.where((element) => element.eanDevice.ean == widget.deviceEAN).toList();
+        }
         
-        devices_list = value.devices.where((element) => element.eanDevice.ean == widget.deviceEAN).toList();
         if (!flagFiltering) {
           devices_list_to_display = devices_list;
         }
