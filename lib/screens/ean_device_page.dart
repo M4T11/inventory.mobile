@@ -84,8 +84,8 @@ class _EanDevicePageState extends State<EanDevicePage> {
                   leading: CircleAvatar(
                     backgroundColor: Colors.green,
                     foregroundColor: Colors.white,
-                    child: Text(eanDevice.eanDeviceId.toString()),
-                    // child: Text((index+1).toString()),
+                    // child: Text(eanDevice.eanDeviceId.toString()),
+                    child: Text((index+1).toString()),
                     ),
                     title: Text(eanDevice.producer.name + " " + eanDevice.model),
                     ),

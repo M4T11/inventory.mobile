@@ -84,8 +84,8 @@ class _ProducerPageState extends State<ProducerPage> {
                   leading: CircleAvatar(
                     backgroundColor: Colors.green,
                     foregroundColor: Colors.white,
-                    child: Text(producer.producerId.toString()),
-                    // child: Text((index+1).toString()),
+                    // child: Text(producer.producerId.toString()),
+                    child: Text((index+1).toString()),
                     ),
                     title: Text(producer.name),
                     ),

@@ -391,58 +391,74 @@ class _DevicePageState extends State<DevicePage> {
         
         return RefreshIndicator(
          onRefresh: () async => {value.getAlldevices(), selected_category.clear(), selected_locations.clear(), selected_producers.clear(), selected_ean_devices.clear()},
-         child: ListView.builder(
-          physics: const AlwaysScrollableScrollPhysics(),
-          itemCount: devices_list_to_display.length,
-          itemBuilder: (context, index) {
-            final device = devices_list_to_display[index];
-            return GestureDetector(
-              child: Slidable(
-                startActionPane: ActionPane(
-                  motion: StretchMotion(),
-                  children: [
-                    SlidableAction(
-                      onPressed: ((context) {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeviceEdit(deviceObject: device)));
-                      }),
-                      icon: Icons.edit,
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.orange,
-                    ),
-                ]),
-                endActionPane: ActionPane(
-                  motion: StretchMotion(),
-                  children: [
-                    SlidableAction(
-                      onPressed: ((context) {
-                        // Future<int> response = CategoryService().deleteCategory(category.categoryId);
-                        value.deleteDevice(device.deviceId);
-                        // setState(() { categories.removeWhere((element) => element.categoryId == category.categoryId); });
-                        // setState(() { value.getAllCategories(); });                     
-                      }),
-                      icon: Icons.delete,
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.red,
-                      ),
-                ]),           
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    child: Text(device.deviceId.toString()),
-                    // child: Text((index+1).toString()),
-                    ),
-                    title: Text(device.eanDevice.producer.name + " " + device.eanDevice.model),
-                    subtitle: Text(device.name + " " + device.serialNumber),
-                    ),
+         child: Column(
+           children: [
+            SizedBox(height: 25),
+            Text(
+                'Liczba urządzeń: ' + devices_list_to_display.length.toString(),
+                // widget.categoryObject.categoryId.toString() + widget.categoryObject.name.toString(),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  ),
               ),
-              onTap: () {
-                Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DeviceDetails(deviceObject: device)),);
-              },
-            );
-          }),
+            SizedBox(height: 25),
+            ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemCount: devices_list_to_display.length,
+            itemBuilder: (context, index) {
+              final device = devices_list_to_display[index];
+              return GestureDetector(
+                child: Slidable(
+                  startActionPane: ActionPane(
+                    motion: StretchMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: ((context) {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeviceEdit(deviceObject: device)));
+                        }),
+                        icon: Icons.edit,
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.orange,
+                      ),
+                  ]),
+                  endActionPane: ActionPane(
+                    motion: StretchMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: ((context) {
+                          // Future<int> response = CategoryService().deleteCategory(category.categoryId);
+                          value.deleteDevice(device.deviceId);
+                          // setState(() { categories.removeWhere((element) => element.categoryId == category.categoryId); });
+                          // setState(() { value.getAllCategories(); });                     
+                        }),
+                        icon: Icons.delete,
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.red,
+                        ),
+                  ]),           
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                      // child: Text(device.deviceId.toString()),
+                      child: Text((index+1).toString()),
+                      ),
+                      title: Text(device.eanDevice.producer.name + " " + device.eanDevice.model),
+                      subtitle: Text(device.name + " " + device.serialNumber),
+                      ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DeviceDetails(deviceObject: device)),);
+                },
+              );
+            }),
+           ]
+         ),
           );   
       }),
       floatingActionButton: Padding(

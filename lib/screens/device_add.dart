@@ -56,7 +56,7 @@ class _DeviceAddState extends State<DeviceAdd> {
 
 
   List<String> deviceCondition = ["Nowe", "Używane"]; 
-  List<String> deviceStatus = ["Do naprawy", "Do wystawienia", "Do zdjęć", "Na części"]; 
+  List<String> deviceStatus = ["Do naprawy", "Do wystawienia", "Do zdjęć", "Na części", "Sprzedane"]; 
 
     @override
   void initState() {
@@ -759,14 +759,14 @@ class _DeviceAddState extends State<DeviceAdd> {
                           borderRadius: BorderRadius.circular(12),
                           color: Colors.grey[200],
                           ),
-                        searchController: textEditingControllerCondition,
-                        searchInnerWidget: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 8,
-                          bottom: 4,
-                          right: 8,
-                          left: 8,
-                        ),
+                        // searchController: textEditingControllerCondition,
+                        // searchInnerWidget: Padding(
+                        // padding: const EdgeInsets.only(
+                        //   top: 8,
+                        //   bottom: 4,
+                        //   right: 8,
+                        //   left: 8,
+                        // ),
                         // child: TextFormField(
                         //   controller: textEditingControllerStatus,
                         //   decoration: InputDecoration(
@@ -782,16 +782,16 @@ class _DeviceAddState extends State<DeviceAdd> {
                         //       ),
                         //     ),
                         //   ),
-                        ),
+                        // ),
                         // searchMatchFn: (item, searchValue) {
                         //   return (item.value.toString().contains(searchValue));
                         //   },
                           //This to clear the search value when you close the menu
-                          onMenuStateChange: (isOpen) {
-                            if (!isOpen) {
-                              textEditingControllerCondition.clear();
-                              }
-                              },
+                          // onMenuStateChange: (isOpen) {
+                          //   if (!isOpen) {
+                          //     textEditingControllerCondition.clear();
+                          //     }
+                          //     },
                         ))
                   ),
                   SizedBox(height: 10),
@@ -837,39 +837,39 @@ class _DeviceAddState extends State<DeviceAdd> {
                           borderRadius: BorderRadius.circular(12),
                           color: Colors.grey[200],
                           ),
-                        searchController: textEditingControllerStatus,
-                        searchInnerWidget: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 8,
-                          bottom: 4,
-                          right: 8,
-                          left: 8,
-                        ),
-                        child: TextFormField(
-                          controller: textEditingControllerStatus,
-                          decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 8,
-                          ),
-                          hintText: 'Wyszukaj status dla przedmiotu...',
-                          hintStyle: const TextStyle(fontSize: 12),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                          ),
-                        ),
+                        // searchController: textEditingControllerStatus,
+                        // searchInnerWidget: Padding(
+                        // padding: const EdgeInsets.only(
+                        //   top: 8,
+                        //   bottom: 4,
+                        //   right: 8,
+                        //   left: 8,
+                        // ),
+                        // child: TextFormField(
+                        //   controller: textEditingControllerStatus,
+                        //   decoration: InputDecoration(
+                        //   isDense: true,
+                        //   contentPadding: const EdgeInsets.symmetric(
+                        //     horizontal: 10,
+                        //     vertical: 8,
+                        //   ),
+                        //   hintText: 'Wyszukaj status dla przedmiotu...',
+                        //   hintStyle: const TextStyle(fontSize: 12),
+                        //   border: OutlineInputBorder(
+                        //     borderRadius: BorderRadius.circular(8),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         // searchMatchFn: (item, searchValue) {
                         //   return (item.value.toString().contains(searchValue));
                         //   },
                           //This to clear the search value when you close the menu
-                          onMenuStateChange: (isOpen) {
-                            if (!isOpen) {
-                              textEditingControllerStatus.clear();
-                              }
-                              },
+                          // onMenuStateChange: (isOpen) {
+                          //   if (!isOpen) {
+                          //     textEditingControllerStatus.clear();
+                          //     }
+                          //     },
                         ))
                   ),
                   SizedBox(height: 10),

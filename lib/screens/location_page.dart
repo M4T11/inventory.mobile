@@ -84,8 +84,8 @@ class _LocationPageState extends State<LocationPage> {
                   leading: CircleAvatar(
                     backgroundColor: Colors.green,
                     foregroundColor: Colors.white,
-                    child: Text(location.locationId.toString()),
-                    // child: Text((index+1).toString()),
+                    // child: Text(location.locationId.toString()),
+                    child: Text((index+1).toString()),
                     ),
                     title: Text(location.name),
                     ),
