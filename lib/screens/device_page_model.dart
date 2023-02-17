@@ -53,6 +53,12 @@ class _DevicePageModelState extends State<DevicePageModel> {
   List<Device> devices_list_filtered = [];
   List<Device> devices_list_to_display = [];
 
+  List<String> device_condition_names_list = ["Nowe", "Używane"]; 
+  List <String> selected_condition = [];
+
+  List<String> device_status_names_list = ["Do naprawy", "Do wystawienia", "Wystawione", "Do zdjęć", "Na części", "Sprzedane"]; 
+  List <String> selected_status = [];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -89,78 +95,33 @@ class _DevicePageModelState extends State<DevicePageModel> {
     devices_list_filtered = devices_list;
 
     setState(() {
-      // devices_list = devices_list.where((e) => e.eanDevice.category.name == 'Klawiatura')
-      // .toList();
-      if(selected_category.isNotEmpty || selected_locations.isNotEmpty || selected_producers.isNotEmpty || selected_ean_devices.isNotEmpty) {
+      if(selected_category.isNotEmpty || selected_locations.isNotEmpty || selected_producers.isNotEmpty || selected_ean_devices.isNotEmpty 
+        || selected_condition.isNotEmpty || selected_status.isNotEmpty) {
         flagFiltering = true;
-        if(selected_category.isNotEmpty && selected_locations.isNotEmpty && selected_producers.isNotEmpty && selected_ean_devices.isNotEmpty) {
-          
-          devices_list_to_display = devices_list_filtered.where((element) => selected_category.contains(element.eanDevice.category.name.toString()) 
-          &&  selected_locations.contains(element.location.name.toString()) 
-          &&  selected_producers.contains(element.eanDevice.producer.name.toString())
-          &&  selected_ean_devices.contains(element.eanDevice.model.toString())).toList();
-          
+        if(selected_category.isNotEmpty) {
+           devices_list_filtered = devices_list_filtered.where((element) => selected_category.contains(element.eanDevice.category.name.toString())).toList();
         }
-        else if (selected_category.isNotEmpty && selected_locations.isNotEmpty && selected_producers.isNotEmpty && selected_ean_devices.isEmpty) {
-          devices_list_to_display = devices_list_filtered.where((element) => selected_category.contains(element.eanDevice.category.name.toString()) 
-          && selected_locations.contains(element.location.name.toString()) 
-          && selected_producers.contains(element.eanDevice.producer.name.toString())).toList();
-        }
-        else if (selected_category.isNotEmpty && selected_locations.isNotEmpty && selected_producers.isEmpty && selected_ean_devices.isNotEmpty) {
-          devices_list_to_display = devices_list_filtered.where((element) => selected_category.contains(element.eanDevice.category.name.toString()) 
-          && selected_locations.contains(element.location.name.toString()) 
-          && selected_ean_devices.contains(element.eanDevice.model.toString())).toList();
-        }
-          else if (selected_category.isNotEmpty && selected_locations.isEmpty && selected_producers.isNotEmpty && selected_ean_devices.isNotEmpty) {
-          devices_list_to_display = devices_list_filtered.where((element) => selected_category.contains(element.eanDevice.category.name.toString()) 
-          && selected_producers.contains(element.eanDevice.producer.name.toString())
-          && selected_ean_devices.contains(element.eanDevice.model.toString())).toList();
-        }
-        else if (selected_category.isEmpty && selected_locations.isNotEmpty && selected_producers.isNotEmpty && selected_ean_devices.isNotEmpty) {
-          devices_list_to_display = devices_list_filtered.where((element) => selected_locations.contains(element.location.name.toString())  
-          && selected_producers.contains(element.eanDevice.producer.name.toString())
-          && selected_ean_devices.contains(element.eanDevice.model.toString())).toList();
-        }
-        else if (selected_category.isNotEmpty && selected_locations.isNotEmpty && selected_producers.isEmpty && selected_ean_devices.isEmpty) {
-          devices_list_to_display = devices_list_filtered.where((element) => selected_category.contains(element.eanDevice.category.name.toString()) 
-          && selected_locations.contains(element.location.name.toString())).toList();
-        }
-        else if (selected_category.isNotEmpty && selected_locations.isEmpty && selected_producers.isNotEmpty && selected_ean_devices.isEmpty) {
-          devices_list_to_display = devices_list_filtered.where((element) => selected_category.contains(element.eanDevice.category.name.toString()) 
-          && selected_producers.contains(element.eanDevice.producer.name.toString())).toList();
-        }
-        else if (selected_category.isNotEmpty && selected_locations.isEmpty && selected_producers.isEmpty && selected_ean_devices.isNotEmpty) {
-          devices_list_to_display = devices_list_filtered.where((element) => selected_category.contains(element.eanDevice.category.name.toString()) 
-          && selected_ean_devices.contains(element.eanDevice.model.toString())).toList();
-        }
-        else if (selected_category.isEmpty && selected_locations.isNotEmpty && selected_producers.isNotEmpty && selected_ean_devices.isEmpty) {
-          devices_list_to_display = devices_list_filtered.where((element) => selected_locations.contains(element.location.name.toString())
-          && selected_producers.contains(element.eanDevice.producer.name.toString())).toList();
-        }
-        else if (selected_category.isEmpty && selected_locations.isNotEmpty && selected_producers.isEmpty && selected_ean_devices.isNotEmpty) {
-          devices_list_to_display = devices_list_filtered.where((element) => selected_locations.contains(element.location.name.toString())
-          && selected_ean_devices.contains(element.eanDevice.model.toString())).toList();
-        }
-        else if (selected_category.isEmpty && selected_locations.isEmpty && selected_producers.isNotEmpty && selected_ean_devices.isNotEmpty) {
-          devices_list_to_display = devices_list_filtered.where((element) => selected_producers.contains(element.eanDevice.producer.name.toString())
-          && selected_ean_devices.contains(element.eanDevice.model.toString())).toList();
-        }
-        else if (selected_category.isEmpty && selected_locations.isEmpty && selected_producers.isNotEmpty && selected_ean_devices.isEmpty) {
-          devices_list_to_display = devices_list_filtered.where((element) => selected_producers.contains(element.eanDevice.producer.name.toString())).toList();
-        }
-        else if (selected_category.isEmpty && selected_locations.isNotEmpty && selected_producers.isEmpty && selected_ean_devices.isEmpty) {
-          devices_list_to_display = devices_list_filtered.where((element) => selected_locations.contains(element.location.name.toString())).toList();
-        }
-        else if (selected_category.isNotEmpty && selected_locations.isEmpty && selected_producers.isEmpty && selected_ean_devices.isEmpty) {
-          devices_list_to_display = devices_list_filtered.where((element) => selected_category.contains(element.eanDevice.category.name.toString())).toList();
-        }
-        else if (selected_category.isEmpty && selected_locations.isEmpty && selected_producers.isEmpty && selected_ean_devices.isNotEmpty) {
-          devices_list_to_display = devices_list_filtered.where((element) => selected_ean_devices.contains(element.eanDevice.model.toString())).toList();
-        }
-        // else {
-        //   devices_list_to_display = devices_list_filtered.where((element) => selected_locations.contains(element.location.name.toString())).toList();
+        if(selected_locations.isNotEmpty) {
+          devices_list_filtered = devices_list_filtered.where((element) => selected_locations.contains(element.location.name.toString())).toList();
 
-        // }
+        }        
+        if(selected_producers.isNotEmpty) {
+          devices_list_filtered = devices_list_filtered.where((element) => selected_producers.contains(element.eanDevice.producer.name.toString())).toList();
+
+        }
+        if(selected_ean_devices.isNotEmpty) {
+          devices_list_filtered = devices_list_filtered.where((element) => selected_ean_devices.contains(element.eanDevice.model.toString())).toList();
+
+        }
+        if(selected_condition.isNotEmpty) {
+          devices_list_filtered = devices_list_filtered.where((element) => selected_condition.contains(element.condition.toString())).toList();
+
+        }
+        if(selected_status.isNotEmpty) {
+          devices_list_filtered = devices_list_filtered.where((element) => selected_status.contains(element.status.toString())).toList();
+
+        }
+        devices_list_to_display = devices_list_filtered;
         
       }
       else {
@@ -168,7 +129,7 @@ class _DevicePageModelState extends State<DevicePageModel> {
         devices_list_to_display = devices_list;
       }
     });
-    // print(devices_list);
+    
   }
 
   List<String> updateModels(List<EanDevice> ean_devices_list) {
@@ -187,6 +148,21 @@ class _DevicePageModelState extends State<DevicePageModel> {
     return ean_devices_names_list;
 
 
+  }
+  
+  void clearFilters() {
+    setState(() {
+      selected_category.clear();
+      selected_locations.clear();
+      selected_producers.clear();
+      selected_ean_devices.clear(); 
+      selected_condition.clear();
+      selected_status.clear();
+
+      flagFiltering = false;
+      devices_list_to_display = devices_list;
+                                        
+    });
   }
   
 
@@ -243,6 +219,40 @@ class _DevicePageModelState extends State<DevicePageModel> {
                               Text(
                                 ' wyniki',
                                 style: TextStyle(fontSize: 22),
+                              ),
+                              SizedBox(width: 170,),
+                              GestureDetector(
+                                child: Container(
+                                  // height: 40,
+                                  // width: 100,
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Wyczyść',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                        
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    selected_category.clear();
+                                    selected_locations.clear();
+                                    selected_producers.clear();
+                                    selected_ean_devices.clear(); 
+                                    selected_condition.clear();
+                                    selected_status.clear();                      
+                                  });        
+                                  clearFilters(); 
+                                }
                               ),
                             ],
                           ),

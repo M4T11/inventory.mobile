@@ -230,8 +230,21 @@ class _DevicePageState extends State<DevicePage> {
     }
 
     return ean_devices_names_list;
+  }
 
+  void clearFilters() {
+    setState(() {
+      selected_category.clear();
+      selected_locations.clear();
+      selected_producers.clear();
+      selected_ean_devices.clear(); 
+      selected_condition.clear();
+      selected_status.clear();
 
+      flagFiltering = false;
+      devices_list_to_display = devices_list;
+                                        
+    });
   }
   
 
@@ -294,6 +307,41 @@ class _DevicePageState extends State<DevicePage> {
                                 ' wyniki',
                                 style: TextStyle(fontSize: 22),
                               ),
+                              SizedBox(width: 170,),
+                              GestureDetector(
+                                child: Container(
+                                  // height: 40,
+                                  // width: 100,
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Wyczyść',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                        
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    selected_category.clear();
+                                    selected_locations.clear();
+                                    selected_producers.clear();
+                                    selected_ean_devices.clear(); 
+                                    selected_condition.clear();
+                                    selected_status.clear();                      
+                                  });        
+                                  clearFilters(); 
+                                }
+                              ),
+
                             ],
                           ),
                           Container(
