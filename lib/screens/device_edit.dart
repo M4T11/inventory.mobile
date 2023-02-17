@@ -57,7 +57,7 @@ class _DeviceEditState extends State<DeviceEdit> {
   Map mapDescriptionToSave = {};
 
   List<String> deviceCondition = ["Nowe", "Używane"]; 
-  List<String> deviceStatus = ["Do naprawy", "Do wystawienia", "Do zdjęć", "Na części", "Sprzedane"]; 
+  List<String> deviceStatus = ["Do naprawy", "Do wystawienia", "Wystawione", "Do zdjęć", "Na części", "Sprzedane"]; 
 
     @override
   void initState() {

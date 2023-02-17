@@ -52,7 +52,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
   List<String> selectedItemsDescription = [];
 
   List<String> deviceCondition = ["Nowe", "Używane"]; 
-  List<String> deviceStatus = ["Do naprawy", "Do wystawienia", "Do zdjęć", "Na części", "Sprzedane"]; 
+  List<String> deviceStatus = ["Do naprawy", "Do wystawienia", "Wystawione", "Do zdjęć", "Na części", "Sprzedane"]; 
     
     @override
   void initState() {
