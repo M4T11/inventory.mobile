@@ -307,7 +307,7 @@ class _DevicePageState extends State<DevicePage> {
                                 ' wyniki',
                                 style: TextStyle(fontSize: 22),
                               ),
-                              SizedBox(width: 170,),
+                              SizedBox(width: 120,),
                               GestureDetector(
                                 child: Container(
                                   // height: 40,

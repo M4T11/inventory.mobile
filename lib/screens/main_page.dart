@@ -325,7 +325,7 @@ class _MainPageState extends State<MainPage> {
                                         // initialValue: widget.categoryObject.name.toString(),
                                         decoration: InputDecoration(
                                           border: InputBorder.none,
-                                          hintText: 'Wprowadź SN lub kod QR przedmiotu',
+                                          hintText: 'Wprowadź SN, EAN lub kod QR przedmiotu',
                                         ),
                                       ),
                                     ),
@@ -343,6 +343,7 @@ class _MainPageState extends State<MainPage> {
                                           _controllerSearch.text = result.rawContent.toString();
                                           Device? device_sn = devices.firstWhereOrNull((x) => x.serialNumber == _controllerSearch.text.toString());
                                           Device? device_qr = devices.firstWhereOrNull((x) => x.qrCode == _controllerSearch.text.toString());
+                                          Device? device_ean = devices.firstWhereOrNull((x) => x.eanDevice.ean == _controllerSearch.text.toString());
                                           Device? device_location = devices.firstWhereOrNull((x) => x.location.name == _controllerSearch.text.toString());
                             
                                           if (device_sn == null && device_qr == null && selectedValueSearchType == "Urządzenie") {
@@ -385,7 +386,7 @@ class _MainPageState extends State<MainPage> {
                                             }
                                             
                                           }
-                                          if (device_sn == null && device_qr == null && selectedValueSearchType == "Wszystkie egzemplarze") {
+                                          if (device_ean == null && selectedValueSearchType == "Wszystkie egzemplarze") {
                                             showDialog<String>(
                                               context: context,
                                               builder: (BuildContext context) => AlertDialog(
@@ -405,7 +406,7 @@ class _MainPageState extends State<MainPage> {
                                             ]    
                                             ));
                                             
-                                          } else if ((device_sn != null || device_qr != null) && selectedValueSearchType == "Wszystkie egzemplarze") {
+                                          } else if ((device_ean != null) && selectedValueSearchType == "Wszystkie egzemplarze") {
                                             Navigator.of(context).push(MaterialPageRoute(builder: (context) => DevicePageModel(deviceEAN: _controllerSearch.text, location: false,))).then((value) => _controllerSearch.clear());
                                                
                                           }
@@ -501,6 +502,7 @@ class _MainPageState extends State<MainPage> {
                                     onTap: () {
                                      Device? device_sn = devices.firstWhereOrNull((x) => x.serialNumber == _controllerSearch.text.toString());
                                      Device? device_qr = devices.firstWhereOrNull((x) => x.qrCode == _controllerSearch.text.toString());
+                                     Device? device_ean = devices.firstWhereOrNull((x) => x.eanDevice.ean == _controllerSearch.text.toString());
                                      Device? device_location = devices.firstWhereOrNull((x) => x.location.name == _controllerSearch.text.toString());
                         
                                       if (device_sn == null && device_qr == null && selectedValueSearchType == "Urządzenie") {
@@ -543,7 +545,7 @@ class _MainPageState extends State<MainPage> {
                                         }
                                         
                                       }
-                                      if (device_sn == null && device_qr == null && selectedValueSearchType == "Wszystkie egzemplarze") {
+                                      if (device_ean == null && selectedValueSearchType == "Wszystkie egzemplarze") {
                                         showDialog<String>(
                                           context: context,
                                           builder: (BuildContext context) => AlertDialog(
@@ -563,7 +565,7 @@ class _MainPageState extends State<MainPage> {
                                         ]    
                                         ));
                                         
-                                      } else if ((device_sn != null || device_qr != null) && selectedValueSearchType == "Wszystkie egzemplarze") {
+                                      } else if ((device_ean != null) && selectedValueSearchType == "Wszystkie egzemplarze") {
                                         Navigator.of(context).push(MaterialPageRoute(builder: (context) => DevicePageModel(deviceEAN: _controllerSearch.text, location: false,))).then((value) => _controllerSearch.clear());
                                             
                                       }

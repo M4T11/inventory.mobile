@@ -149,7 +149,7 @@ class _DevicePageModelState extends State<DevicePageModel> {
 
 
   }
-  
+
   void clearFilters() {
     setState(() {
       selected_category.clear();
@@ -220,7 +220,7 @@ class _DevicePageModelState extends State<DevicePageModel> {
                                 ' wyniki',
                                 style: TextStyle(fontSize: 22),
                               ),
-                              SizedBox(width: 170,),
+                              SizedBox(width: 120,),
                               GestureDetector(
                                 child: Container(
                                   // height: 40,

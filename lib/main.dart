@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => DeviceProvider())
     ],
     child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: NavPage()
       ),
     );

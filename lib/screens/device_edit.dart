@@ -75,6 +75,7 @@ class _DeviceEditState extends State<DeviceEdit> {
     _controllerSerialnumber.text = widget.deviceObject.serialNumber.toString();
     _controllerName.text = widget.deviceObject.name.toString();
     _controllerDescription.text = widget.deviceObject.description.toString(); 
+    _controllerID.text = widget.deviceObject.qrCode.toString();
 
     spinReadOnly = false;
     spinEnabled = true;
@@ -143,7 +144,7 @@ class _DeviceEditState extends State<DeviceEdit> {
   TextEditingController _controllerSerialnumber = new TextEditingController();
   TextEditingController _controllerName = new TextEditingController();
   TextEditingController _controllerDescription = new TextEditingController();
-
+  TextEditingController _controllerID = new TextEditingController();
   TextEditingController _textControllerAlertDialog = new TextEditingController();
 
   late bool spinEnabled;
@@ -164,6 +165,7 @@ class _DeviceEditState extends State<DeviceEdit> {
     _controllerSerialnumber.dispose();
     _controllerName.dispose();
     _controllerDescription.dispose();
+    _controllerID.dispose();
     textEditingControllerEanDevice.dispose();
     textEditingControllerLocation.dispose();
     textEditingControllerStatus.dispose();
@@ -266,6 +268,45 @@ class _DeviceEditState extends State<DeviceEdit> {
                       ],
                     ),               
                   ),
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Stack(
+                      alignment: Alignment.centerRight,
+                      children: <Widget>[
+                        Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              border: Border.all(color: Colors.white),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: TextField(
+                              controller: _controllerID,
+                              textAlign: TextAlign.center,
+                              // initialValue: widget.categoryObject.name.toString(),
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Nadaj unikalne ID',
+                              ),
+                            ),
+                          ),
+                        IconButton(
+                          icon: Icon(Icons.camera_alt_rounded),
+                          onPressed: () async {
+                              var camera_result_serial_number = await BarcodeScanner.scan();
+                              print(camera_result_serial_number.type); // The result type (barcode, cancelled, failed)
+                              print(camera_result_serial_number.rawContent); // The barcode content
+                              print(camera_result_serial_number.format); // The barcode format (as enum)
+                              print(camera_result_serial_number.formatNote); // If a unknown format was sc
+                              
+                              if(camera_result_serial_number.format != 'unknown' && camera_result_serial_number.type != 'Cancelled' && camera_result_serial_number.rawContent.isNotEmpty) {
+                                _controllerID.text = camera_result_serial_number.rawContent.toString();
+                              }
+                          },
+                        ),
+                      ],
+                    ),               
+                  ),     
                   // SizedBox(height: 10),
                   // Padding(
                   //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -924,7 +965,7 @@ class _DeviceEditState extends State<DeviceEdit> {
                               condition: selectedValueCondition.toString(),
                               status: selectedValueStatus.toString(),
                               dateAdded: "2023-01-01",
-                              qrCode: "string",
+                              qrCode: _controllerID.text.toString(),
                               ));
                               Navigator.of(context).push(MaterialPageRoute(builder: (context) => DevicePage()));
                           },
