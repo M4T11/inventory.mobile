@@ -15,6 +15,7 @@ import 'package:flutter_spinbox/material.dart';
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'dart:convert';
 import 'package:quiver/collection.dart';
+import 'package:motion_toast/motion_toast.dart'; 
 
 
 class DeviceEdit extends StatefulWidget {
@@ -923,17 +924,6 @@ class _DeviceEditState extends State<DeviceEdit> {
                         ),
                       ),
                       onTap: () {
-                        // TODO update wartosci, ktore sa rozne
-                            // selectedItemsDescription.forEach((element) {
-                            //   if(!selected_copy.containsKey(element)) {
-                            //     selected_copy[element] = false;
-                            //   }
-                            // });
-                            // selected_copy.keys.forEach((key) {
-                            //   if(!selectedItemsDescription.contains(key.toString())) {
-                            //     selected_copy.remove(key);
-                            //   }
-                            // });
                             
                             selectedItemsDescription.forEach((element) {
                               if(selected_copy.containsKey(element)) {
@@ -945,6 +935,16 @@ class _DeviceEditState extends State<DeviceEdit> {
                               
                             });
                             mapDescriptionToSave = mapDescriptionToSave.map((key, value) => MapEntry('"$key"', value));
+                            
+                            if (_controllerSerialnumber.text.isEmpty || selectedValueEanDevice == null || selectedValueLocation == null || 
+                                selectedValueCondition == null || selectedValueStatus == null || _controllerID.text.isEmpty) {
+                                  MotionToast.warning(
+                                    title:  Text("UWAGA!"),
+                                    description:  Text("Uzupełnij wszystkie wymagane pola.")
+                                  ).show(context);
+
+                                }
+                            else {
                             // Map mapDescription = {for (var item in selectedItemsDescription) '"$item"' : false};
                             // print(mapDescriptionToSave);
                             var ean_device_selected = selectedValueEanDevice.toString().split(" ");
@@ -968,6 +968,7 @@ class _DeviceEditState extends State<DeviceEdit> {
                               qrCode: _controllerID.text.toString(),
                               ));
                               Navigator.of(context).push(MaterialPageRoute(builder: (context) => DevicePage()));
+                            }
                           },
                     ),
                   ),

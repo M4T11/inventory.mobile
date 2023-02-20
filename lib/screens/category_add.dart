@@ -5,6 +5,7 @@ import 'package:inventoryapp/services/category_services.dart';
 import 'package:inventoryapp/provider/category_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:motion_toast/motion_toast.dart'; 
 
 class CategoryAdd extends StatefulWidget {
     final bool forwarding;
@@ -97,7 +98,14 @@ class _CategoryAddState extends State<CategoryAdd> {
                     ),
                   ),
                   onTap: () {
-                        Provider.of<CategoryProvider>(context, listen: false).addCategories(Category(
+                    if (_controller.text.isEmpty) {
+                      MotionToast.warning(
+                                    title:  Text("UWAGA!"),
+                                    description:  Text("Uzupełnij wszystkie wymagane pola.")
+                                  ).show(context);
+                      
+                    } else {
+                      Provider.of<CategoryProvider>(context, listen: false).addCategories(Category(
                           categoryId: 0, 
                           name: _controller.text.toString()));
                           if (widget.forwarding) {
@@ -105,7 +113,7 @@ class _CategoryAddState extends State<CategoryAdd> {
                           } else {
                             Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryPage()));
                           }  
-                          
+                    }                         
                       },
                 ),
               ),

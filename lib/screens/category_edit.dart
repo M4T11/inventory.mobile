@@ -5,6 +5,7 @@ import 'package:inventoryapp/services/category_services.dart';
 import 'package:inventoryapp/provider/category_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:motion_toast/motion_toast.dart'; 
 
 class CategoryEdit extends StatefulWidget {
   final Category categoryObject;
@@ -98,11 +99,19 @@ class _CategoryEditState extends State<CategoryEdit> {
                     ),
                     ),
                   onTap: () {
+                    if (_controller.text.isEmpty) {
+                      MotionToast.warning(
+                                    title:  Text("UWAGA!"),
+                                    description:  Text("Uzupełnij wszystkie wymagane pola.")
+                                  ).show(context);
+                      
+                    } else {
                         Provider.of<CategoryProvider>(context, listen: false).editCategories(Category(
                           categoryId: widget.categoryObject.categoryId, 
                           name: _controller.text.toString()));
                           Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryPage()));
-                      },
+                    }
+                  },
                 ),
               ),
         

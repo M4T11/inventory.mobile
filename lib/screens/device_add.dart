@@ -14,7 +14,8 @@ import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:flutter_spinbox/material.dart';
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:intl/intl.dart';
-import 'package:collection/collection.dart'; 
+import 'package:collection/collection.dart';
+import 'package:motion_toast/motion_toast.dart'; 
 
 // Po dodaniu z menu glownego lista wszystkich nie jest odswiezona
 class DeviceAdd extends StatefulWidget {
@@ -934,6 +935,15 @@ class _DeviceAddState extends State<DeviceAdd> {
                         ),
                         ),
                       onTap: () {
+                            if (_controllerSerialnumber.text.isEmpty || selectedValueEanDevice == null || selectedValueLocation == null || 
+                                selectedValueCondition == null || selectedValueStatus == null || _controllerID.text.isEmpty) {
+                                  MotionToast.warning(
+                                    title:  Text("UWAGA!"),
+                                    description:  Text("Uzupełnij wszystkie wymagane pola.")
+                                  ).show(context);
+
+                                }
+                            else {
                             Map mapDescription = {for (var item in selectedItemsDescription) '"$item"' : false};
                             var ean_device_selected = selectedValueEanDevice.toString().split(" ");
                             var ean_selected = ean_device_selected.last.substring(1, ean_device_selected.last.length - 1);;
@@ -968,6 +978,7 @@ class _DeviceAddState extends State<DeviceAdd> {
                               qrCode: _controllerID.text.toString(),
                               ));
                               Navigator.of(context).push(MaterialPageRoute(builder: (context) => DevicePage()));
+                            }
                           },
                     ),
                   ),

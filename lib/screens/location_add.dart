@@ -6,6 +6,7 @@ import 'package:inventoryapp/services/location_services.dart';
 import 'package:inventoryapp/provider/location_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:motion_toast/motion_toast.dart'; 
 
 class LocationAdd extends StatefulWidget {
   final bool forwarding;
@@ -98,6 +99,13 @@ class _LocationAddState extends State<LocationAdd> {
                     ),
                   ),
                   onTap: () {
+                    if (_controller.text.isEmpty) {
+                      MotionToast.warning(
+                                    title:  Text("UWAGA!"),
+                                    description:  Text("Uzupełnij wszystkie wymagane pola.")
+                                  ).show(context);
+                      
+                    } else {
                         Provider.of<LocationProvider>(context, listen: false).addLocation(Location(
                           locationId: 0, 
                           name: _controller.text.toString()));
@@ -106,8 +114,8 @@ class _LocationAddState extends State<LocationAdd> {
                           } else {
                             Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationPage()));
                           }
-                          
-                      },
+                    }                         
+                  },
                 ),
               ),
         

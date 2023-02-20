@@ -5,6 +5,7 @@ import 'package:inventoryapp/services/producer_services.dart';
 import 'package:inventoryapp/provider/producer_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:motion_toast/motion_toast.dart'; 
 
 class ProducerAdd extends StatefulWidget {
   final bool forwarding;
@@ -97,6 +98,13 @@ class _ProducerAddState extends State<ProducerAdd> {
                     ),          
                   ),
                   onTap: () {
+                    if (_controller.text.isEmpty) {
+                      MotionToast.warning(
+                                    title:  Text("UWAGA!"),
+                                    description:  Text("Uzupełnij wszystkie wymagane pola.")
+                                  ).show(context);
+                      
+                    } else {
                         Provider.of<ProducerProvider>(context, listen: false).addProducer(Producer(
                           producerId: 0, 
                           name: _controller.text.toString()));
@@ -104,7 +112,8 @@ class _ProducerAddState extends State<ProducerAdd> {
                             Navigator.of(context).pop();
                           } else {
                             Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProducerPage()));
-                          }                         
+                          } 
+                    }                        
                       },
                 ),
               ),

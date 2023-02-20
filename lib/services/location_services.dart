@@ -11,7 +11,7 @@ class LocationService {
     if (local) {
       url = 'http://127.0.0.1:8000/locations/';
     } else {
-      url = 'http://192.168.50.103:8000/locations/';
+      url = 'http://192.168.50.104:8000/locations/';
     }
    
     final uri = Uri.parse(url);
@@ -35,7 +35,7 @@ class LocationService {
     if (local) {
       url = 'http://127.0.0.1:8000/locations/id/' + id.toString();
     } else {
-      url = 'http://192.168.50.103:8000/locations/id/' + id.toString();
+      url = 'http://192.168.50.104:8000/locations/id/' + id.toString();
     }
 
     final uri = Uri.parse(url);
@@ -49,7 +49,7 @@ class LocationService {
     if (local) {
       url = 'http://127.0.0.1:8000/locations/id/' + location.locationId.toString();
     } else {
-      url = 'http://192.168.50.103:8000/locations/id/' + location.locationId.toString();
+      url = 'http://192.168.50.104:8000/locations/id/' + location.locationId.toString();
     }
 
     final uri = Uri.parse(url);
@@ -76,7 +76,7 @@ class LocationService {
     if (local) {
       url = 'http://127.0.0.1:8000/locations/';
     } else {
-      url = 'http://192.168.50.103:8000/locations/';
+      url = 'http://192.168.50.104:8000/locations/';
     }
 
     final uri = Uri.parse(url);

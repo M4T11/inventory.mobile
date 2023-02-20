@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:motion_toast/motion_toast.dart'; 
 
 
 class EanDeviceAdd extends StatefulWidget {
@@ -348,6 +349,13 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
                           ),
                         ),
                         onTap: () {
+                          if (selectedValueCategory == null || selectedValueProducer == null || _controllerEAN.text.isEmpty || _controllerModel.text.isEmpty) {
+                                MotionToast.warning(
+                                              title:  Text("UWAGA!"),
+                                              description:  Text("Uzupełnij wszystkie wymagane pola.")
+                                            ).show(context);
+                                
+                          } else {
                               Category category = categories.firstWhere((x) => x.name == selectedValueCategory.toString());
                               Producer producer = producers.firstWhere((x) => x.name == selectedValueProducer.toString());
                               Provider.of<EanDeviceProvider>(context, listen: false).addEanDevice(
@@ -364,7 +372,7 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
                                 } else {
                                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDevicePage()));
                                 }
-                                
+                          }                                
                             },
                       ),
                     ),
