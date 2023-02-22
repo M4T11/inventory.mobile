@@ -12,7 +12,9 @@ import 'package:provider/provider.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
-import 'package:motion_toast/motion_toast.dart'; 
+import 'package:motion_toast/motion_toast.dart';
+import 'package:collection/collection.dart';
+
 
 class EanDeviceEdit extends StatefulWidget {
   final EanDevice eanDeviceObject;
@@ -33,6 +35,7 @@ class _EanDeviceEditState extends State<EanDeviceEdit> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<CategoryProvider>(context, listen: false).getAllCategories();
       Provider.of<ProducerProvider>(context, listen: false).getAllProducers();
+      Provider.of<EanDeviceProvider>(context, listen: false).getAllEanDevices();
     });
     selectedValueCategory = widget.eanDeviceObject.category.name;
     selectedValueProducer = widget.eanDeviceObject.producer.name;
@@ -71,15 +74,16 @@ class _EanDeviceEditState extends State<EanDeviceEdit> {
         ),
         // backgroundColor: Colors.grey[300],
         // backgroundColor: Colors.white,
-        body: Consumer2<CategoryProvider, ProducerProvider>(
-          builder: (context, categoryProvider, producerProvider, child) {
-            if(categoryProvider.isLoading || producerProvider.isLoading) {
+        body: Consumer3<CategoryProvider, ProducerProvider, EanDeviceProvider>(
+          builder: (context, categoryProvider, producerProvider, eanDeviceProvider, child) {
+            if(categoryProvider.isLoading || producerProvider.isLoading || eanDeviceProvider.isLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
                 );
             }
             final categories = categoryProvider.categories;
             final producers = producerProvider.producers;
+            final eanDevices = eanDeviceProvider.eanDevices;
             return SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -363,6 +367,17 @@ class _EanDeviceEditState extends State<EanDeviceEdit> {
                           } else {
                             Category category = categories.firstWhere((x) => x.name == selectedValueCategory.toString());
                             Producer producer = producers.firstWhere((x) => x.name == selectedValueProducer.toString());
+
+                            EanDevice? ean_device = eanDevices.firstWhereOrNull((x) => x.ean == _controllerEAN.text.toString());
+                            
+
+                            if (ean_device != null) {
+                              MotionToast.error(
+                                    title:  Text("BŁĄD!"),
+                                    description:  Text("Istnieje urządzenie o podanym numerze EAN.")
+                                  ).show(context);                          
+                            }
+                            else {
                             Provider.of<EanDeviceProvider>(context, listen: false).editEanDevice(
                               EanDevice(
                               eanDeviceId: widget.eanDeviceObject.eanDeviceId,
@@ -374,6 +389,7 @@ class _EanDeviceEditState extends State<EanDeviceEdit> {
                               model: _controllerModel.text.toString()));
                               Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDevicePage()));
                           }
+                        }
                       },
                     ),
                   ),

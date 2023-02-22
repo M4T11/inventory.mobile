@@ -13,6 +13,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:motion_toast/motion_toast.dart'; 
+import 'package:collection/collection.dart';
 
 
 class EanDeviceAdd extends StatefulWidget {
@@ -34,6 +35,8 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<CategoryProvider>(context, listen: false).getAllCategories();
       Provider.of<ProducerProvider>(context, listen: false).getAllProducers();
+      Provider.of<EanDeviceProvider>(context, listen: false).getAllEanDevices();
+      
     });
     
   }
@@ -67,15 +70,16 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
         ),
         // backgroundColor: Colors.grey[300],
         // backgroundColor: Colors.white,
-        body: Consumer2<CategoryProvider, ProducerProvider>(
-          builder: (context, categoryProvider, producerProvider, child) {
-            if(categoryProvider.isLoading || producerProvider.isLoading) {
+        body: Consumer3<CategoryProvider, ProducerProvider, EanDeviceProvider>(
+          builder: (context, categoryProvider, producerProvider, eanDeviceProvider, child) {
+            if(categoryProvider.isLoading || producerProvider.isLoading || eanDeviceProvider.isLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
                 );
             }
             final categories = categoryProvider.categories;
             final producers = producerProvider.producers;
+            final eanDevices = eanDeviceProvider.eanDevices;
             return SafeArea(
             child: Center(
                 child: SingleChildScrollView(
@@ -358,22 +362,34 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
                           } else {
                               Category category = categories.firstWhere((x) => x.name == selectedValueCategory.toString());
                               Producer producer = producers.firstWhere((x) => x.name == selectedValueProducer.toString());
-                              Provider.of<EanDeviceProvider>(context, listen: false).addEanDevice(
-                                EanDevice(
-                                eanDeviceId: 0,
-                                ean: _controllerEAN.text.toString(),
-                                category: category,
-                                producer: producer,
-                                // category: Category(categoryId: 0, name: selectedValueCategory.toString()),
-                                // producer: Producer(producerId: 0, name: selectedValueProducer.toString()),
-                                model: _controllerModel.text.toString()));
-                                if (widget.forwarding) {
-                                  Navigator.of(context).pop();
-                                } else {
-                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDevicePage()));
-                                }
-                          }                                
-                            },
+
+                              EanDevice? ean_device = eanDevices.firstWhereOrNull((x) => x.ean == _controllerEAN.text.toString());
+                            
+
+                              if (ean_device != null) {
+                                MotionToast.error(
+                                      title:  Text("BŁĄD!"),
+                                      description:  Text("Istnieje urządzenie o podanym numerze EAN.")
+                                    ).show(context);                          
+                              }
+                              else {
+                                Provider.of<EanDeviceProvider>(context, listen: false).addEanDevice(
+                                  EanDevice(
+                                  eanDeviceId: 0,
+                                  ean: _controllerEAN.text.toString(),
+                                  category: category,
+                                  producer: producer,
+                                  // category: Category(categoryId: 0, name: selectedValueCategory.toString()),
+                                  // producer: Producer(producerId: 0, name: selectedValueProducer.toString()),
+                                  model: _controllerModel.text.toString()));
+                                  if (widget.forwarding) {
+                                    Navigator.of(context).pop();
+                                  } else {
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDevicePage()));
+                                  }
+                             } 
+                          }                               
+                        },
                       ),
                     ),
                         

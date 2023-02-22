@@ -66,6 +66,7 @@ class _DeviceAddState extends State<DeviceAdd> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<EanDeviceProvider>(context, listen: false).getAllEanDevices();
       Provider.of<LocationProvider>(context, listen: false).getAllLocations();
+      Provider.of<DeviceProvider>(context, listen: false).getAlldevices();
     });
     quantity = 0;
     spinReadOnly = false;
@@ -137,15 +138,16 @@ class _DeviceAddState extends State<DeviceAdd> {
         ),
         // backgroundColor: Colors.grey[300],
         // backgroundColor: Colors.white,
-        body: Consumer2<EanDeviceProvider, LocationProvider>(
-          builder: (context, eanDeviceProvider, locationProvider, child) {
-            if(eanDeviceProvider.isLoading || locationProvider.isLoading) {
+        body: Consumer3<EanDeviceProvider, LocationProvider, DeviceProvider>(
+          builder: (context, eanDeviceProvider, locationProvider, deviceProvider, child) {
+            if(eanDeviceProvider.isLoading || locationProvider.isLoading || deviceProvider.isLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
                 );
             }
             final eanDevices = eanDeviceProvider.eanDevices;
             final locations = locationProvider.locations;
+            final devices = deviceProvider.devices;
             return SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -962,6 +964,23 @@ class _DeviceAddState extends State<DeviceAdd> {
 
                               name = _controllerName.text.toString();
                             }
+
+                            Device? device_sn = devices.firstWhereOrNull((x) => x.serialNumber == _controllerSerialnumber.text.toString());
+                            Device? device_qr = devices.firstWhereOrNull((x) => x.qrCode == _controllerID.text.toString());
+
+                            if (device_sn != null) {
+                              MotionToast.error(
+                                    title:  Text("BŁĄD!"),
+                                    description:  Text("Istnieje urządzenie o podanym numerze seryjnym.")
+                                  ).show(context);                          
+                            } else if (device_qr != null){
+                              MotionToast.error(
+                                    title:  Text("BŁĄD!"),
+                                    description:  Text("Istnieje urządzenie o podanym ID.")
+                                  ).show(context); 
+                            }
+                            else {
+
                             Provider.of<DeviceProvider>(context, listen: false).addDevice(
                               Device(
                               deviceId: 0,
@@ -978,6 +997,7 @@ class _DeviceAddState extends State<DeviceAdd> {
                               qrCode: _controllerID.text.toString(),
                               ));
                               Navigator.of(context).push(MaterialPageRoute(builder: (context) => DevicePage()));
+                              }
                             }
                           },
                     ),
