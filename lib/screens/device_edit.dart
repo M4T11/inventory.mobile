@@ -214,7 +214,7 @@ class _DeviceEditState extends State<DeviceEdit> {
                       fontSize: 24,
                       ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Container(
@@ -234,7 +234,7 @@ class _DeviceEditState extends State<DeviceEdit> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Stack(
@@ -273,7 +273,7 @@ class _DeviceEditState extends State<DeviceEdit> {
                       ],
                     ),               
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Stack(
@@ -312,7 +312,7 @@ class _DeviceEditState extends State<DeviceEdit> {
                       ],
                     ),               
                   ),     
-                  // SizedBox(height: 10),
+                  // SizedBox(height: 5),
                   // Padding(
                   //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   //   child: Container(
@@ -332,7 +332,7 @@ class _DeviceEditState extends State<DeviceEdit> {
                   //     ),
                   //   ),
                   // ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Stack(
@@ -458,7 +458,7 @@ class _DeviceEditState extends State<DeviceEdit> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Stack(
@@ -567,7 +567,7 @@ class _DeviceEditState extends State<DeviceEdit> {
                       ]
                     )
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                       child: Stack(
@@ -724,7 +724,7 @@ class _DeviceEditState extends State<DeviceEdit> {
                         ]
                       ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Container(
@@ -749,7 +749,7 @@ class _DeviceEditState extends State<DeviceEdit> {
                       )
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: DropdownButtonHideUnderline(
@@ -827,7 +827,7 @@ class _DeviceEditState extends State<DeviceEdit> {
                           //     },
                         ))
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: DropdownButtonHideUnderline(
@@ -905,7 +905,7 @@ class _DeviceEditState extends State<DeviceEdit> {
                           //     },
                         ))
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: GestureDetector(
