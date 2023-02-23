@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:inventoryapp/models/device_model.dart';
 import 'package:inventoryapp/models/location_model.dart';
+import 'package:inventoryapp/provider/device_provider.dart';
 import 'package:inventoryapp/provider/location_provider.dart';
 import 'package:inventoryapp/screens/location_add.dart';
 import 'package:inventoryapp/screens/location_details.dart';
 import 'package:inventoryapp/screens/location_edit.dart';
 import 'package:inventoryapp/services/location_services.dart';
 import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
+import 'package:motion_toast/motion_toast.dart'; 
 
 
 class LocationPage extends StatefulWidget {
@@ -24,6 +28,7 @@ class _LocationPageState extends State<LocationPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<LocationProvider>(context, listen: false).getAllLocations();
+      Provider.of<DeviceProvider>(context, listen: false).getAlldevices();
     });
     
   }
@@ -35,16 +40,17 @@ class _LocationPageState extends State<LocationPage> {
       title: const Text('Inventory App'),
       backgroundColor: Color(0xff235d3a),
       ),
-      body: Consumer<LocationProvider>(
-        builder: (context, value, child) {
-          if(value.isLoading) {
+      body: Consumer2<LocationProvider, DeviceProvider>(
+        builder: (context, locationProvider, deviceProvider, child) {
+          if(locationProvider.isLoading || deviceProvider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(),
               );
           }
-        final locations = value.locations;
+        final locations = locationProvider.locations;
+        final devices = deviceProvider.devices;
         return RefreshIndicator(
-         onRefresh: () async => value.getAllLocations(),
+         onRefresh: () async => locationProvider.getAllLocations(),
          child: ListView.builder(
           physics: const AlwaysScrollableScrollPhysics(),
           itemCount: locations.length,
@@ -69,10 +75,16 @@ class _LocationPageState extends State<LocationPage> {
                   children: [
                     SlidableAction(
                       onPressed: ((context) {
-                        // Future<int> response = CategoryService().deleteCategory(category.categoryId);
-                        value.deleteLocations(location.locationId);
-                        // setState(() { categories.removeWhere((element) => element.categoryId == category.categoryId); });
-                        // setState(() { value.getAllCategories(); });                     
+                        Device? device = devices.firstWhereOrNull((x) => x.location.name == location.name);
+                        if(device != null) {
+                          MotionToast.warning(
+                                      title:  Text("UWAGA!"),
+                                      description:  Text("Nie można usunąć lokalizacji powiązanej z urządzeniami.")
+                                    ).show(context);
+
+                        } else {
+                        locationProvider.deleteLocations(location.locationId);
+                        }                 
                       }),
                       icon: Icons.delete,
                       foregroundColor: Colors.white,

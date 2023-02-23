@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:inventoryapp/models/device_model.dart';
 import 'package:inventoryapp/models/producer_model.dart';
+import 'package:inventoryapp/provider/device_provider.dart';
 import 'package:inventoryapp/provider/producer_provider.dart';
 import 'package:inventoryapp/screens/producer_add.dart';
 import 'package:inventoryapp/screens/producer_details.dart';
 import 'package:inventoryapp/screens/producer_edit.dart';
 import 'package:inventoryapp/services/producer_services.dart';
 import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
+import 'package:motion_toast/motion_toast.dart'; 
 
 
 class ProducerPage extends StatefulWidget {
@@ -24,6 +28,7 @@ class _ProducerPageState extends State<ProducerPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<ProducerProvider>(context, listen: false).getAllProducers();
+      Provider.of<DeviceProvider>(context, listen: false).getAlldevices();
     });
     
   }
@@ -35,16 +40,17 @@ class _ProducerPageState extends State<ProducerPage> {
       title: const Text('Inventory App'),
       backgroundColor: Color(0xff235d3a),
       ),
-      body: Consumer<ProducerProvider>(
-        builder: (context, value, child) {
-          if(value.isLoading) {
+      body: Consumer2<ProducerProvider, DeviceProvider>(
+        builder: (context, producerProvider, deviceProvider, child) {
+          if(producerProvider.isLoading || deviceProvider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(),
               );
           }
-        final producers = value.producers;
+        final producers = producerProvider.producers;
+        final devices = deviceProvider.devices;
         return RefreshIndicator(
-         onRefresh: () async => value.getAllProducers(),
+         onRefresh: () async => producerProvider.getAllProducers(),
          child: ListView.builder(
           physics: const AlwaysScrollableScrollPhysics(),
           itemCount: producers.length,
@@ -69,10 +75,16 @@ class _ProducerPageState extends State<ProducerPage> {
                   children: [
                     SlidableAction(
                       onPressed: ((context) {
-                        // Future<int> response = CategoryService().deleteCategory(category.categoryId);
-                        value.deleteProducers(producer.producerId);
-                        // setState(() { categories.removeWhere((element) => element.categoryId == category.categoryId); });
-                        // setState(() { value.getAllCategories(); });                     
+                        Device? device = devices.firstWhereOrNull((x) => x.eanDevice.producer.name == producer.name);
+                        if(device != null) {
+                          MotionToast.warning(
+                                      title:  Text("UWAGA!"),
+                                      description:  Text("Nie można usunąć producenta powiązanego z urządzeniami.")
+                                    ).show(context);
+
+                        } else {
+                        producerProvider.deleteProducers(producer.producerId);
+                        }                   
                       }),
                       icon: Icons.delete,
                       foregroundColor: Colors.white,
