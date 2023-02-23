@@ -10,12 +10,9 @@ import 'package:collection/collection.dart';
 
 class CategoryEdit extends StatefulWidget {
   final Category categoryObject;
-  // const CategoryEdit({Key? key}) : super(key: key);
-  // const CategoryEdit({super.key, required this.category});
+
   const CategoryEdit ({ Key? key, required this.categoryObject}): super(key: key);
   
-
-
   @override
   State<CategoryEdit> createState() => _CategoryEditState();
 }
@@ -31,6 +28,9 @@ class _CategoryEditState extends State<CategoryEdit> {
       Provider.of<CategoryProvider>(context, listen: false).getAllCategories();
       
     });
+
+    _controller.text = widget.categoryObject.name.toString();
+
   }
 
   @override
@@ -42,8 +42,6 @@ class _CategoryEditState extends State<CategoryEdit> {
 
   @override
   Widget build(BuildContext context) {
-    CategoryService categoryService = CategoryService();
-    _controller.text = widget.categoryObject.name.toString();
 
     return KeyboardDismisser(
       child: Scaffold(
@@ -134,7 +132,7 @@ class _CategoryEditState extends State<CategoryEdit> {
                           Provider.of<CategoryProvider>(context, listen: false).editCategories(Category(
                             categoryId: widget.categoryObject.categoryId, 
                             name: _controller.text.toString()));
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryPage()));
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryPage())).then((value) => _controller.clear());
                       }
                     },
                   ),

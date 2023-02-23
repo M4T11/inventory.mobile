@@ -82,6 +82,8 @@ class _DeviceEditState extends State<DeviceEdit> {
 
     spinReadOnly = false;
     spinEnabled = true;
+    returnEAN = false;
+    returnLocationName = false;
 
     // _controllerSerialnumber.addListener((){
     //         //here you have the changes of your textfield
@@ -139,9 +141,31 @@ class _DeviceEditState extends State<DeviceEdit> {
         itemsDescription = itemsDescriptionHeadphones + missing.toList();
       }
     }
-
-
     
+  }
+
+  void setEanDevice(List<EanDevice> list, String ean) {
+    EanDevice eanDevice = list.firstWhere((x) => x.ean == ean);
+    selectedValueEanDevice = eanDevice.producer.name + " " + eanDevice.model + " (" + eanDevice.ean + ")";
+
+    if(eanDevice.category.name == 'Mysz') {
+      selectedItemsDescription.clear();
+      itemsDescription = itemsDescriptionMouse;
+
+    } else if (eanDevice.category.name == 'Klawiatura') {
+        selectedItemsDescription.clear();
+        itemsDescription = itemsDescription;
+
+    } else if (eanDevice.category.name == 'Słuchawki') {
+          selectedItemsDescription.clear();
+          itemsDescription = itemsDescriptionHeadphones;
+    }
+
+  }
+
+  void setLocation(List<Location> list, String locationName) {
+    Location location = list.firstWhere((x) => x.name == locationName);
+    selectedValueLocation = location.name;
   }
 
   TextEditingController _controllerSerialnumber = new TextEditingController();
@@ -150,6 +174,10 @@ class _DeviceEditState extends State<DeviceEdit> {
   TextEditingController _controllerID = new TextEditingController();
   TextEditingController _textControllerAlertDialog = new TextEditingController();
 
+  late String eanCode;
+  late String locationName;
+  late bool returnEAN;
+  late bool returnLocationName;
   late bool spinEnabled;
   late bool spinReadOnly;
   late double quantity;
@@ -196,6 +224,15 @@ class _DeviceEditState extends State<DeviceEdit> {
             final eanDevices = eanDeviceProvider.eanDevices;
             final locations = locationProvider.locations;
             final devices = deviceProvider.devices;
+
+            if(returnEAN) {
+              setEanDevice(eanDevices, eanCode);
+              returnEAN = false;
+            }
+            if(returnLocationName) {
+              setLocation(locations, locationName);
+              returnLocationName = false;
+            }
 
             return SafeArea(
             child: Center(
@@ -441,18 +478,70 @@ class _DeviceEditState extends State<DeviceEdit> {
                               
                               if(camera_result_ean.format != 'unknown' && camera_result_ean.type != 'Cancelled' && camera_result_ean.rawContent.isNotEmpty) {
                                 EanDevice temp_ean = eanDevices.firstWhere((x) => x.ean == camera_result_ean.rawContent.toString());
-                                print(temp_ean.model);
-                                setState(() {
-                                  selectedValueEanDevice = temp_ean.producer.name + " " + temp_ean.model + " (" + temp_ean.ean + ")";
-                                },);
                                 
+                                if (temp_ean != null) {
+                                  setState(() {
+                                  selectedValueEanDevice = temp_ean.producer.name + " " + temp_ean.model + " (" + temp_ean.ean + ")";
+                                  EanDevice eanDevice = eanDevices.firstWhere((x) => x.ean == temp_ean.ean.toString());
+                                  
+                                  if(eanDevice.category.name == 'Mysz') {
+
+                                      selectedItemsDescription.clear();
+                                      itemsDescription = itemsDescriptionMouse;
+
+                                  } else if (eanDevice.category.name == 'Klawiatura') {
+                                      selectedItemsDescription.clear();
+                                      itemsDescription = itemsDescription;
+
+                                  } else if (eanDevice.category.name == 'Słuchawki') {
+                                      selectedItemsDescription.clear();
+                                      itemsDescription = itemsDescriptionHeadphones;
+                                  }
+                                  
+                                },);
+                                } else {
+                                  showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) => AlertDialog(
+                                            title: const Text('UWAGA'),
+                                            content: const Text('Nie znaleziono urządzenia o podanym numerze EAN'),
+                                            actions: [
+                                            TextButton(
+                                              style: TextButton.styleFrom(
+                                                foregroundColor: Colors.pink,
+                                              ),
+                                              child: Text('Anuluj',),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            TextButton(
+                                              style: TextButton.styleFrom(
+                                                foregroundColor: Colors.green,
+                                              ),
+                                              child: Text('Dodaj'),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                // Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDeviceAdd(forwarding: true,)));
+                                                Navigator.push(context, MaterialPageRoute(builder: (context) => EanDeviceAdd(forwarding: true, eanCode: camera_result_ean.rawContent.toString(),)),).then((value) => {
+                                                  returnEAN = value["returnEAN"],
+                                                  eanCode = value["ean"]
+                                              });                                            
+                                              },
+                                            ),
+                                          ]    
+                                          ));
+                                }              
                               }
                           },
                           ),
                           Positioned(
                             right: 35, 
                           child: IconButton(
-                            onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDeviceAdd(forwarding: true,)));}, 
+                            onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDeviceAdd(forwarding: true,))).then((value) => {
+                            returnEAN = value["returnEAN"],
+                            eanCode = value["ean"]
+                            });}, 
                             icon: Icon(Icons.add))),
 
                       ],
@@ -552,9 +641,43 @@ class _DeviceEditState extends State<DeviceEdit> {
                               if(camera_result_location.format != 'unknown' && camera_result_location.type != 'Cancelled' && camera_result_location.rawContent.isNotEmpty) {
                                 Location temp_location = locations.firstWhere((x) => x.name == camera_result_location.rawContent.toString());
                                 print(temp_location.name);
-                                setState(() {
+                                if(temp_location != null) {
+                                  setState(() {
                                   selectedValueLocation = temp_location.name;
-                                },);
+                                  },);
+                                } else {
+                                  showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) => AlertDialog(
+                                            title: const Text('UWAGA'),
+                                            content: const Text('Nie znaleziono lokalizacji'),
+                                            actions: [
+                                            TextButton(
+                                              style: TextButton.styleFrom(
+                                                foregroundColor: Colors.pink,
+                                              ),
+                                              child: Text('Anuluj',),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            TextButton(
+                                              style: TextButton.styleFrom(
+                                                foregroundColor: Colors.green,
+                                              ),
+                                              child: Text('Dodaj'),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationAdd(forwarding: true, locationName: camera_result_location.rawContent.toString(),))).then((value) => {
+                                                  returnLocationName = value["returnLocationName"],
+                                                  locationName = value["locationName"]
+                                                });
+                                                
+                                              },
+                                            ),
+                                          ]    
+                                          ));
+                                }         
                                 
                               }
                           },
@@ -562,7 +685,10 @@ class _DeviceEditState extends State<DeviceEdit> {
                         Positioned(
                           right: 35, 
                           child: IconButton(
-                          onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationAdd(forwarding: true,)));}, 
+                          onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationAdd(forwarding: true,))).then((value) => {
+                            returnLocationName = value["returnLocationName"],
+                            locationName = value["locationName"]
+                          });},
                           icon: Icon(Icons.add))),
                       ]
                     )
@@ -687,8 +813,6 @@ class _DeviceEditState extends State<DeviceEdit> {
                                                   borderSide: BorderSide(color: Colors.green),
                                                   ),  
                                                 ),
-                                                
-                                                
                                           ),
                                           actions: [
                                             TextButton(
@@ -960,18 +1084,18 @@ class _DeviceEditState extends State<DeviceEdit> {
                             Device? device_sn = devices.firstWhereOrNull((x) => x.serialNumber == _controllerSerialnumber.text.toString());
                             Device? device_qr = devices.firstWhereOrNull((x) => x.qrCode == _controllerID.text.toString());
 
-                            if (device_sn != null) {
-                              MotionToast.error(
-                                    title:  Text("BŁĄD!"),
-                                    description:  Text("Istnieje urządzenie o podanym numerze seryjnym.")
-                                  ).show(context);                          
-                            } else if (device_qr != null){
-                              MotionToast.error(
-                                    title:  Text("BŁĄD!"),
-                                    description:  Text("Istnieje urządzenie o podanym ID.")
-                                  ).show(context); 
-                            }
-                            else {
+                            // if (device_sn != null) {
+                            //   MotionToast.error(
+                            //         title:  Text("BŁĄD!"),
+                            //         description:  Text("Istnieje urządzenie o podanym numerze seryjnym.")
+                            //       ).show(context);                          
+                            // } else if (device_qr != null){
+                            //   MotionToast.error(
+                            //         title:  Text("BŁĄD!"),
+                            //         description:  Text("Istnieje urządzenie o podanym ID.")
+                            //       ).show(context); 
+                            // }
+                            // else {
                             Provider.of<DeviceProvider>(context, listen: false).editDevice(
                               Device(
                               deviceId: widget.deviceObject.deviceId,
@@ -988,7 +1112,7 @@ class _DeviceEditState extends State<DeviceEdit> {
                               qrCode: _controllerID.text.toString(),
                               ));
                               Navigator.of(context).push(MaterialPageRoute(builder: (context) => DevicePage()));
-                            }
+                            // }
                             }
                           },
                     ),

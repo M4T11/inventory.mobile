@@ -133,7 +133,7 @@ class _ProducerEditState extends State<ProducerEdit> {
                             producerId: widget.producerObject.producerId, 
                             name: _controller.text.toString()));
                         
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProducerPage()));
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProducerPage())).then((value) => _controller.clear());
                         }
                     }
                   ),

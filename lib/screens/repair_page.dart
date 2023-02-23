@@ -57,7 +57,7 @@ class _RepairPageState extends State<RepairPage> {
               condition: widget.deviceObject.condition.toString(),
               status: widget.deviceObject.status.toString(),
               dateAdded: "2023-01-01",
-              qrCode: "string",
+              qrCode: widget.deviceObject.qrCode.toString(),
               ));
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => MainPage()));
 

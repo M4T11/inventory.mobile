@@ -76,7 +76,6 @@ class _DeviceDetailsState extends State<DeviceDetails> {
     Map selected = json.decode(widget.deviceObject.description);
 
     selected.keys.forEach((key) {
-      // print(key);
       selectedItemsDescription.add(key);
     });  
     
@@ -194,6 +193,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: TextField(
+                      style: TextStyle(color: Colors.grey),
                       enabled: false,
                       controller: _controllerName,
                       textAlign: TextAlign.center,
@@ -218,6 +218,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: TextField(
+                            style: TextStyle(color: Colors.grey),
                             enabled: false,
                             controller: _controllerSerialnumber,
                             textAlign: TextAlign.center,
@@ -248,6 +249,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: TextField(
+                                style: TextStyle(color: Colors.grey),
                                 controller: _controllerID,
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
@@ -366,10 +368,10 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                         onPressed: null,
                       ),
                       Positioned(
-                              right: 35, 
-                            child: IconButton(
-                              onPressed: null, 
-                              icon: Icon(Icons.add))),
+                        right: 35, 
+                        child: IconButton(
+                          onPressed: null, 
+                          icon: Icon(Icons.add))),
             
                     ],
                   ),
@@ -580,6 +582,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: SpinBox(
+                          textStyle: TextStyle(color: Colors.grey),
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12.0),

@@ -64,6 +64,7 @@ class _ProducerDetailsState extends State<ProducerDetails> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: TextField(
+                  style: TextStyle(color: Colors.grey),
                   controller: _controller,
                   textAlign: TextAlign.center,
                   // initialValue: widget.categoryObject.name.toString(),

@@ -33,7 +33,7 @@ class _NavPageState extends State<NavPage> {
         return [
           HomePage(),
           MainPage(),
-          CategoryPage()
+          // CategoryPage()
         ];
     }
 
@@ -51,12 +51,12 @@ class _NavPageState extends State<NavPage> {
                 activeColorPrimary: Colors.green,
                 inactiveColorPrimary: Colors.grey,
             ),
-            PersistentBottomNavBarItem(
-                icon: Icon(Icons.sailing),
-                title: ("Settings"),
-                activeColorPrimary: Colors.green,
-                inactiveColorPrimary: Colors.grey,
-            ),
+            // PersistentBottomNavBarItem(
+            //     icon: Icon(Icons.sailing),
+            //     title: ("Settings"),
+            //     activeColorPrimary: Colors.green,
+            //     inactiveColorPrimary: Colors.grey,
+            // ),
         ];
     }
 

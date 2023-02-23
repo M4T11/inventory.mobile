@@ -8,8 +8,7 @@ import 'package:provider/provider.dart';
 
 class LocationDetails extends StatefulWidget {
   final Location locationObject;
-  // const CategoryEdit({Key? key}) : super(key: key);
-  // const CategoryEdit({super.key, required this.category});
+
   const LocationDetails ({ Key? key, required this.locationObject}): super(key: key);
   
 
@@ -64,6 +63,7 @@ class _LocationDetailsState extends State<LocationDetails> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: TextField(
+                  style: TextStyle(color: Colors.grey),
                   enabled: false,
                   controller: _controller,
                   textAlign: TextAlign.center,

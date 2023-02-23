@@ -17,9 +17,9 @@ import 'package:intl/intl.dart';
 import 'package:collection/collection.dart';
 import 'package:motion_toast/motion_toast.dart'; 
 
-// Po dodaniu z menu glownego lista wszystkich nie jest odswiezona
 class DeviceAdd extends StatefulWidget {
   const DeviceAdd({Key? key}) : super(key: key);
+  
   
   @override
   State<DeviceAdd> createState() => _DeviceAddState();
@@ -71,26 +71,48 @@ class _DeviceAddState extends State<DeviceAdd> {
     quantity = 0;
     spinReadOnly = false;
     spinEnabled = true;
+    returnEAN = false;
+    returnLocationName = false;
 
     _controllerSerialnumber.addListener((){
-            //here you have the changes of your textfield
-            if (_controllerSerialnumber.text.isNotEmpty) {
-              quantity = 1;
-              spinReadOnly = true;
-              spinEnabled = false;
-            } else {
-              spinReadOnly = false;
-              spinEnabled = true;
-            }
-            //use setState to rebuild the widget
-            setState(() {});
-        });
-    // textEditingControllerEanDevice.addListener(() {
-    //   if()
+      //here you have the changes of your textfield
+      if (_controllerSerialnumber.text.isNotEmpty) {
+        quantity = 1;
+        spinReadOnly = true;
+        spinEnabled = false;
+      } else {
+        spinReadOnly = false;
+        spinEnabled = true;
+      }
+      //use setState to rebuild the widget
+      setState(() {});
+    });
+    
+    
+  }
 
-    // });
-    
-    
+  void setEanDevice(List<EanDevice> list, String ean) {
+    EanDevice eanDevice = list.firstWhere((x) => x.ean == ean);
+    selectedValueEanDevice = eanDevice.producer.name + " " + eanDevice.model + " (" + eanDevice.ean + ")";
+
+    if(eanDevice.category.name == 'Mysz') {
+      selectedItemsDescription.clear();
+      itemsDescription = itemsDescriptionMouse;
+
+    } else if (eanDevice.category.name == 'Klawiatura') {
+        selectedItemsDescription.clear();
+        itemsDescription = itemsDescription;
+
+    } else if (eanDevice.category.name == 'Słuchawki') {
+          selectedItemsDescription.clear();
+          itemsDescription = itemsDescriptionHeadphones;
+    }
+
+  }
+
+  void setLocation(List<Location> list, String locationName) {
+    Location location = list.firstWhere((x) => x.name == locationName);
+    selectedValueLocation = location.name;
   }
 
   TextEditingController _controllerSerialnumber = new TextEditingController();
@@ -99,7 +121,10 @@ class _DeviceAddState extends State<DeviceAdd> {
   TextEditingController _controllerID = new TextEditingController();
   TextEditingController _textControllerAlertDialog = new TextEditingController();
 
-  
+  late String eanCode;
+  late String locationName;
+  late bool returnEAN;
+  late bool returnLocationName;
   late bool spinEnabled;
   late bool spinReadOnly;
   late double quantity;
@@ -145,9 +170,18 @@ class _DeviceAddState extends State<DeviceAdd> {
                 child: CircularProgressIndicator(),
                 );
             }
+
             final eanDevices = eanDeviceProvider.eanDevices;
             final locations = locationProvider.locations;
             final devices = deviceProvider.devices;
+            if(returnEAN) {
+              setEanDevice(eanDevices, eanCode);
+              returnEAN = false;
+            }
+            if(returnLocationName) {
+              setLocation(locations, locationName);
+              returnLocationName = false;
+            }
             return SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -416,8 +450,11 @@ class _DeviceAddState extends State<DeviceAdd> {
                                               child: Text('Dodaj'),
                                               onPressed: () {
                                                 Navigator.pop(context);
-                                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDeviceAdd(forwarding: true,)));
-                                                
+                                                // Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDeviceAdd(forwarding: true,)));
+                                                Navigator.push(context, MaterialPageRoute(builder: (context) => EanDeviceAdd(forwarding: true, eanCode: camera_result_ean.rawContent.toString(),)),).then((value) => {              
+                                                  returnEAN = value["returnEAN"],
+                                                  eanCode = value["ean"]
+                                              });                                            
                                               },
                                             ),
                                           ]    
@@ -432,7 +469,11 @@ class _DeviceAddState extends State<DeviceAdd> {
                         Positioned(
                           right: 35, 
                         child: IconButton(
-                          onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDeviceAdd(forwarding: true,)));}, 
+                          onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDeviceAdd(forwarding: true,))).then((value) => {
+                            // returnEAN = value,
+                            returnEAN = value["returnEAN"],
+                            eanCode = value["ean"]
+                            });}, 
                           icon: Icon(Icons.add))),
                       ],
                     ),
@@ -558,7 +599,11 @@ class _DeviceAddState extends State<DeviceAdd> {
                                               child: Text('Dodaj'),
                                               onPressed: () {
                                                 Navigator.pop(context);
-                                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationAdd(forwarding: true,)));
+                                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationAdd(forwarding: true, locationName: camera_result_location.rawContent.toString(),))).then((value) => {
+                                                  // returnLocationName = value
+                                                  returnLocationName = value["returnLocationName"],
+                                                  locationName = value["locationName"]
+                                                });
                                                 
                                               },
                                             ),
@@ -572,7 +617,11 @@ class _DeviceAddState extends State<DeviceAdd> {
                         Positioned(
                           right: 35, 
                         child: IconButton(
-                          onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationAdd(forwarding: true,)));}, 
+                          onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationAdd(forwarding: true,))).then((value) => {
+                            // returnLocationName = value
+                            returnLocationName = value["returnLocationName"],
+                            locationName = value["locationName"]
+                          });}, 
                           icon: Icon(Icons.add))),
                       ]
                     )

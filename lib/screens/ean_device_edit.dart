@@ -368,16 +368,16 @@ class _EanDeviceEditState extends State<EanDeviceEdit> {
                             Category category = categories.firstWhere((x) => x.name == selectedValueCategory.toString());
                             Producer producer = producers.firstWhere((x) => x.name == selectedValueProducer.toString());
 
-                            EanDevice? ean_device = eanDevices.firstWhereOrNull((x) => x.ean == _controllerEAN.text.toString());
+                            // EanDevice? ean_device = eanDevices.firstWhereOrNull((x) => x.ean == _controllerEAN.text.toString());
                             
 
-                            if (ean_device != null) {
-                              MotionToast.error(
-                                    title:  Text("BŁĄD!"),
-                                    description:  Text("Istnieje urządzenie o podanym numerze EAN.")
-                                  ).show(context);                          
-                            }
-                            else {
+                            // if (ean_device != null) {
+                            //   MotionToast.error(
+                            //         title:  Text("BŁĄD!"),
+                            //         description:  Text("Istnieje urządzenie o podanym numerze EAN.")
+                            //       ).show(context);                          
+                            // }
+                            // else {
                             Provider.of<EanDeviceProvider>(context, listen: false).editEanDevice(
                               EanDevice(
                               eanDeviceId: widget.eanDeviceObject.eanDeviceId,
@@ -388,7 +388,7 @@ class _EanDeviceEditState extends State<EanDeviceEdit> {
                               // producer: Producer(producerId: 0, name: selectedValueProducer.toString()),
                               model: _controllerModel.text.toString()));
                               Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDevicePage()));
-                          }
+                          // }
                         }
                       },
                     ),

@@ -18,8 +18,9 @@ import 'package:collection/collection.dart';
 
 class EanDeviceAdd extends StatefulWidget {
   final bool forwarding;
+  final String? eanCode;
 
-  const EanDeviceAdd ({ Key? key, required this.forwarding}): super(key: key);
+  const EanDeviceAdd ({ Key? key, required this.forwarding, this.eanCode}): super(key: key);
   
   @override
   State<EanDeviceAdd> createState() => _EanDeviceAddState();
@@ -38,8 +39,29 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
       Provider.of<EanDeviceProvider>(context, listen: false).getAllEanDevices();
       
     });
+
+    if(widget.eanCode != null) {
+      _controllerEAN.text = widget.eanCode.toString();
+    }
+    returnCategory = false;
+    returnProducer = false;
     
   }
+
+  void setProducer(List<Producer> list, String producerName) {
+    Producer producer = list.firstWhere((x) => x.name == producerName);
+    selectedValueProducer = producer.name;
+  }
+
+    void setCategory(List<Category> list, String categoryName) {
+    Category category = list.firstWhere((x) => x.name == categoryName);
+    selectedValueCategory = category.name;
+  }
+
+  late String producerName;
+  late bool returnProducer;
+  late String categoryName;
+  late bool returnCategory;
 
   TextEditingController _controllerEAN = new TextEditingController();
   String? selectedValueCategory;
@@ -80,6 +102,16 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
             final categories = categoryProvider.categories;
             final producers = producerProvider.producers;
             final eanDevices = eanDeviceProvider.eanDevices;
+
+            if(returnCategory) {
+              setCategory(categories, categoryName);
+              returnCategory = false;
+            }
+            if(returnProducer) {
+              setProducer(producers, producerName);
+              returnProducer = false;
+            }
+
             return SafeArea(
             child: Center(
                 child: SingleChildScrollView(
@@ -219,7 +251,10 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
                                   },
                             )),
                             IconButton(
-                              onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryAdd(forwarding: true,)));}, 
+                              onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryAdd(forwarding: true,))).then((value) => {
+                                returnCategory = value["returnCategory"],
+                                categoryName = value["categoryName"]
+                              });}, 
                               icon: Icon(Icons.add)),
                         ]
                       )
@@ -306,7 +341,10 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
                                   },
                             )),
                             IconButton(
-                              onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProducerAdd(forwarding: true,)));}, 
+                              onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProducerAdd(forwarding: true,))).then((value) => {
+                                returnProducer = value["returnProducer"],
+                                producerName = value["producerName"]
+                              });}, 
                               icon: Icon(Icons.add)),
                         ]
                       )
@@ -364,13 +402,19 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
                               Producer producer = producers.firstWhere((x) => x.name == selectedValueProducer.toString());
 
                               EanDevice? ean_device = eanDevices.firstWhereOrNull((x) => x.ean == _controllerEAN.text.toString());
+                              EanDevice? ean_device_model = eanDevices.firstWhereOrNull((x) => x.model == _controllerModel.text.toString());
                             
 
                               if (ean_device != null) {
                                 MotionToast.error(
                                       title:  Text("BŁĄD!"),
                                       description:  Text("Istnieje urządzenie o podanym numerze EAN.")
-                                    ).show(context);                          
+                                    ).show(context);
+                              } else if (ean_device_model != null) {
+                                MotionToast.error(
+                                      title:  Text("BŁĄD!"),
+                                      description:  Text("Istnieje urządzenie o podanym modelu.")
+                                    ).show(context);
                               }
                               else {
                                 Provider.of<EanDeviceProvider>(context, listen: false).addEanDevice(
@@ -383,7 +427,8 @@ class _EanDeviceAddState extends State<EanDeviceAdd> {
                                   // producer: Producer(producerId: 0, name: selectedValueProducer.toString()),
                                   model: _controllerModel.text.toString()));
                                   if (widget.forwarding) {
-                                    Navigator.of(context).pop();
+                                    final data = { "returnEAN" : true, "ean" : _controllerEAN.text.toString() };
+                                    Navigator.of(context).pop(data);
                                   } else {
                                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => EanDevicePage()));
                                   }

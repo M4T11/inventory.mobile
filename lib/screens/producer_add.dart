@@ -136,9 +136,10 @@ class _ProducerAddState extends State<ProducerAdd> {
                             producerId: 0, 
                             name: _controller.text.toString()));
                             if (widget.forwarding) {
-                              Navigator.of(context).pop();
+                              final data = { "returnProducer" : true, "producerName" : _controller.text.toString() };
+                              Navigator.of(context).pop(data);
                             } else {
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProducerPage()));
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProducerPage())).then((value) => _controller.clear());
                             } 
                       }                        
                         },

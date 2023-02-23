@@ -11,8 +11,9 @@ import 'package:collection/collection.dart';
 
 class LocationAdd extends StatefulWidget {
   final bool forwarding;
+  final String? locationName;
 
-  const LocationAdd ({ Key? key, required this.forwarding}): super(key: key);
+  const LocationAdd ({ Key? key, required this.forwarding, this.locationName}): super(key: key);
 
   
   
@@ -31,6 +32,11 @@ class _LocationAddState extends State<LocationAdd> {
       Provider.of<LocationProvider>(context, listen: false).getAllLocations();
       
     });
+
+    if(widget.locationName != null) {
+      _controller.text = widget.locationName.toString();
+    }
+
   }
 
   @override
@@ -135,9 +141,10 @@ class _LocationAddState extends State<LocationAdd> {
                             locationId: 0, 
                             name: _controller.text.toString()));
                             if (widget.forwarding) {
-                              Navigator.of(context).pop();
+                              final data = { "returnLocationName" : true, "locationName" : _controller.text.toString() };
+                              Navigator.of(context).pop(data);
                             } else {
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationPage()));
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationPage())).then((value) => _controller.clear());
                             }
                       }                         
                     },

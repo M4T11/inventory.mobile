@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:inventoryapp/models/device_model.dart';
+import 'package:inventoryapp/provider/device_provider.dart';
 import 'package:inventoryapp/provider/ean_device_provider.dart';
 import 'package:inventoryapp/screens/ean_device_add.dart';
 import 'package:inventoryapp/screens/ean_device_details.dart';
@@ -7,6 +9,8 @@ import 'package:inventoryapp/screens/ean_device_edit.dart';
 import 'package:inventoryapp/screens/location_edit.dart';
 import 'package:inventoryapp/services/ean_device_services.dart';
 import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
+import 'package:motion_toast/motion_toast.dart'; 
 
 
 class EanDevicePage extends StatefulWidget {
@@ -24,6 +28,7 @@ class _EanDevicePageState extends State<EanDevicePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<EanDeviceProvider>(context, listen: false).getAllEanDevices();
+      Provider.of<DeviceProvider>(context, listen: false).getAlldevices();
     });
     
   }
@@ -35,16 +40,17 @@ class _EanDevicePageState extends State<EanDevicePage> {
       title: const Text('Inventory App'),
       backgroundColor: Color(0xff235d3a),
       ),
-      body: Consumer<EanDeviceProvider>(
-        builder: (context, value, child) {
-          if(value.isLoading) {
+      body: Consumer2<EanDeviceProvider, DeviceProvider>(
+        builder: (context, eanDeviceProvider, deviceProvider, child) {
+          if(eanDeviceProvider.isLoading || deviceProvider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(),
               );
           }
-        final eanDevices = value.eanDevices;
+        final eanDevices = eanDeviceProvider.eanDevices;
+        final devices = deviceProvider.devices;
         return RefreshIndicator(
-         onRefresh: () async => value.getAllEanDevices(),
+         onRefresh: () async => eanDeviceProvider.getAllEanDevices(),
          child: ListView.builder(
           physics: const AlwaysScrollableScrollPhysics(),
           itemCount: eanDevices.length,
@@ -69,10 +75,17 @@ class _EanDevicePageState extends State<EanDevicePage> {
                   children: [
                     SlidableAction(
                       onPressed: ((context) {
-                        // Future<int> response = CategoryService().deleteCategory(category.categoryId);
-                        value.deleteEanDevice(eanDevice.eanDeviceId);
-                        // setState(() { categories.removeWhere((element) => element.categoryId == category.categoryId); });
-                        // setState(() { value.getAllCategories(); });                     
+                        Device? device = devices.firstWhereOrNull((x) => x.eanDevice.ean == eanDevice.ean);
+                        if(device != null) {
+                          MotionToast.warning(
+                                      title:  Text("UWAGA!"),
+                                      description:  Text("Nie można usunąć urządzenia EAN powiązanego z urządzeniami.")
+                                    ).show(context);
+
+                        } else {
+                          eanDeviceProvider.deleteEanDevice(eanDevice.eanDeviceId);
+                        }
+                                        
                       }),
                       icon: Icons.delete,
                       foregroundColor: Colors.white,

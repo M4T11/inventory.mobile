@@ -8,12 +8,9 @@ import 'package:provider/provider.dart';
 
 class CategoryDetails extends StatefulWidget {
   final Category categoryObject;
-  // const CategoryEdit({Key? key}) : super(key: key);
-  // const CategoryEdit({super.key, required this.category});
+
   const CategoryDetails ({ Key? key, required this.categoryObject}): super(key: key);
   
-
-
   @override
   State<CategoryDetails> createState() => _CategoryDetailsState();
 }
@@ -64,6 +61,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: TextField(
+                  style: TextStyle(color: Colors.grey),
                   enabled: false,
                   controller: _controller,
                   textAlign: TextAlign.center,
@@ -98,14 +96,6 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                   ),
                 ),
                 onTap: () {
-                      // print(widget.categoryObject.categoryId.toString());
-                      // print(_controller.text.toString());
-                      // categoryService.editCategory(Category(
-                      //   categoryId: widget.categoryObject.categoryId, 
-                      //   name: _controller.text.toString()));
-                      // Provider.of<CategoryProvider>(context, listen: false).editCategories(Category(
-                      //   categoryId: widget.categoryObject.categoryId, 
-                      //   name: _controller.text.toString()));
                         Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryEdit(categoryObject: widget.categoryObject)));
                     },
               ),

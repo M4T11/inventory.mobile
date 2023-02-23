@@ -103,6 +103,7 @@ class _EanDeviceDetailsState extends State<EanDeviceDetails> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: TextField(
+                          style: TextStyle(color: Colors.grey),
                           enabled: false,
                           controller: _controllerEAN,
                           textAlign: TextAlign.center,
@@ -296,6 +297,7 @@ class _EanDeviceDetailsState extends State<EanDeviceDetails> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: TextField(
+                    style: TextStyle(color: Colors.grey),
                     enabled: false,
                     controller: _controllerModel,
                     textAlign: TextAlign.center,

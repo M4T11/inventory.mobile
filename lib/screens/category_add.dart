@@ -39,8 +39,6 @@ class _CategoryAddState extends State<CategoryAdd> {
 
   @override
   Widget build(BuildContext context) {
-    CategoryService categoryService = CategoryService();
-    // _controller.text = widget.categoryObject.name.toString();
 
     return KeyboardDismisser(
       child: Scaffold(
@@ -134,9 +132,10 @@ class _CategoryAddState extends State<CategoryAdd> {
                             categoryId: 0, 
                             name: _controller.text.toString()));
                             if (widget.forwarding) {
-                              Navigator.of(context).pop();
+                              final data = { "returnCategory" : true, "categoryName" : _controller.text.toString() };
+                              Navigator.of(context).pop(data);
                             } else {
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryPage()));
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryPage())).then((value) => _controller.clear());
                             }  
                       }                         
                         },

@@ -134,7 +134,7 @@ class _LocationEditState extends State<LocationEdit> {
                           Provider.of<LocationProvider>(context, listen: false).editLocations(Location(
                             locationId: widget.locationObject.locationId, 
                             name: _controller.text.toString()));
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationPage()));
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationPage())).then((value) => _controller.clear());
                         }
                     }
                   ),
