@@ -1110,6 +1110,7 @@ class _DeviceEditState extends State<DeviceEdit> {
                               status: selectedValueStatus.toString(),
                               dateAdded: "2023-01-01",
                               qrCode: _controllerID.text.toString(),
+                              returned: false
                               ));
                               Navigator.of(context).push(MaterialPageRoute(builder: (context) => DevicePage()));
                             // }

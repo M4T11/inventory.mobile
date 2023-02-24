@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:inventoryapp/models/category_model.dart';
 import 'package:inventoryapp/models/device_model.dart';
+import 'package:inventoryapp/models/ean_device_model.dart';
 import 'package:inventoryapp/provider/category_provider.dart';
 import 'package:inventoryapp/provider/device_provider.dart';
+import 'package:inventoryapp/provider/ean_device_provider.dart';
 import 'package:inventoryapp/screens/category_add.dart';
 import 'package:inventoryapp/screens/category_details.dart';
 import 'package:inventoryapp/screens/category_edit.dart';
@@ -40,15 +42,15 @@ class _CategoryPageState extends State<CategoryPage> {
       title: const Text('Inventory App'),
       backgroundColor: Color(0xff235d3a),
       ),
-      body: Consumer2<CategoryProvider, DeviceProvider>(
-        builder: (context, categoryProvider, deviceProvider, child) {
-          if(categoryProvider.isLoading || deviceProvider.isLoading) {
+      body: Consumer2<CategoryProvider, EanDeviceProvider>(
+        builder: (context, categoryProvider, eanDeviceProvider, child) {
+          if(categoryProvider.isLoading || eanDeviceProvider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(),
               );
           }
         final categories = categoryProvider.categories;
-        final devices = deviceProvider.devices;
+        final eanDevices = eanDeviceProvider.eanDevices;
         return RefreshIndicator(
          onRefresh: () async => categoryProvider.getAllCategories(),
          child: ListView.builder(
@@ -75,8 +77,8 @@ class _CategoryPageState extends State<CategoryPage> {
                   children: [
                     SlidableAction(
                       onPressed: ((context) {               
-                        Device? device = devices.firstWhereOrNull((x) => x.eanDevice.category.name == category.name);
-                        if(device != null) {
+                        EanDevice? eanDevice = eanDevices.firstWhereOrNull((x) => x.category.name == category.name);
+                        if(eanDevice != null) {
                           MotionToast.warning(
                                       title:  Text("UWAGA!"),
                                       description:  Text("Nie można usunąć kategorii powiązanej z urządzeniami.")

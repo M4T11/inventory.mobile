@@ -55,6 +55,9 @@ class _DevicePageState extends State<DevicePage> {
 
   List<String> device_status_names_list = ["Do naprawy", "Do wystawienia", "Wystawione", "Do zdjęć", "Na części", "Sprzedane"]; 
   List <String> selected_status = [];
+
+  List<String> device_return_names_list = ["Zwrot"]; 
+  List <String> selected_return = [];
   
 
   @override
@@ -92,7 +95,7 @@ class _DevicePageState extends State<DevicePage> {
 
     setState(() {
       if(selected_category.isNotEmpty || selected_locations.isNotEmpty || selected_producers.isNotEmpty || selected_ean_devices.isNotEmpty 
-        || selected_condition.isNotEmpty || selected_status.isNotEmpty) {
+        || selected_condition.isNotEmpty || selected_status.isNotEmpty || selected_return.isNotEmpty) {
         flagFiltering = true;
         if(selected_category.isNotEmpty) {
            devices_list_filtered = devices_list_filtered.where((element) => selected_category.contains(element.eanDevice.category.name.toString())).toList();
@@ -116,6 +119,9 @@ class _DevicePageState extends State<DevicePage> {
         if(selected_status.isNotEmpty) {
           devices_list_filtered = devices_list_filtered.where((element) => selected_status.contains(element.status.toString())).toList();
 
+        }
+        if(selected_return.isNotEmpty) {
+          devices_list_filtered = devices_list_filtered.where((element) => element.returned == true).toList();
         }
         devices_list_to_display = devices_list_filtered;
         
@@ -240,6 +246,7 @@ class _DevicePageState extends State<DevicePage> {
       selected_ean_devices.clear(); 
       selected_condition.clear();
       selected_status.clear();
+      selected_return.clear();
 
       flagFiltering = false;
       devices_list_to_display = devices_list;
@@ -336,7 +343,8 @@ class _DevicePageState extends State<DevicePage> {
                                     selected_producers.clear();
                                     selected_ean_devices.clear(); 
                                     selected_condition.clear();
-                                    selected_status.clear();                      
+                                    selected_status.clear();     
+                                    selected_return.clear();                 
                                   });        
                                   clearFilters(); 
                                 }
@@ -495,6 +503,29 @@ class _DevicePageState extends State<DevicePage> {
                             choiceCheckmark: true,
                             // choiceStyle: C2ChipStyle.outlined(),
                           ),
+                          Container(
+                            padding: EdgeInsets.only(top: 15.0),
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  'Zwrot',
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21)
+                                ),
+                                
+                              ],
+                            ),
+                          ),
+                          ChipsChoice<String>.multiple(
+                            value: selected_return,
+                            onChanged: (val) => {setState(() => selected_return = val), print(selected_return), filterDevices()},
+                            choiceItems: C2Choice.listFrom<String, String>(
+                              source: device_return_names_list,
+                              value: (i, v) => v,
+                              label: (i, v) => v,
+                            ),
+                            choiceCheckmark: true,
+                            // choiceStyle: C2ChipStyle.outlined(),
+                          ),
                       ]),
                       )),
                     );
@@ -589,6 +620,7 @@ class _DevicePageState extends State<DevicePage> {
                       // child: Text(device.deviceId.toString()),
                       child: Text((index+1).toString()),
                       ),
+                      trailing: device.returned ? Icon(Icons.replay) : Icon(null),
                       title: Text(device.eanDevice.producer.name + " " + device.eanDevice.model),
                       subtitle: Text(device.name + " " + device.serialNumber),
                       ),

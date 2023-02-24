@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:inventoryapp/models/device_model.dart';
+import 'package:inventoryapp/models/ean_device_model.dart';
 import 'package:inventoryapp/models/producer_model.dart';
 import 'package:inventoryapp/provider/device_provider.dart';
+import 'package:inventoryapp/provider/ean_device_provider.dart';
 import 'package:inventoryapp/provider/producer_provider.dart';
 import 'package:inventoryapp/screens/producer_add.dart';
 import 'package:inventoryapp/screens/producer_details.dart';
@@ -40,15 +42,15 @@ class _ProducerPageState extends State<ProducerPage> {
       title: const Text('Inventory App'),
       backgroundColor: Color(0xff235d3a),
       ),
-      body: Consumer2<ProducerProvider, DeviceProvider>(
-        builder: (context, producerProvider, deviceProvider, child) {
-          if(producerProvider.isLoading || deviceProvider.isLoading) {
+      body: Consumer2<ProducerProvider, EanDeviceProvider>(
+        builder: (context, producerProvider, eanDeviceProvider, child) {
+          if(producerProvider.isLoading || eanDeviceProvider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(),
               );
           }
         final producers = producerProvider.producers;
-        final devices = deviceProvider.devices;
+        final eanDevices = eanDeviceProvider.eanDevices;
         return RefreshIndicator(
          onRefresh: () async => producerProvider.getAllProducers(),
          child: ListView.builder(
@@ -75,8 +77,8 @@ class _ProducerPageState extends State<ProducerPage> {
                   children: [
                     SlidableAction(
                       onPressed: ((context) {
-                        Device? device = devices.firstWhereOrNull((x) => x.eanDevice.producer.name == producer.name);
-                        if(device != null) {
+                        EanDevice? eanDevice = eanDevices.firstWhereOrNull((x) => x.producer.name == producer.name);
+                        if(eanDevice != null) {
                           MotionToast.warning(
                                       title:  Text("UWAGA!"),
                                       description:  Text("Nie można usunąć producenta powiązanego z urządzeniami.")

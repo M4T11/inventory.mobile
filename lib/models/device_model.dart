@@ -13,6 +13,7 @@ class Device {
   final String status;
   final String dateAdded;
   final String qrCode;
+  final bool returned;
 
 Device({
   required this.deviceId,
@@ -25,7 +26,8 @@ Device({
   required this.condition,
   required this.status,
   required this.dateAdded,
-  required this.qrCode
+  required this.qrCode,
+  required this.returned
 });
 
 Map<String, dynamic> toJson() => {
@@ -39,7 +41,8 @@ Map<String, dynamic> toJson() => {
       'condition': condition,
       'status': status,
       'date_added': dateAdded,
-      'qr_code': qrCode
+      'qr_code': qrCode,
+      'returned': returned
 };
 
 factory Device.fromJson (Map<String,dynamic>json){
@@ -55,6 +58,7 @@ factory Device.fromJson (Map<String,dynamic>json){
       status: json['status'],
       dateAdded: json['date_added'],
       qrCode: json['qr_code'],
+      returned: json['returned']
       );
 }
 

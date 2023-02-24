@@ -12,6 +12,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_spinbox/material.dart';
 import 'dart:convert';
 import 'package:quiver/collection.dart';
+import 'package:motion_toast/motion_toast.dart'; 
 
 
 class DeviceDetails extends StatefulWidget {
@@ -62,7 +63,14 @@ class _DeviceDetailsState extends State<DeviceDetails> {
       Provider.of<EanDeviceProvider>(context, listen: false).getAllEanDevices();
       Provider.of<LocationProvider>(context, listen: false).getAllLocations();
     });
-    // print(widget.deviceObject.eanDevice.ean.toString());
+    if(widget.deviceObject.returned) {
+      _enabled = false;
+    } else {
+      _enabled = true;
+    }
+    
+
+    newDevice = widget.deviceObject;
     selectedValueEanDevice= widget.deviceObject.eanDevice.producer.name + " " + widget.deviceObject.eanDevice.model + " (" + widget.deviceObject.eanDevice.ean + ")";
     selectedValueLocation = widget.deviceObject.location.name;
     selectedValueStatus = widget.deviceObject.status;
@@ -70,7 +78,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
     quantity = widget.deviceObject.quantity.toDouble();
     _controllerSerialnumber.text = widget.deviceObject.serialNumber.toString();
     _controllerName.text = widget.deviceObject.name.toString();
-    // _controllerDescription.text = widget.deviceObject.description.toString(); 
+    // _controllerDescription.text = widget.deviceObject.description.toString();
     _controllerID.text = widget.deviceObject.qrCode.toString();
 
     Map selected = json.decode(widget.deviceObject.description);
@@ -116,7 +124,65 @@ class _DeviceDetailsState extends State<DeviceDetails> {
       }
     }
 
-    
+  }
+
+  void _onTap () {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+      title: const Text('UWAGA'),
+      content: const Text('Czy chcesz zarejestrować zwrot produktu?'),
+      actions: [
+      TextButton(
+        style: TextButton.styleFrom(
+          foregroundColor: Colors.pink,
+        ),
+        child: Text('Anuluj',),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      TextButton(
+        style: TextButton.styleFrom(
+          foregroundColor: Colors.green,
+        ),
+        child: Text('Zarejestruj zwrot'),
+        onPressed: () {
+          setState(() => _enabled = false);
+          int new_quantity = widget.deviceObject.quantity.toInt() + 1;
+          String new_name = "[ZWROT] " + widget.deviceObject.name;
+
+          newDevice = Device(
+            deviceId: widget.deviceObject.deviceId,
+            name: new_name,
+            serialNumber: widget.deviceObject.serialNumber,
+            description: widget.deviceObject.description,
+            eanDevice: widget.deviceObject.eanDevice,
+            location: widget.deviceObject.location,
+            quantity: new_quantity,
+            condition: widget.deviceObject.condition.toString(),
+            status: widget.deviceObject.status.toString(),
+            dateAdded: "2023-01-01",
+            qrCode: widget.deviceObject.qrCode.toString(),
+            returned: true
+            );
+          setState(() {
+            quantity = newDevice.quantity.toDouble();
+            _controllerName.text = newDevice.name;   
+          });
+          
+          Provider.of<DeviceProvider>(context, listen: false).editDevice(newDevice);
+          Navigator.pop(context);
+          MotionToast.success(
+                      title:  Text("SUKCES!"),
+                      description:  Text("Zarejestrowano zwrot dla produktu.")
+                    ).show(context);
+          
+                  
+        },
+      ),
+    ]    
+    ));
   }
 
   TextEditingController _controllerSerialnumber = new TextEditingController();
@@ -124,6 +190,8 @@ class _DeviceDetailsState extends State<DeviceDetails> {
   // TextEditingController _controllerDescription = new TextEditingController();
   TextEditingController _controllerID = new TextEditingController();
 
+  late bool _enabled;
+  late Device newDevice;
   late double quantity;
   String? selectedValueEanDevice;
   final TextEditingController textEditingControllerEanDevice = TextEditingController();
@@ -234,7 +302,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                         onPressed: null,
                       ),
                     ],
-                  ),               
+                  ),
                 ),
                 SizedBox(height: 5),
                     Padding(
@@ -361,7 +429,7 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                             if (!isOpen) {
                               textEditingControllerEanDevice.clear();
                               }
-                              },
+                          },
                         )),
                         IconButton(
                         icon: Icon(Icons.camera_alt_rounded),
@@ -747,31 +815,60 @@ class _DeviceDetailsState extends State<DeviceDetails> {
                       ))
                 ),
                 SizedBox(height: 5),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: GestureDetector(
-                    child: Container(
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(12),
-                      ),                    
-                      child: Center(
-                        child: Text(
-                          'Edytuj',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: 
+                  [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: GestureDetector(
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Edytuj',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,                          
+                              ),
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeviceEdit(deviceObject: newDevice)));
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 5,),
+                    Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: GestureDetector(
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: _enabled ? Colors.green : Colors.grey,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Zwrot',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,                        
+                            ),
                           ),
                         ),
                       ),
+                      onTap: _enabled ? _onTap: null,
                     ),
-                    onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeviceEdit(deviceObject: widget.deviceObject)));
-                        },
                   ),
+                  ]
                 ),
                     
               ]),
