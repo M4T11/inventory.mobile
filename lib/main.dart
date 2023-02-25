@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventoryapp/provider/category_provider.dart';
+import 'package:inventoryapp/provider/device_history_provider.dart';
 import 'package:inventoryapp/provider/ean_device_provider.dart';
 import 'package:inventoryapp/provider/location_provider.dart';
 import 'package:inventoryapp/provider/producer_provider.dart';
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ProducerProvider()),
         ChangeNotifierProvider(create: (context) => LocationProvider()),
         ChangeNotifierProvider(create: (context) => EanDeviceProvider()),
-        ChangeNotifierProvider(create: (context) => DeviceProvider())
+        ChangeNotifierProvider(create: (context) => DeviceProvider()),
+        ChangeNotifierProvider(create: (context) => DeviceHistoryProvider())
     ],
     child: const MaterialApp(
         debugShowCheckedModeBanner: false,
