@@ -78,15 +78,8 @@ class _DeviceDetailsState extends State<DeviceDetails> with SingleTickerProvider
         if(_tabController.index ==1) {
           Provider.of<DeviceHistoryProvider>(context, listen: false).getAllHistoryDevices(widget.deviceObject);
 
-        }
-        
-        
+        }        
       });
-      //  if(_tabController.index ==1) {
-      //   Provider.of<DeviceHistoryProvider>(context, listen: false).getAllHistoryDevices(widget.deviceObject);
-
-      //  }
-      // print("Selected Index: " + _tabController.index.toString());
     });
     
 
@@ -233,6 +226,7 @@ class _DeviceDetailsState extends State<DeviceDetails> with SingleTickerProvider
     textEditingControllerLocation.dispose();
     textEditingControllerStatus.dispose();
     textEditingControllerCondition.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
