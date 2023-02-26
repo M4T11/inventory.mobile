@@ -77,7 +77,6 @@ class _DeviceDetailsState extends State<DeviceDetails> with SingleTickerProvider
       setState(() {
         if(_tabController.index ==1) {
           Provider.of<DeviceHistoryProvider>(context, listen: false).getAllHistoryDevices(widget.deviceObject);
-
         }        
       });
     });
@@ -927,7 +926,7 @@ class _DeviceDetailsState extends State<DeviceDetails> with SingleTickerProvider
                           itemCount: deviceHistory.length,
                           itemBuilder: (context, index) {
                             final deviceHistoryItem = deviceHistory[index];
-                            var date = DateFormat('d.M.yyyy HH:mm:ss').format(DateTime.parse(deviceHistoryItem.date));
+                            var date = DateFormat('d.MM.yyyy HH:mm:ss').format(DateTime.parse(deviceHistoryItem.date));
                             return ListTile(
                                 leading: const Icon(Icons.circle),
                                 title: Text("[" + date + "]" + " " + deviceHistoryItem.event));

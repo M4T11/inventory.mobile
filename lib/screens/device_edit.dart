@@ -1174,7 +1174,7 @@ class _DeviceEditState extends State<DeviceEdit> with SingleTickerProviderStateM
                           itemCount: deviceHistory.length,
                           itemBuilder: (context, index) {
                             final deviceHistoryItem = deviceHistory[index];
-                            var date = DateFormat('d.M.yyyy HH:mm:ss').format(DateTime.parse(deviceHistoryItem.date));
+                            var date = DateFormat('d.MM.yyyy HH:mm:ss').format(DateTime.parse(deviceHistoryItem.date));
                             return ListTile(
                                 leading: const Icon(Icons.circle),
                                 title: Text("[" + date + "]" + " " + deviceHistoryItem.event));
